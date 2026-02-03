@@ -1,0 +1,326 @@
+metadata:
+  category: "browsers"
+  description: "Web browsers for development and testing"
+  author: "agentic-provision"
+  version: "1.0.0"
+  created: "2026-02-03"
+
+tasks:
+  # =============================================================================
+  # Primary Development Browsers
+  # =============================================================================
+
+  google-chrome:
+    id: "google-chrome"
+    name: "Google Chrome"
+    description: "Industry standard - best DevTools, 47 device presets"
+    category: "browsers"
+    tags: ["browser", "chromium", "devtools", "testing"]
+
+    detection:
+      installed_indicator: "/Applications/Google Chrome.app"
+      check_command: "[ -d '/Applications/Google Chrome.app' ]"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install Google Chrome"
+          command: "brew install --cask google-chrome"
+          description: "Install via Homebrew cask"
+
+    post_install:
+      message: "Chrome installed. Industry-leading DevTools for web development."
+      notes:
+        - "Best JavaScript debugging"
+        - "Most device simulation options"
+        - "Extensions ecosystem"
+        - "Uses Blink engine"
+
+  firefox-developer-edition:
+    id: "firefox-developer-edition"
+    name: "Firefox Developer Edition"
+    description: "Pre-loaded dev tools, separate profile, dark theme"
+    category: "browsers"
+    tags: ["browser", "firefox", "gecko", "devtools", "developer"]
+
+    detection:
+      installed_indicator: "/Applications/Firefox Developer Edition.app"
+      check_command: "[ -d '/Applications/Firefox Developer Edition.app' ]"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install Firefox Developer Edition"
+          command: "brew install --cask firefox-developer-edition"
+          description: "Install via Homebrew cask"
+
+    post_install:
+      message: "Firefox Developer Edition installed. Separate profile from regular Firefox."
+      notes:
+        - "Best JavaScript debugging tools"
+        - "CSS Grid/Flexbox inspector"
+        - "Separate developer profile"
+        - "Uses Gecko engine"
+
+  firefox:
+    id: "firefox"
+    name: "Firefox"
+    description: "Privacy-focused browser with Gecko engine"
+    category: "browsers"
+    tags: ["browser", "firefox", "gecko", "privacy"]
+
+    detection:
+      installed_indicator: "/Applications/Firefox.app"
+      check_command: "[ -d '/Applications/Firefox.app' ]"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install Firefox"
+          command: "brew install --cask firefox"
+          description: "Install via Homebrew cask"
+
+    post_install:
+      message: "Firefox installed. Test with Gecko engine."
+
+  # =============================================================================
+  # Modern Browsers
+  # =============================================================================
+
+  arc:
+    id: "arc"
+    name: "Arc"
+    description: "Modern browser focused on productivity and organization"
+    category: "browsers"
+    tags: ["browser", "chromium", "modern", "productivity"]
+
+    detection:
+      installed_indicator: "/Applications/Arc.app"
+      check_command: "[ -d '/Applications/Arc.app' ]"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install Arc"
+          command: "brew install --cask arc"
+          description: "Install via Homebrew cask"
+
+    post_install:
+      message: "Arc installed. Modern browser with spaces and workflow focus."
+      notes:
+        - "Chromium-based"
+        - "Spaces for organizing work"
+        - "Built-in split view"
+        - "Command bar like Raycast"
+
+  brave:
+    id: "brave"
+    name: "Brave"
+    description: "Privacy-first browser, 3x faster than Chrome, blocks ads by default"
+    category: "browsers"
+    tags: ["browser", "chromium", "privacy", "fast"]
+
+    detection:
+      installed_indicator: "/Applications/Brave Browser.app"
+      check_command: "[ -d '/Applications/Brave Browser.app' ]"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install Brave"
+          command: "brew install --cask brave-browser"
+          description: "Install via Homebrew cask"
+
+    post_install:
+      message: "Brave installed. Privacy-focused with Chrome DevTools compatibility."
+      notes:
+        - "Blocks ads and trackers by default"
+        - "Claims 3x faster than Chrome"
+        - "Full Chrome DevTools"
+        - "Chrome extensions work"
+
+  vivaldi:
+    id: "vivaldi"
+    name: "Vivaldi"
+    description: "Highly customizable power-user browser"
+    category: "browsers"
+    tags: ["browser", "chromium", "customizable", "power-user"]
+
+    detection:
+      installed_indicator: "/Applications/Vivaldi.app"
+      check_command: "[ -d '/Applications/Vivaldi.app' ]"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install Vivaldi"
+          command: "brew install --cask vivaldi"
+          description: "Install via Homebrew cask"
+
+    post_install:
+      message: "Vivaldi installed. Unmatched customization for power users."
+      notes:
+        - "Chromium-based"
+        - "Tab stacking, tiling"
+        - "Built-in email, calendar"
+        - "Extensive customization"
+
+  # =============================================================================
+  # Safari (for testing WebKit)
+  # =============================================================================
+
+  safari-technology-preview:
+    id: "safari-technology-preview"
+    name: "Safari Technology Preview"
+    description: "Preview upcoming Safari features"
+    category: "browsers"
+    tags: ["browser", "webkit", "safari", "preview"]
+
+    detection:
+      installed_indicator: "/Applications/Safari Technology Preview.app"
+      check_command: "[ -d '/Applications/Safari Technology Preview.app' ]"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install Safari Technology Preview"
+          command: "brew install --cask safari-technology-preview"
+          description: "Install via Homebrew cask"
+
+    post_install:
+      message: "Safari Technology Preview installed. Test upcoming WebKit features."
+      notes:
+        - "Preview new Safari features"
+        - "Separate from regular Safari"
+        - "Important for WebKit testing"
+
+  # =============================================================================
+  # Specialized Development Browsers
+  # =============================================================================
+
+  polypane:
+    id: "polypane"
+    name: "Polypane"
+    description: "Development browser with multiple viewports, accessibility testing"
+    category: "browsers"
+    tags: ["browser", "development", "responsive", "accessibility"]
+
+    detection:
+      installed_indicator: "/Applications/Polypane.app"
+      check_command: "[ -d '/Applications/Polypane.app' ]"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install Polypane"
+          command: "brew install --cask polypane"
+          description: "Install via Homebrew cask"
+
+    post_install:
+      message: "Polypane installed. Development browser for responsive & accessibility."
+      notes:
+        - "Multiple viewports at once"
+        - "Accessibility auditing"
+        - "Debug tools"
+        - "Paid subscription ($108/year)"
+
+  responsively:
+    id: "responsively"
+    name: "Responsively"
+    description: "Free tool to test responsive design across multiple viewports"
+    category: "browsers"
+    tags: ["browser", "development", "responsive", "free"]
+
+    detection:
+      installed_indicator: "/Applications/Responsively.app"
+      check_command: "[ -d '/Applications/Responsively.app' ]"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install Responsively"
+          command: "brew install --cask responsively"
+          description: "Install via Homebrew cask"
+
+    post_install:
+      message: "Responsively installed. Free multi-viewport development tool."
+      notes:
+        - "Open-source and free"
+        - "Multiple device views"
+        - "Mirrored interactions"
+
+  # =============================================================================
+  # Microsoft Edge (for testing)
+  # =============================================================================
+
+  microsoft-edge:
+    id: "microsoft-edge"
+    name: "Microsoft Edge"
+    description: "Chromium-based Edge for enterprise compatibility testing"
+    category: "browsers"
+    tags: ["browser", "chromium", "microsoft", "enterprise"]
+
+    detection:
+      installed_indicator: "/Applications/Microsoft Edge.app"
+      check_command: "[ -d '/Applications/Microsoft Edge.app' ]"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install Microsoft Edge"
+          command: "brew install --cask microsoft-edge"
+          description: "Install via Homebrew cask"
+
+    post_install:
+      message: "Microsoft Edge installed. For enterprise and Microsoft ecosystem testing."
+      notes:
+        - "Chromium-based"
+        - "Microsoft ecosystem integration"
+        - "Enterprise features"
+
+  # =============================================================================
+  # Tor Browser (for privacy testing)
+  # =============================================================================
+
+  tor-browser:
+    id: "tor-browser"
+    name: "Tor Browser"
+    description: "Privacy browser for anonymous browsing"
+    category: "browsers"
+    tags: ["browser", "privacy", "tor", "anonymous"]
+
+    detection:
+      installed_indicator: "/Applications/Tor Browser.app"
+      check_command: "[ -d '/Applications/Tor Browser.app' ]"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install Tor Browser"
+          command: "brew install --cask tor-browser"
+          description: "Install via Homebrew cask"
+
+    post_install:
+      message: "Tor Browser installed. Maximum privacy through onion routing."

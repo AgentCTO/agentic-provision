@@ -1,0 +1,424 @@
+metadata:
+  category: "security"
+  description: "Password managers, security tools, and VPNs"
+  author: "agentic-provision"
+  version: "1.0.0"
+  created: "2026-02-03"
+
+tasks:
+  # =============================================================================
+  # Password Managers
+  # =============================================================================
+
+  1password:
+    id: "1password"
+    name: "1Password"
+    description: "Premium password manager - polished UX, never breached"
+    category: "security"
+    tags: ["password-manager", "security", "premium"]
+
+    detection:
+      installed_indicator: "/Applications/1Password.app"
+      check_command: "[ -d '/Applications/1Password.app' ] || [ -d '/Applications/1Password 7.app' ]"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install 1Password"
+          command: "brew install --cask 1password"
+          description: "Install via Homebrew cask"
+
+    post_install:
+      message: "1Password installed. Create account or sign in."
+      notes:
+        - "Never breached"
+        - "Polished apps across all platforms"
+        - "Developer tools and CLI"
+        - "$2.99/month individual"
+
+  1password-cli:
+    id: "1password-cli"
+    name: "1Password CLI"
+    description: "Access 1Password from terminal - secrets in scripts"
+    category: "security"
+    tags: ["password-manager", "cli", "developer", "secrets"]
+
+    detection:
+      check_command: "command -v op"
+      version_command: "op --version"
+
+    dependencies:
+      required: ["homebrew", "1password"]
+
+    install:
+      steps:
+        - name: "Install 1Password CLI"
+          command: "brew install 1password-cli"
+          description: "Install via Homebrew"
+
+    post_install:
+      message: "1Password CLI installed. Connect with: op account add"
+      notes:
+        - "Inject secrets into scripts"
+        - "CI/CD integration"
+        - "SSH key management"
+        - "Great for DevOps"
+
+  bitwarden:
+    id: "bitwarden"
+    name: "Bitwarden"
+    description: "Open-source password manager - free tier, self-hostable"
+    category: "security"
+    tags: ["password-manager", "security", "open-source", "free"]
+
+    detection:
+      installed_indicator: "/Applications/Bitwarden.app"
+      check_command: "[ -d '/Applications/Bitwarden.app' ]"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install Bitwarden"
+          command: "brew install --cask bitwarden"
+          description: "Install via Homebrew cask"
+
+    post_install:
+      message: "Bitwarden installed. Create account or sign in."
+      notes:
+        - "Open-source"
+        - "Free tier with full features"
+        - "Self-hostable"
+        - "Premium: $10/year"
+        - "Never breached"
+
+  bitwarden-cli:
+    id: "bitwarden-cli"
+    name: "Bitwarden CLI"
+    description: "Access Bitwarden from terminal"
+    category: "security"
+    tags: ["password-manager", "cli", "developer"]
+
+    detection:
+      check_command: "command -v bw"
+      version_command: "bw --version"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install Bitwarden CLI"
+          command: "brew install bitwarden-cli"
+          description: "Install via Homebrew"
+
+    post_install:
+      message: "Bitwarden CLI installed. Login with: bw login"
+
+  # =============================================================================
+  # Two-Factor Authentication
+  # =============================================================================
+
+  authy:
+    id: "authy"
+    name: "Authy"
+    description: "2FA app with cloud backup and multi-device sync"
+    category: "security"
+    tags: ["2fa", "authentication", "totp"]
+
+    detection:
+      installed_indicator: "/Applications/Authy Desktop.app"
+      check_command: "[ -d '/Applications/Authy Desktop.app' ]"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install Authy"
+          command: "brew install --cask authy"
+          description: "Install via Homebrew cask"
+
+    post_install:
+      message: "Authy installed. Sync your 2FA tokens."
+      notes:
+        - "Cloud backup of 2FA tokens"
+        - "Multi-device sync"
+        - "Free"
+
+  # =============================================================================
+  # VPN Clients
+  # =============================================================================
+
+  wireguard:
+    id: "wireguard"
+    name: "WireGuard"
+    description: "Fast, modern VPN with simple configuration"
+    category: "security"
+    tags: ["vpn", "networking", "security"]
+
+    detection:
+      check_command: "command -v wg"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install WireGuard tools"
+          command: "brew install wireguard-tools"
+          description: "Install CLI tools via Homebrew"
+
+    post_install:
+      message: "WireGuard tools installed. Configure with .conf files."
+      notes:
+        - "Faster than OpenVPN"
+        - "Simple configuration"
+        - "Modern cryptography"
+
+  tailscale:
+    id: "tailscale"
+    name: "Tailscale"
+    description: "Zero-config VPN using WireGuard - mesh networking"
+    category: "security"
+    tags: ["vpn", "wireguard", "mesh", "zero-config"]
+
+    detection:
+      check_command: "command -v tailscale"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install Tailscale"
+          command: "brew install --cask tailscale"
+          description: "Install via Homebrew cask"
+
+    post_install:
+      message: "Tailscale installed. Sign in to connect devices."
+      notes:
+        - "Zero configuration"
+        - "Mesh network between devices"
+        - "SSH over Tailscale"
+        - "Free for personal use (20 devices)"
+
+  mullvad-vpn:
+    id: "mullvad-vpn"
+    name: "Mullvad VPN"
+    description: "Privacy-focused VPN - no account needed"
+    category: "security"
+    tags: ["vpn", "privacy", "anonymous"]
+
+    detection:
+      installed_indicator: "/Applications/Mullvad VPN.app"
+      check_command: "[ -d '/Applications/Mullvad VPN.app' ]"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install Mullvad VPN"
+          command: "brew install --cask mullvadvpn"
+          description: "Install via Homebrew cask"
+
+    post_install:
+      message: "Mullvad VPN installed. Generate account number at mullvad.net"
+      notes:
+        - "No email required - just account number"
+        - "WireGuard-based"
+        - "€5/month flat rate"
+        - "Strong privacy focus"
+
+  # =============================================================================
+  # Security Utilities
+  # =============================================================================
+
+  gpg-suite:
+    id: "gpg-suite"
+    name: "GPG Suite"
+    description: "OpenPGP encryption for Mac - encrypt, sign, verify"
+    category: "security"
+    tags: ["encryption", "gpg", "pgp", "signing"]
+
+    detection:
+      installed_indicator: "/Applications/GPG Keychain.app"
+      check_command: "[ -d '/Applications/GPG Keychain.app' ]"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install GPG Suite"
+          command: "brew install --cask gpg-suite"
+          description: "Install via Homebrew cask"
+
+    post_install:
+      message: "GPG Suite installed. Use GPG Keychain to manage keys."
+      notes:
+        - "Email encryption/signing"
+        - "Git commit signing"
+        - "File encryption"
+
+  gnupg:
+    id: "gnupg"
+    name: "GnuPG"
+    description: "Command-line GPG for encryption and signing"
+    category: "security"
+    tags: ["encryption", "gpg", "cli", "signing"]
+
+    detection:
+      check_command: "command -v gpg"
+      version_command: "gpg --version | head -1"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install GnuPG"
+          command: "brew install gnupg"
+          description: "Install via Homebrew"
+
+    post_install:
+      message: "GnuPG installed. Generate key with: gpg --full-generate-key"
+
+  age:
+    id: "age"
+    name: "age"
+    description: "Simple, modern file encryption (alternative to GPG)"
+    category: "security"
+    tags: ["encryption", "simple", "modern"]
+
+    detection:
+      check_command: "command -v age"
+      version_command: "age --version"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install age"
+          command: "brew install age"
+          description: "Install via Homebrew"
+
+    post_install:
+      message: "age installed. Simpler alternative to GPG."
+      notes:
+        - "Simple and secure"
+        - "No configuration needed"
+        - "SSH key compatible"
+
+  # =============================================================================
+  # Security Scanning
+  # =============================================================================
+
+  trivy:
+    id: "trivy"
+    name: "Trivy"
+    description: "Container and artifact vulnerability scanner"
+    category: "security"
+    tags: ["security", "scanning", "vulnerabilities", "containers"]
+
+    detection:
+      check_command: "command -v trivy"
+      version_command: "trivy --version"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install Trivy"
+          command: "brew install trivy"
+          description: "Install via Homebrew"
+
+    post_install:
+      message: "Trivy installed. Scan images: trivy image nginx:latest"
+
+  gitleaks:
+    id: "gitleaks"
+    name: "Gitleaks"
+    description: "Detect secrets in git repos"
+    category: "security"
+    tags: ["security", "secrets", "git", "scanning"]
+
+    detection:
+      check_command: "command -v gitleaks"
+      version_command: "gitleaks version"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install Gitleaks"
+          command: "brew install gitleaks"
+          description: "Install via Homebrew"
+
+    post_install:
+      message: "Gitleaks installed. Scan repo: gitleaks detect"
+
+  # =============================================================================
+  # Network Security
+  # =============================================================================
+
+  little-snitch:
+    id: "little-snitch"
+    name: "Little Snitch"
+    description: "Application firewall - control outbound connections"
+    category: "security"
+    tags: ["firewall", "privacy", "network", "monitoring"]
+
+    detection:
+      installed_indicator: "/Applications/Little Snitch.app"
+      check_command: "[ -d '/Applications/Little Snitch.app' ]"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install Little Snitch"
+          command: "brew install --cask little-snitch"
+          description: "Install via Homebrew cask"
+
+    post_install:
+      message: "Little Snitch installed. Requires restart and configuration."
+      notes:
+        - "Monitor all network connections"
+        - "Block unwanted connections"
+        - "Paid app (~$45)"
+
+  lulu:
+    id: "lulu"
+    name: "LuLu"
+    description: "Free, open-source firewall for Mac"
+    category: "security"
+    tags: ["firewall", "privacy", "network", "free", "open-source"]
+
+    detection:
+      installed_indicator: "/Applications/LuLu.app"
+      check_command: "[ -d '/Applications/LuLu.app' ]"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install LuLu"
+          command: "brew install --cask lulu"
+          description: "Install via Homebrew cask"
+
+    post_install:
+      message: "LuLu installed. Free alternative to Little Snitch."
+      notes:
+        - "Open-source"
+        - "Free"
+        - "Block outbound connections"

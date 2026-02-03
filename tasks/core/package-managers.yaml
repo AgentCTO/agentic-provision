@@ -1,0 +1,87 @@
+metadata:
+  category: "package-managers"
+  description: "System package managers for macOS"
+  author: "agentic-provision"
+  version: "1.0.0"
+  created: "2026-02-02"
+
+tasks:
+  homebrew:
+    id: "homebrew"
+    name: "Homebrew"
+    description: "The missing package manager for macOS"
+    category: "package-managers"
+    tags: ["package-manager", "essential", "macos"]
+
+    detection:
+      check_command: "command -v brew"
+      version_command: "brew --version"
+
+    dependencies:
+      required: []
+
+    install:
+      steps:
+        - name: "Install Homebrew"
+          command: '/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"'
+          description: "Download and run the Homebrew installer"
+          idempotent: false
+          requires_sudo: false
+
+        - name: "Add Homebrew to PATH (Apple Silicon)"
+          command: 'echo ''eval "$(/opt/homebrew/bin/brew shellenv)"'' >> ~/.zprofile && eval "$(/opt/homebrew/bin/brew shellenv)"'
+          description: "Configure shell to find Homebrew on Apple Silicon Macs"
+          shell_config: true
+
+    shell_integration:
+      zsh: 'eval "$(/opt/homebrew/bin/brew shellenv)"'
+      bash: 'eval "$(/opt/homebrew/bin/brew shellenv)"'
+
+    verification:
+      command: "brew --version"
+      expected_pattern: "^Homebrew \\d+\\.\\d+\\.\\d+"
+
+    conflicts_with: []
+
+    notes: |
+      Homebrew is essential for macOS development. It installs to:
+      - /opt/homebrew on Apple Silicon (M1/M2/M3/M4)
+      - /usr/local on Intel Macs
+
+      Never use sudo with Homebrew commands.
+
+    docs_url: "https://brew.sh"
+
+  macports:
+    id: "macports"
+    name: "MacPorts"
+    description: "Alternative package manager for macOS"
+    category: "package-managers"
+    tags: ["package-manager", "alternative", "macos"]
+
+    detection:
+      check_command: "command -v port"
+      version_command: "port version"
+
+    dependencies:
+      required: []
+
+    install:
+      steps:
+        - name: "Download MacPorts installer"
+          command: "echo 'MacPorts requires manual download from macports.org for your macOS version'"
+          description: "MacPorts must be installed via .pkg installer"
+          idempotent: true
+
+    verification:
+      command: "port version"
+      expected_pattern: "^Version:"
+
+    conflicts_with: []
+
+    notes: |
+      MacPorts is an alternative to Homebrew. Most developers prefer Homebrew,
+      but MacPorts has stricter dependency isolation. Installation requires
+      downloading the correct .pkg for your macOS version from macports.org.
+
+    docs_url: "https://www.macports.org"

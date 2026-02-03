@@ -1,0 +1,350 @@
+metadata:
+  category: "git-setup"
+  description: "Git configuration and GitHub integration"
+  author: "agentic-provision"
+  version: "1.0.0"
+  created: "2026-02-02"
+
+tasks:
+  git:
+    id: "git"
+    name: "Git"
+    description: "Distributed version control system"
+    category: "git-setup"
+    tags: ["git", "version-control", "essential"]
+
+    detection:
+      check_command: "command -v git"
+      version_command: "git --version"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install Git"
+          command: "brew install git"
+          description: "Install latest Git via Homebrew"
+          idempotent: true
+
+    verification:
+      command: "git --version"
+      expected_pattern: "^git version \\d+"
+
+    conflicts_with: []
+
+    notes: |
+      macOS includes Git with Xcode CLI tools, but Homebrew provides
+      the latest version. The Homebrew version takes precedence in PATH.
+
+    docs_url: "https://git-scm.com"
+
+  git-config:
+    id: "git-config"
+    name: "Git Configuration"
+    description: "Configure Git username, email, and settings"
+    category: "git-setup"
+    tags: ["git", "configuration"]
+
+    detection:
+      check_command: "git config --global user.name"
+
+    dependencies:
+      required: ["git"]
+
+    install:
+      steps:
+        - name: "Set Git username"
+          command: 'git config --global user.name "${GIT_NAME}"'
+          description: "Configure global Git username"
+
+        - name: "Set Git email"
+          command: 'git config --global user.email "${GIT_EMAIL}"'
+          description: "Configure global Git email"
+
+        - name: "Set default branch to main"
+          command: "git config --global init.defaultBranch main"
+          description: "Use 'main' as default branch name"
+
+        - name: "Set pull behavior to rebase"
+          command: "git config --global pull.rebase true"
+          description: "Rebase on pull instead of merge"
+
+        - name: "Auto-setup remote tracking"
+          command: "git config --global push.autoSetupRemote true"
+          description: "Automatically set upstream on first push"
+
+        - name: "Enable colored output"
+          command: "git config --global color.ui auto"
+          description: "Enable colored Git output"
+
+    options:
+      - id: "git_name"
+        prompt: "Your name for Git commits"
+        type: "string"
+      - id: "git_email"
+        prompt: "Your email for Git commits"
+        type: "string"
+
+    verification:
+      command: "git config --global user.name && git config --global user.email"
+
+    conflicts_with: []
+
+    notes: |
+      These are recommended Git settings. You can customize further:
+        git config --global core.editor "code --wait"
+        git config --global alias.co checkout
+        git config --global alias.br branch
+        git config --global alias.st status
+
+  ssh-keygen:
+    id: "ssh-keygen"
+    name: "SSH Key Generation"
+    description: "Generate SSH key for GitHub/GitLab"
+    category: "git-setup"
+    tags: ["ssh", "authentication", "github"]
+
+    detection:
+      installed_indicator: "~/.ssh/id_ed25519"
+
+    dependencies:
+      required: []
+
+    install:
+      steps:
+        - name: "Generate SSH key"
+          command: 'ssh-keygen -t ed25519 -C "${GIT_EMAIL}" -f ~/.ssh/id_ed25519 -N ""'
+          description: "Generate Ed25519 SSH key pair"
+
+        - name: "Start ssh-agent"
+          command: 'eval "$(ssh-agent -s)"'
+          description: "Start the SSH agent"
+
+        - name: "Configure SSH for macOS Keychain"
+          command: |
+            mkdir -p ~/.ssh && cat >> ~/.ssh/config << 'EOF'
+            Host *
+              AddKeysToAgent yes
+              UseKeychain yes
+              IdentityFile ~/.ssh/id_ed25519
+            EOF
+          description: "Configure SSH to use macOS Keychain"
+          shell_config: true
+
+        - name: "Add key to ssh-agent"
+          command: "ssh-add --apple-use-keychain ~/.ssh/id_ed25519"
+          description: "Add SSH key to agent with Keychain storage"
+
+        - name: "Display public key"
+          command: 'echo "Your public key (add this to GitHub/GitLab):" && cat ~/.ssh/id_ed25519.pub'
+          description: "Show public key for copying"
+
+    options:
+      - id: "git_email"
+        prompt: "Email for SSH key comment"
+        type: "string"
+
+    verification:
+      command: "[ -f ~/.ssh/id_ed25519 ] && echo 'key exists'"
+      expected_output: "key exists"
+
+    conflicts_with: []
+
+    notes: |
+      Ed25519 keys are recommended over RSA for security and performance.
+
+      Add your public key to GitHub:
+        1. Copy: pbcopy < ~/.ssh/id_ed25519.pub
+        2. Go to github.com → Settings → SSH Keys → New SSH key
+        3. Paste and save
+
+      Test connection: ssh -T git@github.com
+
+  gh-cli:
+    id: "gh-cli"
+    name: "GitHub CLI"
+    description: "Official GitHub command-line tool"
+    category: "git-setup"
+    tags: ["github", "cli", "essential"]
+
+    detection:
+      check_command: "command -v gh"
+      version_command: "gh --version"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install GitHub CLI"
+          command: "brew install gh"
+          description: "Install gh via Homebrew"
+          idempotent: true
+
+    post_install:
+      - task: "gh-auth"
+        condition: "user_choice"
+        prompt: "Authenticate with GitHub now?"
+
+    verification:
+      command: "gh --version"
+      expected_pattern: "^gh version \\d+"
+
+    conflicts_with: []
+
+    notes: |
+      GitHub CLI lets you work with GitHub from the terminal:
+        gh repo clone owner/repo
+        gh pr create
+        gh pr checkout 123
+        gh issue list
+
+    docs_url: "https://cli.github.com"
+
+  gh-auth:
+    id: "gh-auth"
+    name: "GitHub Authentication"
+    description: "Authenticate GitHub CLI with your account"
+    category: "git-setup"
+    tags: ["github", "authentication"]
+
+    detection:
+      check_command: "gh auth status"
+
+    dependencies:
+      required: ["gh-cli"]
+
+    install:
+      steps:
+        - name: "Authenticate with GitHub"
+          command: "gh auth login"
+          description: "Interactive GitHub login (opens browser)"
+
+    verification:
+      command: "gh auth status"
+      expected_pattern: "Logged in to github.com"
+
+    conflicts_with: []
+
+    notes: |
+      The interactive login will:
+        1. Ask which account (github.com or enterprise)
+        2. Ask preferred protocol (SSH recommended if you have keys)
+        3. Open browser for authentication
+        4. Authorize the GitHub CLI
+
+  git-lfs:
+    id: "git-lfs"
+    name: "Git Large File Storage"
+    description: "Git extension for versioning large files"
+    category: "git-setup"
+    tags: ["git", "lfs", "large-files"]
+
+    detection:
+      check_command: "git lfs version"
+
+    dependencies:
+      required: ["homebrew", "git"]
+
+    install:
+      steps:
+        - name: "Install Git LFS"
+          command: "brew install git-lfs"
+          description: "Install Git LFS via Homebrew"
+          idempotent: true
+
+        - name: "Initialize Git LFS"
+          command: "git lfs install"
+          description: "Set up Git LFS for your user"
+
+    verification:
+      command: "git lfs version"
+      expected_pattern: "^git-lfs/"
+
+    conflicts_with: []
+
+    notes: |
+      Git LFS replaces large files (images, videos, datasets) with
+      text pointers in Git, storing file contents on a remote server.
+
+      Track files: git lfs track "*.psd"
+      See tracked patterns: cat .gitattributes
+
+    docs_url: "https://git-lfs.github.com"
+
+  lazygit:
+    id: "lazygit"
+    name: "lazygit"
+    description: "Terminal UI for Git commands"
+    category: "git-setup"
+    tags: ["git", "tui", "productivity"]
+
+    detection:
+      check_command: "command -v lazygit"
+
+    dependencies:
+      required: ["homebrew", "git"]
+
+    install:
+      steps:
+        - name: "Install lazygit"
+          command: "brew install lazygit"
+          description: "Install lazygit via Homebrew"
+          idempotent: true
+
+    verification:
+      command: "lazygit --version"
+      expected_pattern: "version="
+
+    conflicts_with: []
+
+    notes: |
+      lazygit provides a terminal UI for common Git operations.
+      Launch with: lazygit
+
+      Keybindings are vim-like. Press '?' for help.
+
+    docs_url: "https://github.com/jesseduffield/lazygit"
+
+  git-delta:
+    id: "git-delta"
+    name: "delta"
+    description: "Syntax-highlighting pager for git diffs"
+    category: "git-setup"
+    tags: ["git", "diff", "syntax-highlighting"]
+
+    detection:
+      check_command: "command -v delta"
+
+    dependencies:
+      required: ["homebrew", "git"]
+
+    install:
+      steps:
+        - name: "Install delta"
+          command: "brew install git-delta"
+          description: "Install delta via Homebrew"
+          idempotent: true
+
+        - name: "Configure Git to use delta"
+          command: |
+            git config --global core.pager delta
+            git config --global interactive.diffFilter "delta --color-only"
+            git config --global delta.navigate true
+            git config --global delta.side-by-side true
+          description: "Set delta as Git's pager"
+
+    verification:
+      command: "delta --version"
+      expected_pattern: "^delta \\d+"
+
+    conflicts_with: []
+
+    notes: |
+      delta provides beautiful, syntax-highlighted diffs.
+      After installation, git diff and git log will use delta automatically.
+
+      Customize in ~/.gitconfig under [delta] section.
+
+    docs_url: "https://github.com/dandavison/delta"

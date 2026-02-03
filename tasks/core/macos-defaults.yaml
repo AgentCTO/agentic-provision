@@ -1,0 +1,347 @@
+metadata:
+  category: "macos-defaults"
+  description: "macOS system preferences and developer-friendly defaults"
+  author: "agentic-provision"
+  version: "1.0.0"
+  created: "2026-02-03"
+
+tasks:
+  developer-essentials:
+    id: "developer-essentials"
+    name: "Developer Essentials"
+    description: "Finder shows hidden files, fast key repeat, disable auto-correct, expand save dialogs"
+    category: "macos-defaults"
+    tags: ["finder", "keyboard", "developer", "essential"]
+
+    detection:
+      check_command: "defaults read com.apple.finder AppleShowAllFiles 2>/dev/null | grep -q 1"
+
+    dependencies:
+      required: []
+
+    install:
+      steps:
+        - name: "Configure Finder for development"
+          command: |
+            defaults write com.apple.finder AppleShowAllFiles -bool true
+            defaults write NSGlobalDomain AppleShowAllExtensions -bool true
+            defaults write com.apple.finder ShowPathbar -bool true
+            defaults write com.apple.finder ShowStatusBar -bool true
+            defaults write com.apple.finder _FXShowPosixPathInTitle -bool true
+            defaults write com.apple.finder FXPreferredViewStyle -string "clmv"
+            defaults write com.apple.finder FXDefaultSearchScope -string "SCcf"
+            defaults write com.apple.finder FXEnableExtensionChangeWarning -bool false
+          description: "Show hidden files, extensions, path bar, column view"
+
+        - name: "Configure keyboard for coding"
+          command: |
+            defaults write NSGlobalDomain KeyRepeat -int 2
+            defaults write NSGlobalDomain InitialKeyRepeat -int 15
+            defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false
+            defaults write NSGlobalDomain NSAutomaticCapitalizationEnabled -bool false
+            defaults write NSGlobalDomain NSAutomaticSpellingCorrectionEnabled -bool false
+            defaults write NSGlobalDomain NSAutomaticQuoteSubstitutionEnabled -bool false
+            defaults write NSGlobalDomain NSAutomaticDashSubstitutionEnabled -bool false
+            defaults write NSGlobalDomain AppleKeyboardUIMode -int 3
+          description: "Fast key repeat, disable auto-correct, full keyboard navigation"
+
+        - name: "Expand save dialogs by default"
+          command: |
+            defaults write NSGlobalDomain NSNavPanelExpandedStateForSaveMode -bool true
+            defaults write NSGlobalDomain NSNavPanelExpandedStateForSaveMode2 -bool true
+          description: "Always show expanded save dialogs"
+
+        - name: "Save to disk not iCloud"
+          command: |
+            defaults write NSGlobalDomain NSDocumentSaveNewDocumentsToCloud -bool false
+          description: "Default save location is local disk"
+
+        - name: "Plain text TextEdit"
+          command: |
+            defaults write com.apple.TextEdit RichText -int 0
+            defaults write com.apple.TextEdit PlainTextEncoding -int 4
+            defaults write com.apple.TextEdit PlainTextEncodingForWrite -int 4
+          description: "TextEdit opens in plain text mode"
+
+        - name: "Restart Finder"
+          command: "killall Finder"
+          description: "Apply Finder changes"
+
+    post_install:
+      message: "Developer essentials configured. Some keyboard changes require logout."
+      note: "Logout and login to apply all keyboard settings"
+
+  minimal-dock:
+    id: "minimal-dock"
+    name: "Minimal Dock"
+    description: "Auto-hide dock, small icons, no recents, fast animations"
+    category: "macos-defaults"
+    tags: ["dock", "minimal", "clean"]
+
+    detection:
+      check_command: "defaults read com.apple.dock autohide 2>/dev/null | grep -q 1"
+
+    dependencies:
+      required: []
+
+    install:
+      steps:
+        - name: "Configure minimal dock"
+          command: |
+            defaults write com.apple.dock tilesize -int 36
+            defaults write com.apple.dock autohide -bool true
+            defaults write com.apple.dock autohide-delay -float 0
+            defaults write com.apple.dock autohide-time-modifier -float 0.3
+            defaults write com.apple.dock show-recents -bool false
+            defaults write com.apple.dock mru-spaces -bool false
+            defaults write com.apple.dock mineffect -string "scale"
+            defaults write com.apple.dock minimize-to-application -bool true
+          description: "Small icons, auto-hide, no recents, fast animations"
+
+        - name: "Restart Dock"
+          command: "killall Dock"
+          description: "Apply Dock changes"
+
+    post_install:
+      message: "Minimal dock configured."
+
+  power-user-dock:
+    id: "power-user-dock"
+    name: "Power User Dock"
+    description: "Left position, magnification, medium icons"
+    category: "macos-defaults"
+    tags: ["dock", "power-user"]
+
+    detection:
+      check_command: "defaults read com.apple.dock orientation 2>/dev/null | grep -q left"
+
+    dependencies:
+      required: []
+
+    install:
+      steps:
+        - name: "Configure power user dock"
+          command: |
+            defaults write com.apple.dock orientation -string "left"
+            defaults write com.apple.dock tilesize -int 48
+            defaults write com.apple.dock magnification -bool true
+            defaults write com.apple.dock largesize -int 72
+            defaults write com.apple.dock autohide -bool false
+            defaults write com.apple.dock show-recents -bool false
+            defaults write com.apple.dock mru-spaces -bool false
+          description: "Left dock, magnification, medium icons"
+
+        - name: "Restart Dock"
+          command: "killall Dock"
+          description: "Apply Dock changes"
+
+    post_install:
+      message: "Power user dock configured."
+
+  screenshot-pro:
+    id: "screenshot-pro"
+    name: "Screenshot Pro Setup"
+    description: "PNG format, ~/Screenshots folder, no shadows"
+    category: "macos-defaults"
+    tags: ["screenshots", "productivity"]
+
+    detection:
+      check_command: "[ -d ~/Screenshots ] && defaults read com.apple.screencapture location 2>/dev/null | grep -q Screenshots"
+
+    dependencies:
+      required: []
+
+    install:
+      steps:
+        - name: "Create Screenshots folder"
+          command: "mkdir -p ~/Screenshots"
+          description: "Create dedicated screenshots folder"
+
+        - name: "Configure screenshot settings"
+          command: |
+            defaults write com.apple.screencapture type -string "png"
+            defaults write com.apple.screencapture disable-shadow -bool true
+            defaults write com.apple.screencapture location -string "${HOME}/Screenshots"
+            defaults write com.apple.screencapture include-date -bool true
+          description: "PNG format, no shadows, ~/Screenshots location"
+
+        - name: "Apply screenshot changes"
+          command: "killall SystemUIServer"
+          description: "Restart SystemUIServer"
+
+    post_install:
+      message: "Screenshots will now save to ~/Screenshots as PNG without shadows."
+
+  trackpad-power-user:
+    id: "trackpad-power-user"
+    name: "Trackpad Power User"
+    description: "Tap to click, three-finger drag, fast tracking"
+    category: "macos-defaults"
+    tags: ["trackpad", "productivity", "laptop"]
+
+    detection:
+      check_command: "defaults read com.apple.AppleMultitouchTrackpad Clicking 2>/dev/null | grep -q 1"
+
+    dependencies:
+      required: []
+
+    install:
+      steps:
+        - name: "Enable tap to click"
+          command: |
+            defaults write com.apple.AppleMultitouchTrackpad Clicking -bool true
+            defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -bool true
+            defaults -currentHost write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
+          description: "Tap to click on trackpad"
+
+        - name: "Enable three-finger drag"
+          command: |
+            defaults write com.apple.AppleMultitouchTrackpad TrackpadThreeFingerDrag -bool true
+            defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadThreeFingerDrag -bool true
+          description: "Drag windows with three fingers"
+
+        - name: "Fast tracking speed"
+          command: |
+            defaults write NSGlobalDomain com.apple.trackpad.scaling -float 2.5
+          description: "Increase trackpad tracking speed"
+
+        - name: "Secondary click"
+          command: |
+            defaults write com.apple.AppleMultitouchTrackpad TrackpadRightClick -bool true
+          description: "Two-finger click for right-click"
+
+    post_install:
+      message: "Trackpad configured. Logout may be required for all changes."
+      note: "Three-finger drag requires logout to take effect"
+
+  safari-developer:
+    id: "safari-developer"
+    name: "Safari Developer Tools"
+    description: "Developer menu, Web Inspector, full URLs"
+    category: "macos-defaults"
+    tags: ["safari", "developer", "web"]
+
+    detection:
+      check_command: "defaults read com.apple.Safari IncludeDevelopMenu 2>/dev/null | grep -q 1"
+
+    dependencies:
+      required: []
+
+    install:
+      steps:
+        - name: "Enable Safari developer features"
+          command: |
+            defaults write com.apple.Safari IncludeDevelopMenu -bool true
+            defaults write com.apple.Safari WebKitDeveloperExtrasEnabledPreferenceKey -bool true
+            defaults write com.apple.Safari com.apple.Safari.ContentPageGroupIdentifier.WebKit2DeveloperExtrasEnabled -bool true
+            defaults write NSGlobalDomain WebKitDeveloperExtras -bool true
+            defaults write com.apple.Safari ShowFullURLInSmartSearchField -bool true
+            defaults write com.apple.Safari ShowStatusBar -bool true
+            defaults write com.apple.Safari AutoOpenSafeDownloads -bool false
+          description: "Developer menu, Web Inspector, full URLs, status bar"
+
+    post_install:
+      message: "Safari developer tools enabled. Restart Safari to apply."
+
+  privacy-focused:
+    id: "privacy-focused"
+    name: "Privacy Focused Settings"
+    description: "Disable analytics, secure keyboard, minimal telemetry"
+    category: "macos-defaults"
+    tags: ["privacy", "security"]
+
+    detection:
+      check_command: "defaults read com.apple.CrashReporter DialogType 2>/dev/null | grep -q none"
+
+    dependencies:
+      required: []
+
+    install:
+      steps:
+        - name: "Disable crash reporter dialog"
+          command: |
+            defaults write com.apple.CrashReporter DialogType -string "none"
+          description: "Disable crash reporter popup"
+
+        - name: "Disable Safari search suggestions"
+          command: |
+            defaults write com.apple.Safari UniversalSearchEnabled -bool false
+            defaults write com.apple.Safari SuppressSearchSuggestions -bool true
+          description: "Don't send searches to Apple"
+
+        - name: "Secure keyboard in Terminal"
+          command: |
+            defaults write com.apple.terminal SecureKeyboardEntry -bool true
+          description: "Prevent other apps from reading Terminal input"
+
+        - name: "Safari Do Not Track"
+          command: |
+            defaults write com.apple.Safari SendDoNotTrackHTTPHeader -bool true
+          description: "Send Do Not Track header"
+
+    post_install:
+      message: "Privacy-focused settings applied."
+
+  speed-demon-keyboard:
+    id: "speed-demon-keyboard"
+    name: "Speed Demon Keyboard"
+    description: "Fastest possible key repeat with minimal delay"
+    category: "macos-defaults"
+    tags: ["keyboard", "speed", "power-user"]
+
+    detection:
+      check_command: "[ $(defaults read NSGlobalDomain KeyRepeat 2>/dev/null) -le 1 ]"
+
+    dependencies:
+      required: []
+
+    install:
+      steps:
+        - name: "Configure extreme keyboard speed"
+          command: |
+            defaults write NSGlobalDomain KeyRepeat -int 1
+            defaults write NSGlobalDomain InitialKeyRepeat -int 10
+            defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false
+          description: "Fastest key repeat, shortest delay"
+
+    post_install:
+      message: "Speed demon keyboard configured. Logout required to apply."
+      note: "This is very fast - adjust if uncomfortable"
+
+  hot-corners-productivity:
+    id: "hot-corners-productivity"
+    name: "Productivity Hot Corners"
+    description: "Mission Control, Desktop, Screen Saver, Launchpad in corners"
+    category: "macos-defaults"
+    tags: ["hot-corners", "productivity"]
+
+    detection:
+      check_command: "defaults read com.apple.dock wvous-tl-corner 2>/dev/null | grep -q 2"
+
+    dependencies:
+      required: []
+
+    install:
+      steps:
+        - name: "Configure hot corners"
+          command: |
+            # Top left: Mission Control
+            defaults write com.apple.dock wvous-tl-corner -int 2
+            defaults write com.apple.dock wvous-tl-modifier -int 0
+            # Top right: Desktop
+            defaults write com.apple.dock wvous-tr-corner -int 4
+            defaults write com.apple.dock wvous-tr-modifier -int 0
+            # Bottom left: Start Screen Saver
+            defaults write com.apple.dock wvous-bl-corner -int 5
+            defaults write com.apple.dock wvous-bl-modifier -int 0
+            # Bottom right: Launchpad
+            defaults write com.apple.dock wvous-br-corner -int 11
+            defaults write com.apple.dock wvous-br-modifier -int 0
+          description: "Set up productivity hot corners"
+
+        - name: "Restart Dock"
+          command: "killall Dock"
+          description: "Apply hot corner changes"
+
+    post_install:
+      message: "Hot corners configured: TL=Mission Control, TR=Desktop, BL=Screen Saver, BR=Launchpad"

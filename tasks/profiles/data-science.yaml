@@ -1,0 +1,224 @@
+metadata:
+  id: "data-science"
+  name: "Data Science & Machine Learning"
+  description: "Python, Jupyter, pandas, scikit-learn, and ML tools"
+  version: "1.0.0"
+
+selection_prompt:
+  letter: "D"
+  text: "Data Science & ML - Python, Jupyter, pandas, scikit-learn"
+
+required_tasks:
+  - homebrew
+
+question_flow:
+  - id: "python_setup"
+    question: "How would you like to manage Python versions?"
+    options:
+      - letter: "A"
+        text: "pyenv - Simple Python version management"
+        tasks: ["pyenv"]
+      - letter: "B"
+        text: "mise - Modern polyglot version manager (Python + more)"
+        tasks: ["mise"]
+      - letter: "C"
+        text: "Anaconda - Full data science distribution"
+        tasks: ["anaconda"]
+      - letter: "D"
+        text: "Not sure - What's the difference?"
+        action: "explain"
+        explanation: |
+          **pyenv** is lightweight - just manages Python versions.
+          You install packages with pip. Most flexible approach.
+
+          **mise** manages Python plus other languages (Node, Ruby, etc.)
+          Good if you work with multiple languages.
+
+          **Anaconda** is a full distribution with 250+ packages pre-installed.
+          Includes conda package manager. Larger download (~3GB).
+
+          For most data scientists, **pyenv** or **Anaconda** work well.
+          pyenv for flexibility, Anaconda for convenience.
+
+  - id: "editor"
+    question: "Which editor do you prefer for data science work?"
+    options:
+      - letter: "A"
+        text: "VS Code - Free, great Jupyter and Python support"
+        tasks: ["vscode"]
+      - letter: "B"
+        text: "Cursor - AI-powered, excellent for coding assistance"
+        tasks: ["cursor"]
+      - letter: "C"
+        text: "PyCharm Professional - Full Python IDE with data tools"
+        tasks: ["pycharm"]
+      - letter: "D"
+        text: "PyCharm CE - Free community edition"
+        tasks: ["pycharm-ce"]
+
+  - id: "database"
+    question: "Do you need a local database for data work?"
+    options:
+      - letter: "A"
+        text: "PostgreSQL - Great for structured data, SQL analysis"
+        tasks: ["postgresql"]
+      - letter: "B"
+        text: "SQLite only - Lightweight, file-based (already included)"
+        tasks: ["sqlite"]
+      - letter: "C"
+        text: "MongoDB - Document store for unstructured data"
+        tasks: ["mongodb"]
+      - letter: "D"
+        text: "None - I work with files or cloud databases"
+        tasks: []
+
+  - id: "docker"
+    question: "Do you need Docker for running ML environments or services?"
+    options:
+      - letter: "A"
+        text: "Docker Desktop - Run containers for ML services"
+        tasks: ["docker-desktop"]
+      - letter: "B"
+        text: "Colima - Free, lightweight Docker alternative"
+        tasks: ["colima"]
+      - letter: "C"
+        text: "No - I don't need containers"
+        tasks: []
+      - letter: "D"
+        text: "Not sure - When would I use Docker for data science?"
+        action: "explain"
+        explanation: |
+          Docker is useful for data science when:
+          - Running databases locally (PostgreSQL, Redis, etc.)
+          - Using GPU-enabled ML containers
+          - Reproducing exact environments
+          - Running services like MLflow, Jupyter servers
+
+          If you're just getting started, you can skip Docker for now.
+
+  - id: "shell"
+    question: "Do you want shell customization?"
+    options:
+      - letter: "A"
+        text: "Starship - Fast, shows Python/conda environment info"
+        tasks: ["starship"]
+      - letter: "B"
+        text: "Oh My Zsh - Popular framework with many plugins"
+        tasks: ["oh-my-zsh"]
+      - letter: "C"
+        text: "None - Keep the default shell"
+        tasks: []
+      - letter: "D"
+        text: "Skip for now"
+        tasks: []
+
+  - id: "terminal"
+    question: "Would you like to install a terminal emulator?"
+    options:
+      - letter: "A"
+        text: "iTerm2 - Most popular, great for long-running processes"
+        tasks: ["iterm2"]
+      - letter: "B"
+        text: "Warp - Modern terminal with AI assistance"
+        tasks: ["warp"]
+      - letter: "C"
+        text: "None - I'll use the built-in Terminal"
+        tasks: []
+      - letter: "D"
+        text: "Skip for now"
+        tasks: []
+
+  - id: "git"
+    question: "Do you need help setting up Git and GitHub?"
+    options:
+      - letter: "A"
+        text: "Yes - Configure git and generate SSH keys"
+        tasks: ["git", "git-config", "ssh-keygen", "gh-cli", "git-lfs"]
+        user_data_required: ["git_name", "git_email"]
+      - letter: "B"
+        text: "Just git config - I'll handle SSH keys myself"
+        tasks: ["git", "git-config", "git-lfs"]
+        user_data_required: ["git_name", "git_email"]
+      - letter: "C"
+        text: "No - Already configured"
+        tasks: ["git", "git-lfs"]
+      - letter: "D"
+        text: "Skip for now"
+        tasks: ["git"]
+
+  - id: "local_llm"
+    question: "Would you like local AI/LLM tools for ML experimentation?"
+    options:
+      - letter: "A"
+        text: "Ollama - Simple CLI for running local LLMs"
+        tasks: ["ollama"]
+      - letter: "B"
+        text: "LM Studio - GUI for browsing and running models"
+        tasks: ["lm-studio"]
+      - letter: "C"
+        text: "AnythingLLM - Chat with documents, RAG built-in"
+        tasks: ["anythingllm"]
+      - letter: "D"
+        text: "Skip - I use cloud APIs"
+        tasks: []
+
+  - id: "ai_coding"
+    question: "Would you like AI coding assistance?"
+    options:
+      - letter: "A"
+        text: "Claude Code - Terminal AI for code assistance"
+        tasks: ["claude-code"]
+      - letter: "B"
+        text: "Continue - Open-source, works with local models"
+        tasks: ["continue"]
+      - letter: "C"
+        text: "Both Claude Code and Continue"
+        tasks: ["claude-code", "continue"]
+      - letter: "D"
+        text: "Skip - Jupyter notebooks are enough"
+        tasks: []
+
+  - id: "productivity"
+    question: "Would you like productivity tools?"
+    options:
+      - letter: "A"
+        text: "Raycast - Spotlight replacement with calculations"
+        tasks: ["raycast"]
+      - letter: "B"
+        text: "Rectangle - Window management for multiple notebooks"
+        tasks: ["rectangle"]
+      - letter: "C"
+        text: "Both Raycast and Rectangle"
+        tasks: ["raycast", "rectangle"]
+      - letter: "D"
+        text: "Skip"
+        tasks: []
+
+  - id: "fonts"
+    question: "Would you like a coding font for notebooks?"
+    options:
+      - letter: "A"
+        text: "JetBrains Mono - Great readability, ligatures"
+        tasks: ["jetbrains-mono"]
+      - letter: "B"
+        text: "Fira Code - Popular choice, ligatures"
+        tasks: ["fira-code"]
+      - letter: "C"
+        text: "JetBrains Mono Nerd Font - With icons for terminal"
+        tasks: ["jetbrains-mono-nerd-font"]
+      - letter: "D"
+        text: "Skip - Use system fonts"
+        tasks: []
+
+default_cli_tools:
+  - git
+  - git-lfs
+  - jq
+  - ripgrep
+  - wget
+  - htop
+
+post_install_suggestions:
+  - tableplus
+  - dbeaver
+  - bat

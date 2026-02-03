@@ -1,0 +1,261 @@
+metadata:
+  id: "devops"
+  name: "DevOps & Infrastructure"
+  description: "Docker, Kubernetes, Terraform, cloud CLIs"
+  version: "1.0.0"
+
+selection_prompt:
+  letter: "B"
+  text: "DevOps & Infrastructure - Docker, Kubernetes, Terraform, cloud CLIs"
+
+required_tasks:
+  - homebrew
+
+question_flow:
+  - id: "containers"
+    question: "Which container runtime do you need?"
+    options:
+      - letter: "A"
+        text: "Docker Desktop - Full Docker with GUI and Kubernetes"
+        tasks: ["docker-desktop", "kubernetes-cli"]
+      - letter: "B"
+        text: "Colima - Free, lightweight Docker runtime"
+        tasks: ["colima", "kubernetes-cli"]
+      - letter: "C"
+        text: "Podman - Daemonless, Docker-compatible"
+        tasks: ["podman", "kubernetes-cli"]
+      - letter: "D"
+        text: "Not sure - What's the difference?"
+        action: "explain"
+        explanation: |
+          **Docker Desktop**: Official Docker with GUI, built-in K8s.
+          Note: Requires paid license for larger companies.
+
+          **Colima**: Free, open-source Docker on macOS.
+          Uses same Docker CLI, just different runtime.
+
+          **Podman**: Daemonless, rootless containers.
+          Docker-compatible but architecturally different.
+
+          For most users: Docker Desktop or Colima.
+          For enterprise with license concerns: Colima or Podman.
+
+  - id: "kubernetes"
+    question: "What Kubernetes tools do you need?"
+    options:
+      - letter: "A"
+        text: "Essential - kubectl, helm, k9s"
+        tasks: ["kubernetes-cli", "helm", "k9s"]
+      - letter: "B"
+        text: "With local cluster - Add minikube or kind"
+        tasks: ["kubernetes-cli", "helm", "k9s", "minikube"]
+      - letter: "C"
+        text: "Minimal - Just kubectl"
+        tasks: ["kubernetes-cli"]
+      - letter: "D"
+        text: "None - I don't use Kubernetes"
+        tasks: []
+
+  - id: "iac"
+    question: "Which infrastructure-as-code tools do you use?"
+    options:
+      - letter: "A"
+        text: "Terraform - HashiCorp's IaC tool (most popular)"
+        tasks: ["terraform"]
+      - letter: "B"
+        text: "OpenTofu - Open-source Terraform fork"
+        tasks: ["opentofu"]
+      - letter: "C"
+        text: "Pulumi - IaC using TypeScript/Python/Go"
+        tasks: ["pulumi"]
+      - letter: "D"
+        text: "Not sure - What's the difference?"
+        action: "explain"
+        explanation: |
+          **Terraform**: Industry standard, huge ecosystem, HashiCorp license.
+          **OpenTofu**: Fork of Terraform, truly open-source, drop-in replacement.
+          **Pulumi**: Use real programming languages instead of HCL.
+
+          For most teams: Terraform or OpenTofu. For developers who prefer
+          TypeScript/Python: Pulumi.
+
+  - id: "cloud"
+    question: "Which cloud provider CLIs do you need?"
+    options:
+      - letter: "A"
+        text: "AWS CLI - Amazon Web Services"
+        tasks: ["awscli"]
+      - letter: "B"
+        text: "gcloud - Google Cloud Platform"
+        tasks: ["google-cloud-sdk"]
+      - letter: "C"
+        text: "Azure CLI - Microsoft Azure"
+        tasks: ["azure-cli"]
+      - letter: "D"
+        text: "Multiple or none - I'll configure this separately"
+        tasks: []
+
+  - id: "editor"
+    question: "Which editor do you prefer?"
+    options:
+      - letter: "A"
+        text: "VS Code - Great YAML, Docker, and K8s extensions"
+        tasks: ["vscode"]
+      - letter: "B"
+        text: "Cursor - AI-powered assistance for configs"
+        tasks: ["cursor"]
+      - letter: "C"
+        text: "Neovim - Terminal-based, highly customizable"
+        tasks: ["neovim"]
+      - letter: "D"
+        text: "Skip - I have my preferred editor"
+        tasks: []
+
+  - id: "shell"
+    question: "Do you want shell customization?"
+    options:
+      - letter: "A"
+        text: "Starship - Shows kubectl context, AWS profile, etc."
+        tasks: ["starship"]
+      - letter: "B"
+        text: "Oh My Zsh - With kubectl and docker plugins"
+        tasks: ["oh-my-zsh"]
+      - letter: "C"
+        text: "None - Keep default shell"
+        tasks: []
+      - letter: "D"
+        text: "Skip for now"
+        tasks: []
+
+  - id: "terminal"
+    question: "Would you like to install a terminal emulator?"
+    options:
+      - letter: "A"
+        text: "iTerm2 - Most popular, great for DevOps work"
+        tasks: ["iterm2", "tmux"]
+      - letter: "B"
+        text: "Warp - Modern terminal with AI assistance"
+        tasks: ["warp"]
+      - letter: "C"
+        text: "None - I'll use the built-in Terminal"
+        tasks: []
+      - letter: "D"
+        text: "Skip for now"
+        tasks: []
+
+  - id: "git"
+    question: "Do you need help setting up Git and GitHub?"
+    options:
+      - letter: "A"
+        text: "Yes - Configure git and generate SSH keys"
+        tasks: ["git", "git-config", "ssh-keygen", "gh-cli"]
+        user_data_required: ["git_name", "git_email"]
+      - letter: "B"
+        text: "Just git config"
+        tasks: ["git", "git-config"]
+        user_data_required: ["git_name", "git_email"]
+      - letter: "C"
+        text: "No - Already configured"
+        tasks: ["git"]
+      - letter: "D"
+        text: "Skip for now"
+        tasks: ["git"]
+
+  - id: "security_tools"
+    question: "Do you need security scanning tools?"
+    options:
+      - letter: "A"
+        text: "Trivy - Container and IaC vulnerability scanner"
+        tasks: ["trivy"]
+      - letter: "B"
+        text: "Gitleaks - Secret detection in git repos"
+        tasks: ["gitleaks"]
+      - letter: "C"
+        text: "Both Trivy and Gitleaks"
+        tasks: ["trivy", "gitleaks"]
+      - letter: "D"
+        text: "Skip - CI/CD handles security scanning"
+        tasks: []
+
+  - id: "vpn_tools"
+    question: "Do you need VPN or network tools?"
+    options:
+      - letter: "A"
+        text: "Tailscale - Zero-config mesh VPN"
+        tasks: ["tailscale"]
+      - letter: "B"
+        text: "WireGuard - Fast, modern VPN"
+        tasks: ["wireguard"]
+      - letter: "C"
+        text: "Both Tailscale and WireGuard"
+        tasks: ["tailscale", "wireguard"]
+      - letter: "D"
+        text: "Skip - Company provides VPN"
+        tasks: []
+
+  - id: "ai_tools"
+    question: "Would you like AI assistance for DevOps?"
+    options:
+      - letter: "A"
+        text: "Claude Code - Terminal AI for configs and scripts"
+        tasks: ["claude-code"]
+      - letter: "B"
+        text: "Goose - Open-source AI agent from Block"
+        tasks: ["goose"]
+      - letter: "C"
+        text: "Both Claude Code and Goose"
+        tasks: ["claude-code", "goose"]
+      - letter: "D"
+        text: "Skip"
+        tasks: []
+
+  - id: "productivity"
+    question: "Would you like productivity tools?"
+    options:
+      - letter: "A"
+        text: "Raycast - Spotlight replacement with dev shortcuts"
+        tasks: ["raycast"]
+      - letter: "B"
+        text: "Rectangle - Window management"
+        tasks: ["rectangle"]
+      - letter: "C"
+        text: "Both Raycast and Rectangle"
+        tasks: ["raycast", "rectangle"]
+      - letter: "D"
+        text: "Skip"
+        tasks: []
+
+  - id: "fonts"
+    question: "Would you like a coding font with terminal icons?"
+    options:
+      - letter: "A"
+        text: "JetBrains Mono Nerd Font - Icons for k9s, lazydocker"
+        tasks: ["jetbrains-mono-nerd-font"]
+      - letter: "B"
+        text: "Meslo Nerd Font - Recommended for Powerlevel10k"
+        tasks: ["meslo-nerd-font"]
+      - letter: "C"
+        text: "Hack Nerd Font - Clean, legible with icons"
+        tasks: ["hack-nerd-font"]
+      - letter: "D"
+        text: "Skip - Use system fonts"
+        tasks: []
+
+default_cli_tools:
+  - git
+  - gh-cli
+  - jq
+  - yq
+  - ripgrep
+  - fd
+  - fzf
+  - watch
+  - htop
+  - httpie
+  - direnv
+
+post_install_suggestions:
+  - lazygit
+  - lazydocker
+  - bat
+  - eza

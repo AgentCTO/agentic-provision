@@ -1,0 +1,659 @@
+metadata:
+  category: "ai-tools"
+  description: "Local AI/LLM tools and AI-assisted development"
+  author: "agentic-provision"
+  version: "1.0.0"
+  created: "2026-02-03"
+
+tasks:
+  # =============================================================================
+  # Local LLM Runners
+  # =============================================================================
+
+  ollama:
+    id: "ollama"
+    name: "Ollama"
+    description: "Run LLMs locally - simple CLI, scriptable, developer-friendly"
+    category: "ai-tools"
+    tags: ["llm", "local", "cli", "open-source"]
+
+    detection:
+      check_command: "command -v ollama"
+      version_command: "ollama --version"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install Ollama"
+          command: "brew install ollama"
+          description: "Install via Homebrew"
+
+    post_install:
+      message: "Ollama installed. Run models with: ollama run llama3.2"
+      notes:
+        - "Simple CLI: ollama run llama3.2"
+        - "OpenAI-compatible API at localhost:11434"
+        - "Cross-platform"
+        - "Easy to script and integrate"
+        - "Popular models: llama3.2, mistral, codellama"
+
+  lm-studio:
+    id: "lm-studio"
+    name: "LM Studio"
+    description: "GUI for running local LLMs - browse, download, chat"
+    category: "ai-tools"
+    tags: ["llm", "local", "gui", "user-friendly"]
+
+    detection:
+      installed_indicator: "/Applications/LM Studio.app"
+      check_command: "[ -d '/Applications/LM Studio.app' ]"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install LM Studio"
+          command: "brew install --cask lm-studio"
+          description: "Install via Homebrew cask"
+
+    post_install:
+      message: "LM Studio installed. GUI for browsing and running local LLMs."
+      notes:
+        - "Beautiful GUI"
+        - "Model browser and downloader"
+        - "Local API server"
+        - "Parameter tuning UI"
+        - "Good for comparing models"
+
+  jan:
+    id: "jan"
+    name: "Jan"
+    description: "Offline ChatGPT alternative - privacy-first AI assistant"
+    category: "ai-tools"
+    tags: ["llm", "local", "gui", "privacy", "chatgpt-alternative"]
+
+    detection:
+      installed_indicator: "/Applications/Jan.app"
+      check_command: "[ -d '/Applications/Jan.app' ]"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install Jan"
+          command: "brew install --cask jan"
+          description: "Install via Homebrew cask"
+
+    post_install:
+      message: "Jan installed. Offline ChatGPT-style assistant."
+      notes:
+        - "ChatGPT-like interface"
+        - "Completely offline"
+        - "No account required"
+        - "Supports multiple models"
+        - "Project workspaces"
+
+  localai:
+    id: "localai"
+    name: "LocalAI"
+    description: "OpenAI drop-in replacement - full API compatibility"
+    category: "ai-tools"
+    tags: ["llm", "local", "api", "openai-compatible"]
+
+    detection:
+      check_command: "command -v local-ai || [ -d '/Applications/LocalAI.app' ]"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install LocalAI"
+          command: "brew install localai"
+          description: "Install via Homebrew"
+
+    post_install:
+      message: "LocalAI installed. Full OpenAI API compatibility."
+      notes:
+        - "Drop-in OpenAI replacement"
+        - "Text, image, audio APIs"
+        - "Function calling support"
+        - "Best for app development"
+
+  anythingllm:
+    id: "anythingllm"
+    name: "AnythingLLM"
+    description: "All-in-one AI app with RAG, agents, and MCP - chat with your documents"
+    category: "ai-tools"
+    tags: ["llm", "local", "rag", "agents", "documents", "mcp"]
+
+    detection:
+      installed_indicator: "/Applications/AnythingLLM.app"
+      check_command: "[ -d '/Applications/AnythingLLM.app' ]"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install AnythingLLM"
+          command: "brew install --cask anythingllm"
+          description: "Install via Homebrew cask"
+
+    post_install:
+      message: "AnythingLLM installed. Chat with documents using local or cloud LLMs."
+      notes:
+        - "Built-in RAG - chat with PDFs, docs, code"
+        - "AI agents with custom skills"
+        - "MCP (Model Context Protocol) compatible"
+        - "100% offline capable"
+        - "Supports local (Ollama) and cloud LLMs"
+        - "No-code agent builder"
+        - "Workspaces for different projects"
+        - "Browser extension available"
+
+  gpt4all:
+    id: "gpt4all"
+    name: "GPT4All"
+    description: "Open-source local LLM runner - no GPU required, runs anywhere"
+    category: "ai-tools"
+    tags: ["llm", "local", "gui", "open-source", "nomic"]
+
+    detection:
+      installed_indicator: "/Applications/GPT4All.app"
+      check_command: "[ -d '/Applications/GPT4All.app' ]"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install GPT4All"
+          command: "brew install --cask gpt4all"
+          description: "Install via Homebrew cask"
+
+    post_install:
+      message: "GPT4All installed. Run LLMs locally without GPU."
+      notes:
+        - "No GPU required - runs on CPU"
+        - "Simple GUI interface"
+        - "Python SDK available"
+        - "Download models in-app"
+        - "Completely offline and private"
+        - "Free and open-source (Nomic AI)"
+
+  # =============================================================================
+  # AI Desktop Assistants
+  # =============================================================================
+
+  claude-desktop:
+    id: "claude-desktop"
+    name: "Claude Desktop"
+    description: "Anthropic's official Claude AI desktop app with MCP support"
+    category: "ai-tools"
+    tags: ["ai", "assistant", "anthropic", "claude", "mcp"]
+
+    detection:
+      installed_indicator: "/Applications/Claude.app"
+      check_command: "[ -d '/Applications/Claude.app' ]"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install Claude Desktop"
+          command: "brew install --cask claude"
+          description: "Install via Homebrew cask"
+
+    post_install:
+      message: "Claude Desktop installed. Sign in with your Anthropic account."
+      notes:
+        - "Official Anthropic app"
+        - "MCP (Model Context Protocol) support"
+        - "Desktop extensions for local tools"
+        - "Cowork feature for file access (Pro+)"
+        - "Requires macOS 11+"
+
+  chatgpt-desktop:
+    id: "chatgpt-desktop"
+    name: "ChatGPT Desktop"
+    description: "OpenAI's official ChatGPT desktop app with launcher widget"
+    category: "ai-tools"
+    tags: ["ai", "assistant", "openai", "chatgpt"]
+
+    detection:
+      installed_indicator: "/Applications/ChatGPT.app"
+      check_command: "[ -d '/Applications/ChatGPT.app' ]"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install ChatGPT Desktop"
+          command: "brew install --cask chatgpt"
+          description: "Install via Homebrew cask"
+
+    post_install:
+      message: "ChatGPT Desktop installed. Sign in with your OpenAI account."
+      notes:
+        - "Official OpenAI app"
+        - "Option+Space launcher widget"
+        - "Screenshot and file upload"
+        - "Requires Apple Silicon (M1+)"
+        - "Requires macOS 14+"
+
+  perplexity:
+    id: "perplexity"
+    name: "Perplexity"
+    description: "AI-powered search and research assistant with citations"
+    category: "ai-tools"
+    tags: ["ai", "search", "research", "citations"]
+
+    detection:
+      installed_indicator: "/Applications/Perplexity.app"
+      check_command: "[ -d '/Applications/Perplexity.app' ]"
+
+    dependencies:
+      required: []
+
+    install:
+      steps:
+        - name: "Install Perplexity from Mac App Store"
+          command: "echo 'Install Perplexity from the Mac App Store: Search for Perplexity: Ask Anything'"
+          description: "Available on Mac App Store"
+          manual: true
+
+    post_install:
+      message: "Install Perplexity from the Mac App Store."
+      notes:
+        - "AI-powered search engine"
+        - "Provides citations for answers"
+        - "Pro Search for deeper research"
+        - "Voice and text input"
+        - "Install from Mac App Store"
+
+  # =============================================================================
+  # AI-Powered Development Tools
+  # =============================================================================
+
+  continue:
+    id: "continue"
+    name: "Continue"
+    description: "Open-source AI code assistant for VS Code/JetBrains"
+    category: "ai-tools"
+    tags: ["ai", "coding", "assistant", "vscode", "open-source"]
+
+    detection:
+      check_command: "code --list-extensions 2>/dev/null | grep -q Continue.continue"
+
+    dependencies:
+      required: ["vscode"]
+
+    install:
+      steps:
+        - name: "Install Continue extension"
+          command: "code --install-extension Continue.continue"
+          description: "Install VS Code extension"
+
+    post_install:
+      message: "Continue installed. Open-source Copilot alternative."
+      notes:
+        - "Works with local models (Ollama)"
+        - "Works with cloud APIs"
+        - "Open-source"
+        - "Available for VS Code and JetBrains"
+
+  cursor:
+    id: "cursor-ai"
+    name: "Cursor (AI Editor)"
+    description: "AI-first code editor - VS Code fork with built-in AI"
+    category: "ai-tools"
+    tags: ["ai", "editor", "coding", "copilot"]
+
+    detection:
+      installed_indicator: "/Applications/Cursor.app"
+      check_command: "[ -d '/Applications/Cursor.app' ]"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install Cursor"
+          command: "brew install --cask cursor"
+          description: "Install via Homebrew cask"
+
+    post_install:
+      message: "Cursor installed. AI-first code editor."
+      notes:
+        - "VS Code compatible"
+        - "Built-in AI chat and autocomplete"
+        - "Understands your codebase"
+        - "Free tier available"
+
+  windsurf:
+    id: "windsurf"
+    name: "Windsurf"
+    description: "AI agent-powered IDE - VS Code fork with Cascade assistant"
+    category: "ai-tools"
+    tags: ["ai", "editor", "coding", "agent", "cascade"]
+
+    detection:
+      installed_indicator: "/Applications/Windsurf.app"
+      check_command: "[ -d '/Applications/Windsurf.app' ]"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install Windsurf"
+          command: "brew install --cask windsurf"
+          description: "Install via Homebrew cask"
+
+    post_install:
+      message: "Windsurf installed. AI agent-powered IDE."
+      notes:
+        - "VS Code fork - imports existing settings"
+        - "Cascade AI assistant built-in"
+        - "Agent mode for autonomous coding"
+        - "Supports 70+ languages"
+        - "Requires macOS 11+"
+
+  supermaven:
+    id: "supermaven"
+    name: "Supermaven"
+    description: "Fast AI code completion with 1M token context window"
+    category: "ai-tools"
+    tags: ["ai", "coding", "completion", "fast"]
+
+    detection:
+      check_command: "code --list-extensions 2>/dev/null | grep -q supermaven.supermaven"
+
+    dependencies:
+      required: ["vscode"]
+
+    install:
+      steps:
+        - name: "Install Supermaven extension"
+          command: "code --install-extension supermaven.supermaven"
+          description: "Install VS Code extension"
+
+    post_install:
+      message: "Supermaven installed. Fast AI code completion."
+      notes:
+        - "1M token context window"
+        - "3x faster than Copilot"
+        - "Chat with GPT-4o, Claude 3.5"
+        - "Also available for JetBrains/Neovim"
+        - "Free tier available"
+
+  tabnine:
+    id: "tabnine"
+    name: "Tabnine"
+    description: "Privacy-first AI code assistant - no code retention"
+    category: "ai-tools"
+    tags: ["ai", "coding", "completion", "privacy", "enterprise"]
+
+    detection:
+      check_command: "code --list-extensions 2>/dev/null | grep -q TabNine.tabnine-vscode"
+
+    dependencies:
+      required: ["vscode"]
+
+    install:
+      steps:
+        - name: "Install Tabnine extension"
+          command: "code --install-extension TabNine.tabnine-vscode"
+          description: "Install VS Code extension"
+
+    post_install:
+      message: "Tabnine installed. Privacy-first AI code assistant."
+      notes:
+        - "No-train, no-retain policy"
+        - "Supports multiple LLMs (GPT-4o, Claude)"
+        - "Enterprise-grade security"
+        - "Available for 15+ IDEs"
+        - "Free tier available"
+
+  # =============================================================================
+  # AI CLI Tools
+  # =============================================================================
+
+  aider:
+    id: "aider"
+    name: "Aider"
+    description: "AI pair programming in your terminal"
+    category: "ai-tools"
+    tags: ["ai", "coding", "cli", "pair-programming"]
+
+    detection:
+      check_command: "command -v aider"
+      version_command: "aider --version"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install aider"
+          command: "brew install aider"
+          description: "Install via Homebrew"
+
+    post_install:
+      message: "Aider installed. AI pair programmer in terminal."
+      notes:
+        - "Works with git repos"
+        - "Supports multiple LLM backends"
+        - "Voice input support"
+
+  goose:
+    id: "goose"
+    name: "Goose"
+    description: "Open-source AI agent by Block - goes beyond code suggestions"
+    category: "ai-tools"
+    tags: ["ai", "agent", "cli", "open-source", "mcp", "block"]
+
+    detection:
+      check_command: "command -v goose"
+      version_command: "goose --version"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install Goose"
+          command: "brew install block/tap/goose"
+          description: "Install via Homebrew"
+
+    post_install:
+      message: "Goose installed. Open-source AI agent from Block."
+      notes:
+        - "Goes beyond code - builds entire projects"
+        - "MCP compatible (Model Context Protocol)"
+        - "25+ LLM provider support"
+        - "Runs locally, fully autonomous"
+        - "Apache 2.0 license"
+        - "Desktop app also available"
+
+  claude-code:
+    id: "claude-code"
+    name: "Claude Code"
+    description: "Anthropic's terminal-based AI coding assistant"
+    category: "ai-tools"
+    tags: ["ai", "coding", "cli", "anthropic", "terminal"]
+
+    detection:
+      check_command: "command -v claude"
+      version_command: "claude --version"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install Claude Code"
+          command: "brew install --cask claude-code"
+          description: "Install via Homebrew cask"
+
+    post_install:
+      message: "Claude Code installed. Terminal AI coding assistant."
+      notes:
+        - "Official Anthropic CLI tool"
+        - "Agentic coding in terminal"
+        - "MCP server support"
+        - "Self-contained executable"
+        - "Run: claude to start"
+
+  github-copilot-cli:
+    id: "github-copilot-cli"
+    name: "GitHub Copilot CLI"
+    description: "AI in the command line - explain and suggest commands"
+    category: "ai-tools"
+    tags: ["ai", "cli", "github", "copilot"]
+
+    detection:
+      check_command: "command -v github-copilot-cli || gh extension list | grep -q copilot"
+
+    dependencies:
+      required: ["gh-cli"]
+
+    install:
+      steps:
+        - name: "Install GitHub Copilot CLI extension"
+          command: "gh extension install github/gh-copilot"
+          description: "Install via gh CLI"
+
+    post_install:
+      message: "GitHub Copilot CLI installed. Usage: gh copilot explain/suggest"
+      notes:
+        - "Requires GitHub Copilot subscription"
+        - "Explain commands: gh copilot explain"
+        - "Suggest commands: gh copilot suggest"
+
+  # =============================================================================
+  # Image Generation
+  # =============================================================================
+
+  diffusionbee:
+    id: "diffusionbee"
+    name: "DiffusionBee"
+    description: "Stable Diffusion GUI for Mac - generate images locally"
+    category: "ai-tools"
+    tags: ["ai", "image-generation", "stable-diffusion", "local"]
+
+    detection:
+      installed_indicator: "/Applications/DiffusionBee.app"
+      check_command: "[ -d '/Applications/DiffusionBee.app' ]"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install DiffusionBee"
+          command: "brew install --cask diffusionbee"
+          description: "Install via Homebrew cask"
+
+    post_install:
+      message: "DiffusionBee installed. Generate images locally with Stable Diffusion."
+      notes:
+        - "Runs completely offline"
+        - "No GPU required (uses Apple Silicon)"
+        - "Free and open-source"
+
+  # =============================================================================
+  # AI Transcription
+  # =============================================================================
+
+  macwhisper:
+    id: "macwhisper"
+    name: "MacWhisper"
+    description: "Transcribe audio locally using OpenAI Whisper"
+    category: "ai-tools"
+    tags: ["ai", "transcription", "whisper", "local"]
+
+    detection:
+      installed_indicator: "/Applications/MacWhisper.app"
+      check_command: "[ -d '/Applications/MacWhisper.app' ]"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install MacWhisper"
+          command: "brew install --cask macwhisper"
+          description: "Install via Homebrew cask"
+
+    post_install:
+      message: "MacWhisper installed. Transcribe audio locally."
+      notes:
+        - "Uses OpenAI Whisper model"
+        - "Runs completely offline"
+        - "Multiple language support"
+
+  # =============================================================================
+  # ML/Data Science Tools
+  # =============================================================================
+
+  jupyter:
+    id: "jupyter"
+    name: "JupyterLab"
+    description: "Interactive notebooks for data science and ML"
+    category: "ai-tools"
+    tags: ["jupyter", "notebooks", "data-science", "python"]
+
+    detection:
+      check_command: "command -v jupyter"
+      version_command: "jupyter --version"
+
+    dependencies:
+      required: ["pyenv"]
+
+    install:
+      steps:
+        - name: "Install JupyterLab"
+          command: "pip install jupyterlab"
+          description: "Install via pip"
+
+    post_install:
+      message: "JupyterLab installed. Launch with: jupyter lab"
+      notes:
+        - "Interactive Python notebooks"
+        - "Data visualization"
+        - "ML experiment tracking"
+
+  miniconda:
+    id: "miniconda"
+    name: "Miniconda"
+    description: "Minimal conda for Python data science environments"
+    category: "ai-tools"
+    tags: ["python", "conda", "data-science", "environments"]
+
+    detection:
+      check_command: "command -v conda"
+      version_command: "conda --version"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install Miniconda"
+          command: "brew install --cask miniconda"
+          description: "Install via Homebrew cask"
+
+    post_install:
+      message: "Miniconda installed. Initialize with: conda init zsh"
+      notes:
+        - "Minimal conda installation"
+        - "Create environments: conda create -n myenv python=3.11"
+        - "Great for ML/data science projects"

@@ -1,0 +1,488 @@
+metadata:
+  category: "fonts"
+  description: "Programming fonts with ligatures and Nerd Font variants"
+  author: "agentic-provision"
+  version: "1.0.0"
+  created: "2026-02-03"
+
+tasks:
+  # =============================================================================
+  # Popular Coding Fonts (with Ligatures)
+  # =============================================================================
+
+  fira-code:
+    id: "fira-code"
+    name: "Fira Code"
+    description: "Most popular coding font - excellent ligatures, free"
+    category: "fonts"
+    tags: ["font", "ligatures", "popular", "free"]
+
+    detection:
+      check_command: "ls ~/Library/Fonts/FiraCode* /Library/Fonts/FiraCode* 2>/dev/null | head -1"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install Fira Code"
+          command: "brew install --cask font-fira-code"
+          description: "Install via Homebrew cask"
+
+    post_install:
+      message: "Fira Code installed. Set as editor font to enable ligatures."
+      notes:
+        - "Ligatures: => !== -> <=> =>"
+        - "Enable ligatures in editor settings"
+        - "Free and open-source"
+
+  jetbrains-mono:
+    id: "jetbrains-mono"
+    name: "JetBrains Mono"
+    description: "Designed for developers - increased letter height, reduced eye strain"
+    category: "fonts"
+    tags: ["font", "ligatures", "jetbrains", "free"]
+
+    detection:
+      check_command: "ls ~/Library/Fonts/JetBrainsMono* /Library/Fonts/JetBrainsMono* 2>/dev/null | head -1"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install JetBrains Mono"
+          command: "brew install --cask font-jetbrains-mono"
+          description: "Install via Homebrew cask"
+
+    post_install:
+      message: "JetBrains Mono installed. Optimized for long coding sessions."
+      notes:
+        - "138 code ligatures"
+        - "Increased x-height for readability"
+        - "Free from JetBrains"
+
+  cascadia-code:
+    id: "cascadia-code"
+    name: "Cascadia Code"
+    description: "Microsoft's font for Windows Terminal and VS Code"
+    category: "fonts"
+    tags: ["font", "ligatures", "microsoft", "free"]
+
+    detection:
+      check_command: "ls ~/Library/Fonts/CascadiaCode* /Library/Fonts/CascadiaCode* 2>/dev/null | head -1"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install Cascadia Code"
+          command: "brew install --cask font-cascadia-code"
+          description: "Install via Homebrew cask"
+
+    post_install:
+      message: "Cascadia Code installed. Microsoft's default terminal font."
+      notes:
+        - "Default in Windows Terminal"
+        - "Includes cursive italic variant"
+        - "Free from Microsoft"
+
+  monaspace:
+    id: "monaspace"
+    name: "Monaspace"
+    description: "GitHub's innovative variable font superfamily (5 styles)"
+    category: "fonts"
+    tags: ["font", "ligatures", "github", "variable", "free"]
+
+    detection:
+      check_command: "ls ~/Library/Fonts/Monaspace* /Library/Fonts/Monaspace* 2>/dev/null | head -1"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install Monaspace"
+          command: "brew install --cask font-monaspace"
+          description: "Install via Homebrew cask"
+
+    post_install:
+      message: "Monaspace installed. 5 interchangeable font styles from GitHub."
+      notes:
+        - "Neon (neo-grotesque), Argon (humanist)"
+        - "Xenon (slab serif), Radon (handwriting)"
+        - "Krypton (mechanical sans)"
+        - "Texture healing technology"
+
+  source-code-pro:
+    id: "source-code-pro"
+    name: "Source Code Pro"
+    description: "Adobe's monospace font family for coding"
+    category: "fonts"
+    tags: ["font", "adobe", "free"]
+
+    detection:
+      check_command: "ls ~/Library/Fonts/SourceCodePro* /Library/Fonts/SourceCodePro* 2>/dev/null | head -1"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install Source Code Pro"
+          command: "brew install --cask font-source-code-pro"
+          description: "Install via Homebrew cask"
+
+    post_install:
+      message: "Source Code Pro installed. Clean Adobe monospace font."
+      notes:
+        - "No ligatures (traditional style)"
+        - "14 weights available"
+        - "Free from Adobe"
+
+  hack:
+    id: "hack"
+    name: "Hack"
+    description: "Typeface designed for source code - highly legible"
+    category: "fonts"
+    tags: ["font", "legibility", "free"]
+
+    detection:
+      check_command: "ls ~/Library/Fonts/Hack* /Library/Fonts/Hack* 2>/dev/null | head -1"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install Hack"
+          command: "brew install --cask font-hack"
+          description: "Install via Homebrew cask"
+
+    post_install:
+      message: "Hack installed. Optimized for source code legibility."
+      notes:
+        - "No ligatures (clarity focused)"
+        - "Based on Bitstream Vera/DejaVu"
+        - "Free and open-source"
+
+  inconsolata:
+    id: "inconsolata"
+    name: "Inconsolata"
+    description: "Classic humanist monospace font"
+    category: "fonts"
+    tags: ["font", "classic", "free"]
+
+    detection:
+      check_command: "ls ~/Library/Fonts/Inconsolata* /Library/Fonts/Inconsolata* 2>/dev/null | head -1"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install Inconsolata"
+          command: "brew install --cask font-inconsolata"
+          description: "Install via Homebrew cask"
+
+    post_install:
+      message: "Inconsolata installed. Classic programmer's font."
+      notes:
+        - "Inspired by Consolas"
+        - "Clean, readable design"
+        - "Free and open-source"
+
+  ibm-plex-mono:
+    id: "ibm-plex-mono"
+    name: "IBM Plex Mono"
+    description: "IBM's open-source monospace font - clean, neutral design"
+    category: "fonts"
+    tags: ["font", "ibm", "corporate", "free"]
+
+    detection:
+      check_command: "ls ~/Library/Fonts/IBMPlexMono* /Library/Fonts/IBMPlexMono* 2>/dev/null | head -1"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install IBM Plex Mono"
+          command: "brew install --cask font-ibm-plex-mono"
+          description: "Install via Homebrew cask"
+
+    post_install:
+      message: "IBM Plex Mono installed. Clean corporate monospace."
+      notes:
+        - "Part of IBM Plex family"
+        - "Balance of personality and neutrality"
+        - "Free and open-source"
+
+  geist-mono:
+    id: "geist-mono"
+    name: "Geist Mono"
+    description: "Vercel's modern monospace font - default in Next.js 15"
+    category: "fonts"
+    tags: ["font", "vercel", "nextjs", "modern", "free"]
+
+    detection:
+      check_command: "ls ~/Library/Fonts/GeistMono* /Library/Fonts/GeistMono* 2>/dev/null | head -1"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install Geist Mono"
+          command: "brew install --cask font-geist-mono"
+          description: "Install via Homebrew cask"
+
+    post_install:
+      message: "Geist Mono installed. Vercel's modern coding font."
+      notes:
+        - "Default font in Next.js 15"
+        - "Designed for code editors and terminals"
+        - "Free from Vercel"
+
+  ubuntu-mono:
+    id: "ubuntu-mono"
+    name: "Ubuntu Mono"
+    description: "Ubuntu's official monospace font - clear and approachable"
+    category: "fonts"
+    tags: ["font", "ubuntu", "linux", "free"]
+
+    detection:
+      check_command: "ls ~/Library/Fonts/UbuntuMono* /Library/Fonts/UbuntuMono* 2>/dev/null | head -1"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install Ubuntu Mono"
+          command: "brew install --cask font-ubuntu-mono"
+          description: "Install via Homebrew cask"
+
+    post_install:
+      message: "Ubuntu Mono installed. Ubuntu's official coding font."
+      notes:
+        - "Clear and approachable design"
+        - "Popular on Linux systems"
+        - "Free and open-source"
+
+  # =============================================================================
+  # Specialty Fonts
+  # =============================================================================
+
+  victor-mono:
+    id: "victor-mono"
+    name: "Victor Mono"
+    description: "Monospace font with cursive italics and ligatures"
+    category: "fonts"
+    tags: ["font", "ligatures", "cursive", "free"]
+
+    detection:
+      check_command: "ls ~/Library/Fonts/VictorMono* /Library/Fonts/VictorMono* 2>/dev/null | head -1"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install Victor Mono"
+          command: "brew install --cask font-victor-mono"
+          description: "Install via Homebrew cask"
+
+    post_install:
+      message: "Victor Mono installed. Beautiful cursive italics for comments."
+      notes:
+        - "Cursive italic style"
+        - "Programming ligatures"
+        - "7 weights available"
+
+  iosevka:
+    id: "iosevka"
+    name: "Iosevka"
+    description: "Narrow, highly customizable programming font"
+    category: "fonts"
+    tags: ["font", "ligatures", "narrow", "customizable", "free"]
+
+    detection:
+      check_command: "ls ~/Library/Fonts/Iosevka* /Library/Fonts/Iosevka* 2>/dev/null | head -1"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install Iosevka"
+          command: "brew install --cask font-iosevka"
+          description: "Install via Homebrew cask"
+
+    post_install:
+      message: "Iosevka installed. Narrow font - fit more code on screen."
+      notes:
+        - "Very narrow character width"
+        - "Highly customizable builds"
+        - "Great for split panes"
+
+  # =============================================================================
+  # Nerd Fonts (Patched with Icons - Required for Starship, Powerlevel10k)
+  # =============================================================================
+
+  jetbrains-mono-nerd-font:
+    id: "jetbrains-mono-nerd-font"
+    name: "JetBrains Mono Nerd Font"
+    description: "JetBrains Mono + 3600+ icons for terminals"
+    category: "fonts"
+    tags: ["font", "nerd-font", "icons", "terminal", "starship"]
+
+    detection:
+      check_command: "ls ~/Library/Fonts/JetBrainsMonoNerd* /Library/Fonts/JetBrainsMonoNerd* 2>/dev/null | head -1"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install JetBrains Mono Nerd Font"
+          command: "brew install --cask font-jetbrains-mono-nerd-font"
+          description: "Install via Homebrew cask"
+
+    post_install:
+      message: "JetBrains Mono Nerd Font installed. Set as terminal font."
+      notes:
+        - "Required for Starship prompt"
+        - "3600+ icons included"
+        - "Use 'JetBrainsMono Nerd Font' in settings"
+
+  fira-code-nerd-font:
+    id: "fira-code-nerd-font"
+    name: "Fira Code Nerd Font"
+    description: "Fira Code + icons for terminal prompts"
+    category: "fonts"
+    tags: ["font", "nerd-font", "icons", "terminal", "ligatures"]
+
+    detection:
+      check_command: "ls ~/Library/Fonts/FiraCodeNerd* /Library/Fonts/FiraCodeNerd* 2>/dev/null | head -1"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install Fira Code Nerd Font"
+          command: "brew install --cask font-fira-code-nerd-font"
+          description: "Install via Homebrew cask"
+
+    post_install:
+      message: "Fira Code Nerd Font installed. Ligatures + icons."
+      notes:
+        - "Ligatures AND icons"
+        - "Use 'FiraCode Nerd Font' in settings"
+        - "Great for editors and terminals"
+
+  meslo-nerd-font:
+    id: "meslo-nerd-font"
+    name: "Meslo Nerd Font"
+    description: "Recommended font for Powerlevel10k and Oh My Zsh"
+    category: "fonts"
+    tags: ["font", "nerd-font", "icons", "powerlevel10k", "oh-my-zsh"]
+
+    detection:
+      check_command: "ls ~/Library/Fonts/MesloLG* /Library/Fonts/MesloLG* 2>/dev/null | head -1"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install Meslo Nerd Font"
+          command: "brew install --cask font-meslo-lg-nerd-font"
+          description: "Install via Homebrew cask"
+
+    post_install:
+      message: "Meslo Nerd Font installed. Recommended for Powerlevel10k."
+      notes:
+        - "Official Powerlevel10k recommendation"
+        - "Use 'MesloLGS NF' in terminal settings"
+        - "Multiple sizes: S, M, L"
+
+  hack-nerd-font:
+    id: "hack-nerd-font"
+    name: "Hack Nerd Font"
+    description: "Hack font patched with terminal icons"
+    category: "fonts"
+    tags: ["font", "nerd-font", "icons", "terminal"]
+
+    detection:
+      check_command: "ls ~/Library/Fonts/HackNerd* /Library/Fonts/HackNerd* 2>/dev/null | head -1"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install Hack Nerd Font"
+          command: "brew install --cask font-hack-nerd-font"
+          description: "Install via Homebrew cask"
+
+    post_install:
+      message: "Hack Nerd Font installed. Clean, legible with icons."
+      notes:
+        - "No ligatures (clarity focused)"
+        - "Use 'Hack Nerd Font' in settings"
+        - "Good for terminals"
+
+  blex-mono-nerd-font:
+    id: "blex-mono-nerd-font"
+    name: "Blex Mono Nerd Font"
+    description: "IBM Plex Mono patched with icons (Nerd Font version)"
+    category: "fonts"
+    tags: ["font", "nerd-font", "icons", "ibm", "terminal"]
+
+    detection:
+      check_command: "ls ~/Library/Fonts/BlexMono* /Library/Fonts/BlexMono* 2>/dev/null | head -1"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install Blex Mono Nerd Font"
+          command: "brew install --cask font-blex-mono-nerd-font"
+          description: "Install via Homebrew cask"
+
+    post_install:
+      message: "Blex Mono Nerd Font installed. IBM Plex Mono + icons."
+      notes:
+        - "IBM Plex Mono with Nerd Font icons"
+        - "Use 'BlexMono Nerd Font' in settings"
+        - "Named 'Blex' due to licensing"
+
+  ubuntu-mono-nerd-font:
+    id: "ubuntu-mono-nerd-font"
+    name: "Ubuntu Mono Nerd Font"
+    description: "Ubuntu Mono patched with terminal icons"
+    category: "fonts"
+    tags: ["font", "nerd-font", "icons", "ubuntu", "terminal"]
+
+    detection:
+      check_command: "ls ~/Library/Fonts/UbuntuMonoNerd* /Library/Fonts/UbuntuMonoNerd* 2>/dev/null | head -1"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install Ubuntu Mono Nerd Font"
+          command: "brew install --cask font-ubuntu-mono-nerd-font"
+          description: "Install via Homebrew cask"
+
+    post_install:
+      message: "Ubuntu Mono Nerd Font installed. Ubuntu's font + icons."
+      notes:
+        - "Ubuntu Mono with Nerd Font icons"
+        - "Use 'UbuntuMono Nerd Font' in settings"
+        - "Great for Linux enthusiasts on Mac"

@@ -1,0 +1,573 @@
+metadata:
+  category: "cli-tools"
+  description: "Command-line utilities and modern replacements"
+  author: "agentic-provision"
+  version: "1.0.0"
+  created: "2026-02-02"
+
+tasks:
+  ripgrep:
+    id: "ripgrep"
+    name: "ripgrep (rg)"
+    description: "Fast search tool (better grep)"
+    category: "cli-tools"
+    tags: ["search", "grep", "fast", "rust"]
+
+    detection:
+      check_command: "command -v rg"
+      version_command: "rg --version"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install ripgrep"
+          command: "brew install ripgrep"
+          description: "Install ripgrep via Homebrew"
+          idempotent: true
+
+    verification:
+      command: "rg --version"
+      expected_pattern: "^ripgrep \\d+"
+
+    conflicts_with: []
+
+    notes: |
+      ripgrep is grep, but faster. Respects .gitignore by default.
+      Usage: rg "pattern" [path]
+
+      Common flags:
+        -i    Case insensitive
+        -w    Match whole words
+        -l    List files only
+        -C 3  Show 3 lines of context
+
+    docs_url: "https://github.com/BurntSushi/ripgrep"
+
+  fd:
+    id: "fd"
+    name: "fd"
+    description: "Fast file finder (better find)"
+    category: "cli-tools"
+    tags: ["find", "files", "fast", "rust"]
+
+    detection:
+      check_command: "command -v fd"
+      version_command: "fd --version"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install fd"
+          command: "brew install fd"
+          description: "Install fd via Homebrew"
+          idempotent: true
+
+    verification:
+      command: "fd --version"
+      expected_pattern: "^fd \\d+"
+
+    conflicts_with: []
+
+    notes: |
+      fd is a simple, fast alternative to find. Respects .gitignore.
+      Usage: fd pattern [path]
+
+      Examples:
+        fd "\.js$"        # Find .js files
+        fd -e py          # Find by extension
+        fd -H hidden      # Include hidden files
+
+    docs_url: "https://github.com/sharkdp/fd"
+
+  bat:
+    id: "bat"
+    name: "bat"
+    description: "Cat with syntax highlighting"
+    category: "cli-tools"
+    tags: ["cat", "syntax-highlighting", "rust"]
+
+    detection:
+      check_command: "command -v bat"
+      version_command: "bat --version"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install bat"
+          command: "brew install bat"
+          description: "Install bat via Homebrew"
+          idempotent: true
+
+    verification:
+      command: "bat --version"
+      expected_pattern: "^bat \\d+"
+
+    conflicts_with: []
+
+    notes: |
+      bat is cat with syntax highlighting and line numbers.
+      Usage: bat file.py
+
+      Combine with other tools:
+        rg pattern | bat
+        git diff | bat
+
+    docs_url: "https://github.com/sharkdp/bat"
+
+  eza:
+    id: "eza"
+    name: "eza"
+    description: "Modern ls replacement with colors and icons"
+    category: "cli-tools"
+    tags: ["ls", "directory", "rust"]
+
+    detection:
+      check_command: "command -v eza"
+      version_command: "eza --version"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install eza"
+          command: "brew install eza"
+          description: "Install eza via Homebrew"
+          idempotent: true
+
+    verification:
+      command: "eza --version"
+      expected_pattern: "^eza - A modern"
+
+    conflicts_with: []
+
+    notes: |
+      eza is the maintained successor to exa.
+      Usage: eza [options] [path]
+
+      Useful aliases (add to ~/.zshrc):
+        alias ls="eza"
+        alias ll="eza -l"
+        alias la="eza -la"
+        alias lt="eza --tree"
+
+    docs_url: "https://eza.rocks"
+
+  fzf:
+    id: "fzf"
+    name: "fzf"
+    description: "Command-line fuzzy finder"
+    category: "cli-tools"
+    tags: ["fuzzy", "finder", "search", "go"]
+
+    detection:
+      check_command: "command -v fzf"
+      version_command: "fzf --version"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install fzf"
+          command: "brew install fzf"
+          description: "Install fzf via Homebrew"
+          idempotent: true
+
+        - name: "Install fzf key bindings"
+          command: "$(brew --prefix)/opt/fzf/install --key-bindings --completion --no-update-rc"
+          description: "Enable Ctrl+R history search and other keybindings"
+
+    verification:
+      command: "fzf --version"
+      expected_pattern: "^\\d+\\.\\d+"
+
+    conflicts_with: []
+
+    notes: |
+      fzf enables fuzzy search everywhere:
+        Ctrl+R  - Search command history
+        Ctrl+T  - Find files
+        Alt+C   - cd into directories
+
+      Combine with other tools:
+        vim $(fzf)
+        git checkout $(git branch | fzf)
+
+    docs_url: "https://github.com/junegunn/fzf"
+
+  zoxide:
+    id: "zoxide"
+    name: "zoxide"
+    description: "Smarter cd command that learns"
+    category: "cli-tools"
+    tags: ["cd", "navigation", "rust"]
+
+    detection:
+      check_command: "command -v zoxide"
+      version_command: "zoxide --version"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install zoxide"
+          command: "brew install zoxide"
+          description: "Install zoxide via Homebrew"
+          idempotent: true
+
+    shell_integration:
+      zsh: 'eval "$(zoxide init zsh)"'
+      bash: 'eval "$(zoxide init bash)"'
+
+    verification:
+      command: "zoxide --version"
+      expected_pattern: "^zoxide \\d+"
+
+    conflicts_with: []
+
+    notes: |
+      zoxide learns your most-used directories and lets you jump to them.
+      Use 'z' instead of 'cd':
+        z projects    # Jump to ~/Projects
+        z foo bar     # Jump to dir matching both
+
+      Also: zi for interactive selection with fzf
+
+    docs_url: "https://github.com/ajeetdsouza/zoxide"
+
+  jq:
+    id: "jq"
+    name: "jq"
+    description: "Command-line JSON processor"
+    category: "cli-tools"
+    tags: ["json", "processor", "query"]
+
+    detection:
+      check_command: "command -v jq"
+      version_command: "jq --version"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install jq"
+          command: "brew install jq"
+          description: "Install jq via Homebrew"
+          idempotent: true
+
+    verification:
+      command: "jq --version"
+      expected_pattern: "^jq-\\d+"
+
+    conflicts_with: []
+
+    notes: |
+      jq is like sed for JSON. Examples:
+        cat file.json | jq .          # Pretty print
+        cat file.json | jq '.key'     # Extract key
+        cat file.json | jq '.[] | .name'  # Array map
+
+    docs_url: "https://stedolan.github.io/jq"
+
+  yq:
+    id: "yq"
+    name: "yq"
+    description: "Command-line YAML processor"
+    category: "cli-tools"
+    tags: ["yaml", "processor", "query"]
+
+    detection:
+      check_command: "command -v yq"
+      version_command: "yq --version"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install yq"
+          command: "brew install yq"
+          description: "Install yq via Homebrew"
+          idempotent: true
+
+    verification:
+      command: "yq --version"
+      expected_pattern: "yq"
+
+    conflicts_with: []
+
+    notes: |
+      yq is like jq but for YAML. Examples:
+        yq '.key' file.yaml
+        yq -i '.key = "value"' file.yaml  # In-place edit
+        yq -o=json file.yaml              # Convert to JSON
+
+    docs_url: "https://mikefarah.gitbook.io/yq"
+
+  htop:
+    id: "htop"
+    name: "htop"
+    description: "Interactive process viewer"
+    category: "cli-tools"
+    tags: ["process", "monitor", "top"]
+
+    detection:
+      check_command: "command -v htop"
+      version_command: "htop --version"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install htop"
+          command: "brew install htop"
+          description: "Install htop via Homebrew"
+          idempotent: true
+
+    verification:
+      command: "htop --version"
+      expected_pattern: "^htop \\d+"
+
+    conflicts_with: []
+
+    notes: |
+      htop is an interactive replacement for top.
+      Run: htop
+
+      Key bindings:
+        F5    Tree view
+        F6    Sort by column
+        F9    Kill process
+        F10   Quit
+
+    docs_url: "https://htop.dev"
+
+  tldr:
+    id: "tldr"
+    name: "tldr"
+    description: "Simplified man pages with examples"
+    category: "cli-tools"
+    tags: ["man", "help", "documentation"]
+
+    detection:
+      check_command: "command -v tldr"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install tldr"
+          command: "brew install tldr"
+          description: "Install tldr via Homebrew"
+          idempotent: true
+
+    verification:
+      command: "tldr --version"
+
+    conflicts_with: []
+
+    notes: |
+      tldr shows practical examples instead of full man pages.
+      Usage: tldr <command>
+
+      Examples:
+        tldr tar
+        tldr git-rebase
+        tldr docker-compose
+
+    docs_url: "https://tldr.sh"
+
+  httpie:
+    id: "httpie"
+    name: "HTTPie"
+    description: "Modern HTTP client for the terminal"
+    category: "cli-tools"
+    tags: ["http", "api", "curl-alternative"]
+
+    detection:
+      check_command: "command -v http"
+      version_command: "http --version"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install HTTPie"
+          command: "brew install httpie"
+          description: "Install HTTPie via Homebrew"
+          idempotent: true
+
+    verification:
+      command: "http --version"
+      expected_pattern: "^\\d+"
+
+    conflicts_with: []
+
+    notes: |
+      HTTPie is a user-friendly alternative to curl.
+
+      Examples:
+        http GET api.example.com/users
+        http POST api.example.com/users name=John
+        http PUT api.example.com/users/1 name=Jane
+
+    docs_url: "https://httpie.io"
+
+  wget:
+    id: "wget"
+    name: "wget"
+    description: "File download utility"
+    category: "cli-tools"
+    tags: ["download", "http", "ftp"]
+
+    detection:
+      check_command: "command -v wget"
+      version_command: "wget --version"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install wget"
+          command: "brew install wget"
+          description: "Install wget via Homebrew"
+          idempotent: true
+
+    verification:
+      command: "wget --version"
+      expected_pattern: "^GNU Wget"
+
+    conflicts_with: []
+
+    notes: |
+      wget downloads files from the web.
+
+      Examples:
+        wget https://example.com/file.zip
+        wget -c URL          # Resume download
+        wget -r URL          # Recursive download
+
+    docs_url: "https://www.gnu.org/software/wget"
+
+  tree:
+    id: "tree"
+    name: "tree"
+    description: "Display directory structure as tree"
+    category: "cli-tools"
+    tags: ["directory", "visualization"]
+
+    detection:
+      check_command: "command -v tree"
+      version_command: "tree --version"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install tree"
+          command: "brew install tree"
+          description: "Install tree via Homebrew"
+          idempotent: true
+
+    verification:
+      command: "tree --version"
+      expected_pattern: "^tree v"
+
+    conflicts_with: []
+
+    notes: |
+      tree shows directory contents in a tree format.
+
+      Examples:
+        tree
+        tree -L 2        # Limit depth
+        tree -a          # Show hidden files
+        tree -I node_modules  # Ignore pattern
+
+  watch:
+    id: "watch"
+    name: "watch"
+    description: "Execute a command repeatedly"
+    category: "cli-tools"
+    tags: ["utility", "monitoring"]
+
+    detection:
+      check_command: "command -v watch"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install watch"
+          command: "brew install watch"
+          description: "Install watch via Homebrew"
+          idempotent: true
+
+    verification:
+      command: "watch --version"
+      expected_pattern: "watch"
+
+    conflicts_with: []
+
+    notes: |
+      watch runs a command repeatedly, showing output.
+
+      Examples:
+        watch -n 2 'kubectl get pods'   # Every 2 seconds
+        watch -d 'ls -la'               # Highlight changes
+
+  direnv:
+    id: "direnv"
+    name: "direnv"
+    description: "Per-directory environment variables"
+    category: "cli-tools"
+    tags: ["environment", "env", "automation"]
+
+    detection:
+      check_command: "command -v direnv"
+      version_command: "direnv version"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install direnv"
+          command: "brew install direnv"
+          description: "Install direnv via Homebrew"
+          idempotent: true
+
+    shell_integration:
+      zsh: 'eval "$(direnv hook zsh)"'
+      bash: 'eval "$(direnv hook bash)"'
+
+    verification:
+      command: "direnv version"
+      expected_pattern: "^\\d+"
+
+    conflicts_with: []
+
+    notes: |
+      direnv loads/unloads environment variables based on the current directory.
+
+      Usage:
+        1. Create .envrc in project: echo 'export API_KEY=xxx' > .envrc
+        2. Allow it: direnv allow
+        3. Variables auto-load when you cd into the directory
+
+    docs_url: "https://direnv.net"

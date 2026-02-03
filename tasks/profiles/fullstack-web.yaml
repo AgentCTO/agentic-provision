@@ -1,0 +1,250 @@
+metadata:
+  id: "fullstack-web"
+  name: "Full-Stack Web Development"
+  description: "JavaScript/TypeScript, React, Node.js, PostgreSQL"
+  version: "1.0.0"
+
+selection_prompt:
+  letter: "A"
+  text: "Full-Stack Web - JavaScript/TypeScript, React, Node.js, PostgreSQL"
+
+required_tasks:
+  - homebrew
+
+question_flow:
+  - id: "js_runtime"
+    question: "Which JavaScript runtime setup do you prefer?"
+    options:
+      - letter: "A"
+        text: "Node.js via nvm - Version management, most widely used"
+        tasks: ["nvm", "node-lts"]
+      - letter: "B"
+        text: "Node.js via fnm - Faster alternative to nvm"
+        tasks: ["fnm", "node-lts"]
+      - letter: "C"
+        text: "Bun - Modern all-in-one runtime and package manager"
+        tasks: ["bun"]
+      - letter: "D"
+        text: "Not sure - Help me decide"
+        action: "explain"
+        explanation: |
+          **nvm** is the most widely used - great compatibility, large community.
+          Shell startup is slightly slower (~200ms).
+
+          **fnm** is faster (written in Rust) with the same features.
+          Recommended if shell speed matters to you.
+
+          **Bun** is a new all-in-one tool (runtime + package manager + bundler).
+          Very fast, but newer and less mature.
+
+          For most developers, **nvm** or **fnm** are safe choices.
+
+  - id: "editor"
+    question: "Which editor do you prefer?"
+    options:
+      - letter: "A"
+        text: "VS Code - Free, extensive extension ecosystem"
+        tasks: ["vscode"]
+      - letter: "B"
+        text: "Cursor - AI-powered, built on VS Code"
+        tasks: ["cursor"]
+      - letter: "C"
+        text: "Neovim - Terminal-based, highly customizable"
+        tasks: ["neovim"]
+      - letter: "D"
+        text: "WebStorm - Full JetBrains IDE experience"
+        tasks: ["webstorm"]
+
+  - id: "database"
+    question: "Do you need a local database?"
+    options:
+      - letter: "A"
+        text: "PostgreSQL - Reliable, feature-rich relational database"
+        tasks: ["postgresql"]
+      - letter: "B"
+        text: "MySQL - Popular alternative to PostgreSQL"
+        tasks: ["mysql"]
+      - letter: "C"
+        text: "MongoDB - Document database for flexible schemas"
+        tasks: ["mongodb"]
+      - letter: "D"
+        text: "None - I use cloud databases or don't need one locally"
+        tasks: []
+
+  - id: "docker"
+    question: "Do you need Docker for local development?"
+    options:
+      - letter: "A"
+        text: "Docker Desktop - Full Docker experience with GUI"
+        tasks: ["docker-desktop"]
+      - letter: "B"
+        text: "Colima - Free, lightweight alternative to Docker Desktop"
+        tasks: ["colima"]
+      - letter: "C"
+        text: "No - I run everything directly on macOS"
+        tasks: []
+      - letter: "D"
+        text: "Not sure - When would I need Docker?"
+        action: "explain"
+        explanation: |
+          Docker lets you run applications in isolated containers.
+          You might need it if:
+          - Your project uses docker-compose for local services
+          - You want to match production environment exactly
+          - You need to run databases/services without installing them
+
+          If you're unsure, you can always add Docker later.
+
+  - id: "shell"
+    question: "Do you want shell customization?"
+    options:
+      - letter: "A"
+        text: "Starship - Fast, minimal, cross-shell prompt"
+        tasks: ["starship"]
+      - letter: "B"
+        text: "Oh My Zsh - Popular framework with plugins and themes"
+        tasks: ["oh-my-zsh"]
+      - letter: "C"
+        text: "Oh My Zsh + Powerlevel10k - Feature-rich theme with icons"
+        tasks: ["oh-my-zsh", "powerlevel10k"]
+      - letter: "D"
+        text: "None - Keep the default shell as-is"
+        tasks: []
+
+  - id: "terminal"
+    question: "Would you like to install a terminal emulator?"
+    options:
+      - letter: "A"
+        text: "iTerm2 - Most popular terminal for macOS"
+        tasks: ["iterm2"]
+      - letter: "B"
+        text: "Warp - Modern terminal with AI features"
+        tasks: ["warp"]
+      - letter: "C"
+        text: "Ghostty - Fast, native macOS terminal"
+        tasks: ["ghostty"]
+      - letter: "D"
+        text: "None - I'll use the built-in Terminal"
+        tasks: []
+
+  - id: "git"
+    question: "Do you need help setting up Git and GitHub?"
+    options:
+      - letter: "A"
+        text: "Yes - Configure git and generate SSH keys"
+        tasks: ["git", "git-config", "ssh-keygen", "gh-cli"]
+        user_data_required: ["git_name", "git_email"]
+      - letter: "B"
+        text: "Just git config - I'll handle SSH keys myself"
+        tasks: ["git", "git-config"]
+        user_data_required: ["git_name", "git_email"]
+      - letter: "C"
+        text: "No - Already configured on this machine"
+        tasks: ["git"]
+      - letter: "D"
+        text: "What's involved? - Explain first"
+        action: "explain"
+        explanation: |
+          **Git config** sets your name and email for commits.
+
+          **SSH keys** let you push/pull without entering passwords.
+          The key is stored in your macOS Keychain for security.
+
+          **GitHub CLI (gh)** lets you work with GitHub from terminal:
+          create PRs, clone repos, etc.
+
+          Recommended: Set up all three for the smoothest experience.
+
+  - id: "ai_tools"
+    question: "Would you like AI coding assistance?"
+    options:
+      - letter: "A"
+        text: "Claude Code - Anthropic's terminal AI assistant"
+        tasks: ["claude-code"]
+      - letter: "B"
+        text: "GitHub Copilot CLI - AI in the command line"
+        tasks: ["github-copilot-cli"]
+      - letter: "C"
+        text: "Multiple - Claude Code + Continue (open-source in editor)"
+        tasks: ["claude-code", "continue"]
+      - letter: "D"
+        text: "Skip - I don't need AI assistance"
+        tasks: []
+
+  - id: "api_tools"
+    question: "Do you need API development/testing tools?"
+    options:
+      - letter: "A"
+        text: "Postman - Most popular API platform"
+        tasks: ["postman"]
+      - letter: "B"
+        text: "Bruno - Open-source, Git-friendly alternative"
+        tasks: ["bruno"]
+      - letter: "C"
+        text: "HTTPie - Command-line API testing"
+        tasks: ["httpie"]
+      - letter: "D"
+        text: "Skip - I use browser DevTools or curl"
+        tasks: []
+
+  - id: "browser"
+    question: "Do you need additional browsers for development?"
+    options:
+      - letter: "A"
+        text: "Chrome - Most popular, excellent DevTools"
+        tasks: ["google-chrome"]
+      - letter: "B"
+        text: "Firefox Developer Edition - Web standards, privacy"
+        tasks: ["firefox-developer-edition"]
+      - letter: "C"
+        text: "Both Chrome and Firefox"
+        tasks: ["google-chrome", "firefox"]
+      - letter: "D"
+        text: "Skip - Safari is enough"
+        tasks: []
+
+  - id: "productivity"
+    question: "Would you like productivity tools for development?"
+    options:
+      - letter: "A"
+        text: "Raycast - Spotlight replacement with dev features"
+        tasks: ["raycast"]
+      - letter: "B"
+        text: "Rectangle - Free window management"
+        tasks: ["rectangle"]
+      - letter: "C"
+        text: "Both Raycast and Rectangle"
+        tasks: ["raycast", "rectangle"]
+      - letter: "D"
+        text: "Skip - I'm happy with built-in tools"
+        tasks: []
+
+  - id: "fonts"
+    question: "Would you like to install a coding font?"
+    options:
+      - letter: "A"
+        text: "JetBrains Mono - Designed for developers, ligatures"
+        tasks: ["jetbrains-mono"]
+      - letter: "B"
+        text: "Fira Code - Most popular, excellent ligatures"
+        tasks: ["fira-code"]
+      - letter: "C"
+        text: "JetBrains Mono Nerd Font - With icons for terminal"
+        tasks: ["jetbrains-mono-nerd-font"]
+      - letter: "D"
+        text: "Skip - I'll use system fonts"
+        tasks: []
+
+default_cli_tools:
+  - git
+  - gh-cli
+  - jq
+  - ripgrep
+  - fd
+  - fzf
+
+post_install_suggestions:
+  - tableplus
+  - lazygit
+  - bat
+  - eza

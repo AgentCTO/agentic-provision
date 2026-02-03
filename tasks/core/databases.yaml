@@ -1,0 +1,362 @@
+metadata:
+  category: "databases"
+  description: "Database servers and clients"
+  author: "agentic-provision"
+  version: "1.0.0"
+  created: "2026-02-02"
+
+tasks:
+  postgresql:
+    id: "postgresql"
+    name: "PostgreSQL"
+    description: "Powerful, open-source relational database"
+    category: "databases"
+    tags: ["database", "sql", "relational"]
+
+    detection:
+      check_command: "command -v psql"
+      version_command: "psql --version"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install PostgreSQL 16"
+          command: "brew install postgresql@16"
+          description: "Install PostgreSQL 16 via Homebrew"
+          idempotent: true
+
+        - name: "Start PostgreSQL service"
+          command: "brew services start postgresql@16"
+          description: "Start PostgreSQL and enable on login"
+          idempotent: true
+
+    shell_integration:
+      zsh: 'export PATH="/opt/homebrew/opt/postgresql@16/bin:$PATH"'
+      bash: 'export PATH="/opt/homebrew/opt/postgresql@16/bin:$PATH"'
+
+    verification:
+      command: "psql --version"
+      expected_pattern: "^psql \\(PostgreSQL\\) 16"
+
+    conflicts_with: []
+
+    notes: |
+      PostgreSQL is installed with a default database. Connect with:
+        psql postgres
+
+      To create a new database:
+        createdb myapp_development
+
+    docs_url: "https://www.postgresql.org"
+
+  mysql:
+    id: "mysql"
+    name: "MySQL"
+    description: "Popular open-source relational database"
+    category: "databases"
+    tags: ["database", "sql", "relational"]
+
+    detection:
+      check_command: "command -v mysql"
+      version_command: "mysql --version"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install MySQL"
+          command: "brew install mysql"
+          description: "Install MySQL via Homebrew"
+          idempotent: true
+
+        - name: "Start MySQL service"
+          command: "brew services start mysql"
+          description: "Start MySQL and enable on login"
+          idempotent: true
+
+    verification:
+      command: "mysql --version"
+      expected_pattern: "^mysql  Ver \\d+"
+
+    conflicts_with: ["mariadb"]
+
+    notes: |
+      MySQL is installed without a root password. Secure it with:
+        mysql_secure_installation
+
+      Connect with:
+        mysql -u root
+
+    docs_url: "https://dev.mysql.com/doc"
+
+  mariadb:
+    id: "mariadb"
+    name: "MariaDB"
+    description: "MySQL-compatible database (community fork)"
+    category: "databases"
+    tags: ["database", "sql", "relational", "mysql-compatible"]
+
+    detection:
+      check_command: "command -v mariadb"
+      version_command: "mariadb --version"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install MariaDB"
+          command: "brew install mariadb"
+          description: "Install MariaDB via Homebrew"
+          idempotent: true
+
+        - name: "Start MariaDB service"
+          command: "brew services start mariadb"
+          description: "Start MariaDB and enable on login"
+          idempotent: true
+
+    verification:
+      command: "mariadb --version"
+      expected_pattern: "^mariadb"
+
+    conflicts_with: ["mysql"]
+
+    notes: |
+      MariaDB is a drop-in replacement for MySQL, created by MySQL's
+      original developers. Most MySQL tools and clients work with MariaDB.
+
+    docs_url: "https://mariadb.org"
+
+  mongodb:
+    id: "mongodb"
+    name: "MongoDB"
+    description: "Document-oriented NoSQL database"
+    category: "databases"
+    tags: ["database", "nosql", "document"]
+
+    detection:
+      check_command: "command -v mongod"
+      version_command: "mongod --version"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Add MongoDB tap"
+          command: "brew tap mongodb/brew"
+          description: "Add MongoDB Homebrew tap"
+          idempotent: true
+
+        - name: "Install MongoDB Community"
+          command: "brew install mongodb-community"
+          description: "Install MongoDB Community Edition"
+          idempotent: true
+
+        - name: "Start MongoDB service"
+          command: "brew services start mongodb-community"
+          description: "Start MongoDB and enable on login"
+          idempotent: true
+
+    verification:
+      command: "mongod --version"
+      expected_pattern: "^db version v\\d+"
+
+    conflicts_with: []
+
+    notes: |
+      MongoDB stores data as JSON-like documents. Connect with:
+        mongosh
+
+      Default data directory: /opt/homebrew/var/mongodb
+
+    docs_url: "https://www.mongodb.com/docs"
+
+  redis:
+    id: "redis"
+    name: "Redis"
+    description: "In-memory data structure store"
+    category: "databases"
+    tags: ["database", "nosql", "cache", "in-memory"]
+
+    detection:
+      check_command: "command -v redis-server"
+      version_command: "redis-server --version"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install Redis"
+          command: "brew install redis"
+          description: "Install Redis via Homebrew"
+          idempotent: true
+
+        - name: "Start Redis service"
+          command: "brew services start redis"
+          description: "Start Redis and enable on login"
+          idempotent: true
+
+    verification:
+      command: "redis-server --version"
+      expected_pattern: "^Redis server v="
+
+    conflicts_with: []
+
+    notes: |
+      Redis is often used for caching, session storage, and message queues.
+      Connect with:
+        redis-cli
+
+      Test connection:
+        redis-cli ping
+
+    docs_url: "https://redis.io"
+
+  sqlite:
+    id: "sqlite"
+    name: "SQLite"
+    description: "Lightweight, file-based SQL database"
+    category: "databases"
+    tags: ["database", "sql", "embedded", "lightweight"]
+
+    detection:
+      check_command: "command -v sqlite3"
+      version_command: "sqlite3 --version"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install SQLite"
+          command: "brew install sqlite"
+          description: "Install SQLite via Homebrew"
+          idempotent: true
+
+    verification:
+      command: "sqlite3 --version"
+      expected_pattern: "^\\d+\\.\\d+\\.\\d+"
+
+    conflicts_with: []
+
+    notes: |
+      SQLite is included in macOS, but Homebrew provides a newer version.
+      SQLite databases are single files - no server required.
+
+      Create a database:
+        sqlite3 mydb.sqlite
+
+    docs_url: "https://sqlite.org"
+
+  elasticsearch:
+    id: "elasticsearch"
+    name: "Elasticsearch"
+    description: "Distributed search and analytics engine"
+    category: "databases"
+    tags: ["database", "search", "analytics"]
+
+    detection:
+      check_command: "curl -s localhost:9200 >/dev/null 2>&1"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Add Elastic tap"
+          command: "brew tap elastic/tap"
+          description: "Add Elasticsearch Homebrew tap"
+          idempotent: true
+
+        - name: "Install Elasticsearch"
+          command: "brew install elastic/tap/elasticsearch-full"
+          description: "Install Elasticsearch"
+          idempotent: true
+
+        - name: "Start Elasticsearch service"
+          command: "brew services start elastic/tap/elasticsearch-full"
+          description: "Start Elasticsearch and enable on login"
+          idempotent: true
+
+    verification:
+      command: "curl -s localhost:9200 | grep cluster_name"
+      expected_pattern: "cluster_name"
+
+    conflicts_with: []
+
+    notes: |
+      Elasticsearch runs on port 9200 by default. Test with:
+        curl localhost:9200
+
+      Consider using Docker for Elasticsearch in development.
+
+    docs_url: "https://www.elastic.co/elasticsearch"
+
+  tableplus:
+    id: "tableplus"
+    name: "TablePlus"
+    description: "Modern database GUI client"
+    category: "databases"
+    tags: ["gui", "client", "multi-database"]
+
+    detection:
+      installed_indicator: "/Applications/TablePlus.app"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install TablePlus"
+          command: "brew install --cask tableplus"
+          description: "Install TablePlus via Homebrew Cask"
+          idempotent: true
+
+    verification:
+      command: "[ -d '/Applications/TablePlus.app' ] && echo 'installed'"
+      expected_output: "installed"
+
+    conflicts_with: []
+
+    notes: |
+      TablePlus supports PostgreSQL, MySQL, SQLite, Redis, MongoDB, and more.
+      Free version has limited features; paid version for full functionality.
+
+    docs_url: "https://tableplus.com"
+
+  dbeaver:
+    id: "dbeaver"
+    name: "DBeaver"
+    description: "Free universal database tool"
+    category: "databases"
+    tags: ["gui", "client", "multi-database", "free"]
+
+    detection:
+      installed_indicator: "/Applications/DBeaver.app"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install DBeaver Community"
+          command: "brew install --cask dbeaver-community"
+          description: "Install DBeaver Community Edition"
+          idempotent: true
+
+    verification:
+      command: "[ -d '/Applications/DBeaver.app' ] && echo 'installed'"
+      expected_output: "installed"
+
+    conflicts_with: []
+
+    notes: |
+      DBeaver is a free, open-source database tool supporting most databases.
+      It includes an ER diagram viewer and SQL editor.
+
+    docs_url: "https://dbeaver.io"

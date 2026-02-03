@@ -1,0 +1,289 @@
+metadata:
+  category: "version-managers"
+  description: "Language version management tools"
+  author: "agentic-provision"
+  version: "1.0.0"
+  created: "2026-02-02"
+
+tasks:
+  nvm:
+    id: "nvm"
+    name: "Node Version Manager (nvm)"
+    description: "Manage multiple Node.js versions"
+    category: "version-managers"
+    tags: ["node", "javascript", "version-manager"]
+
+    detection:
+      check_command: "[ -s ~/.nvm/nvm.sh ]"
+      version_command: "source ~/.nvm/nvm.sh && nvm --version"
+      installed_indicator: "~/.nvm/nvm.sh"
+
+    dependencies:
+      required: []
+
+    install:
+      steps:
+        - name: "Install nvm"
+          command: 'curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash'
+          description: "Download and run nvm installer"
+          idempotent: false
+
+    shell_integration:
+      zsh: |
+        export NVM_DIR="$HOME/.nvm"
+        [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+        [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+      bash: |
+        export NVM_DIR="$HOME/.nvm"
+        [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+        [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+
+    post_install:
+      - task: "node-lts"
+        condition: "user_choice"
+        prompt: "Install Node.js LTS?"
+
+    verification:
+      command: "source ~/.nvm/nvm.sh && nvm --version"
+      expected_pattern: "^\\d+\\.\\d+\\.\\d+$"
+
+    conflicts_with: ["fnm", "volta", "asdf-nodejs"]
+
+    notes: |
+      nvm is the most widely-used Node version manager. Note that it can
+      add ~200ms to shell startup time. Consider fnm for faster shells.
+
+    docs_url: "https://github.com/nvm-sh/nvm"
+
+  fnm:
+    id: "fnm"
+    name: "Fast Node Manager (fnm)"
+    description: "Fast, Rust-based Node.js version manager"
+    category: "version-managers"
+    tags: ["node", "javascript", "version-manager", "fast", "rust"]
+
+    detection:
+      check_command: "command -v fnm"
+      version_command: "fnm --version"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install fnm via Homebrew"
+          command: "brew install fnm"
+          description: "Install fnm package"
+          idempotent: true
+
+    shell_integration:
+      zsh: 'eval "$(fnm env --use-on-cd)"'
+      bash: 'eval "$(fnm env --use-on-cd)"'
+
+    post_install:
+      - task: "node-lts"
+        condition: "user_choice"
+        prompt: "Install Node.js LTS?"
+
+    verification:
+      command: "fnm --version"
+      expected_pattern: "^fnm \\d+\\.\\d+\\.\\d+$"
+
+    conflicts_with: ["nvm", "volta", "asdf-nodejs"]
+
+    notes: |
+      fnm is a fast alternative to nvm written in Rust. It has much faster
+      shell startup and supports .nvmrc and .node-version files.
+
+    docs_url: "https://github.com/Schniz/fnm"
+
+  node-lts:
+    id: "node-lts"
+    name: "Node.js LTS"
+    description: "Install latest LTS version of Node.js"
+    category: "runtime"
+    tags: ["node", "javascript", "runtime"]
+
+    detection:
+      check_command: "command -v node"
+      version_command: "node --version"
+
+    dependencies:
+      one_of: ["nvm", "fnm"]
+
+    install:
+      variants:
+        nvm:
+          steps:
+            - name: "Install Node LTS via nvm"
+              command: 'source ~/.nvm/nvm.sh && nvm install --lts && nvm alias default "lts/*"'
+              description: "Install and set Node LTS as default"
+        fnm:
+          steps:
+            - name: "Install Node LTS via fnm"
+              command: "fnm install --lts && fnm default lts-latest"
+              description: "Install and set Node LTS as default"
+
+    verification:
+      command: "node --version"
+      expected_pattern: "^v\\d+\\.\\d+\\.\\d+$"
+
+    conflicts_with: []
+
+    docs_url: "https://nodejs.org"
+
+  pyenv:
+    id: "pyenv"
+    name: "Python Version Manager (pyenv)"
+    description: "Simple Python version management"
+    category: "version-managers"
+    tags: ["python", "version-manager"]
+
+    detection:
+      check_command: "command -v pyenv"
+      version_command: "pyenv --version"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install pyenv"
+          command: "brew install pyenv"
+          description: "Install pyenv via Homebrew"
+          idempotent: true
+
+    shell_integration:
+      zsh: |
+        export PYENV_ROOT="$HOME/.pyenv"
+        [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
+        eval "$(pyenv init -)"
+      bash: |
+        export PYENV_ROOT="$HOME/.pyenv"
+        [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
+        eval "$(pyenv init -)"
+
+    post_install:
+      - task: "python-latest"
+        condition: "user_choice"
+        prompt: "Install latest Python?"
+
+    verification:
+      command: "pyenv --version"
+      expected_pattern: "^pyenv \\d+\\.\\d+\\.\\d+"
+
+    conflicts_with: ["conda", "miniconda"]
+
+    notes: |
+      pyenv allows installing and switching between multiple Python versions.
+      Use 'pyenv install --list' to see available versions.
+
+    docs_url: "https://github.com/pyenv/pyenv"
+
+  rbenv:
+    id: "rbenv"
+    name: "Ruby Version Manager (rbenv)"
+    description: "Manage Ruby versions"
+    category: "version-managers"
+    tags: ["ruby", "version-manager"]
+
+    detection:
+      check_command: "command -v rbenv"
+      version_command: "rbenv --version"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install rbenv and ruby-build"
+          command: "brew install rbenv ruby-build"
+          description: "Install rbenv with ruby-build plugin"
+          idempotent: true
+
+    shell_integration:
+      zsh: 'eval "$(rbenv init - zsh)"'
+      bash: 'eval "$(rbenv init - bash)"'
+
+    verification:
+      command: "rbenv --version"
+      expected_pattern: "^rbenv \\d+\\.\\d+\\.\\d+"
+
+    conflicts_with: ["rvm", "asdf-ruby"]
+
+    docs_url: "https://github.com/rbenv/rbenv"
+
+  mise:
+    id: "mise"
+    name: "mise (polyglot version manager)"
+    description: "Modern replacement for asdf, manages multiple language runtimes"
+    category: "version-managers"
+    tags: ["polyglot", "version-manager", "rust", "fast"]
+
+    detection:
+      check_command: "command -v mise"
+      version_command: "mise --version"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install mise"
+          command: "brew install mise"
+          description: "Install mise via Homebrew"
+          idempotent: true
+
+    shell_integration:
+      zsh: 'eval "$(mise activate zsh)"'
+      bash: 'eval "$(mise activate bash)"'
+
+    verification:
+      command: "mise --version"
+      expected_pattern: "^\\d+\\.\\d+\\.\\d+"
+
+    conflicts_with: ["asdf"]
+
+    notes: |
+      mise is a modern, fast alternative to asdf. It can manage Node, Python,
+      Ruby, Go, and many other runtimes. Use 'mise use node@20' to install.
+
+    docs_url: "https://mise.jdx.dev"
+
+  asdf:
+    id: "asdf"
+    name: "asdf Version Manager"
+    description: "Manage multiple runtime versions with a single CLI"
+    category: "version-managers"
+    tags: ["polyglot", "version-manager"]
+
+    detection:
+      check_command: "command -v asdf"
+      version_command: "asdf --version"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install asdf"
+          command: "brew install asdf"
+          description: "Install asdf via Homebrew"
+          idempotent: true
+
+    shell_integration:
+      zsh: '. $(brew --prefix asdf)/libexec/asdf.sh'
+      bash: '. $(brew --prefix asdf)/libexec/asdf.sh'
+
+    verification:
+      command: "asdf --version"
+      expected_pattern: "^v\\d+\\.\\d+\\.\\d+"
+
+    conflicts_with: ["mise"]
+
+    notes: |
+      asdf manages multiple language runtimes via plugins. Install plugins
+      with 'asdf plugin add nodejs' then 'asdf install nodejs latest'.
+      Consider mise for a faster, more modern alternative.
+
+    docs_url: "https://asdf-vm.com"

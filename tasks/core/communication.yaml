@@ -1,0 +1,371 @@
+metadata:
+  category: "communication"
+  description: "Team communication, chat, and video conferencing apps"
+  author: "agentic-provision"
+  version: "1.0.0"
+  created: "2026-02-03"
+
+tasks:
+  # =============================================================================
+  # Team Chat
+  # =============================================================================
+
+  slack:
+    id: "slack"
+    name: "Slack"
+    description: "Industry standard team chat - 2400+ integrations"
+    category: "communication"
+    tags: ["chat", "team", "collaboration", "integrations"]
+
+    detection:
+      installed_indicator: "/Applications/Slack.app"
+      check_command: "[ -d '/Applications/Slack.app' ]"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install Slack"
+          command: "brew install --cask slack"
+          description: "Install via Homebrew cask"
+
+    post_install:
+      message: "Slack installed. Sign in to your workspaces."
+      notes:
+        - "2400+ integrations (GitHub, Jira, etc.)"
+        - "Workflow Builder for automation"
+        - "Free tier: 10K messages, 10 integrations"
+        - "Paid: $8.75/user/month"
+
+  discord:
+    id: "discord"
+    name: "Discord"
+    description: "Voice-first communication - great for dev communities"
+    category: "communication"
+    tags: ["chat", "voice", "community", "gaming"]
+
+    detection:
+      installed_indicator: "/Applications/Discord.app"
+      check_command: "[ -d '/Applications/Discord.app' ]"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install Discord"
+          command: "brew install --cask discord"
+          description: "Install via Homebrew cask"
+
+    post_install:
+      message: "Discord installed. Great for developer communities."
+      notes:
+        - "Always-on voice channels"
+        - "Screen sharing"
+        - "Free for basic use"
+        - "Popular in open-source communities"
+
+  microsoft-teams:
+    id: "microsoft-teams"
+    name: "Microsoft Teams"
+    description: "Enterprise communication with Office 365 integration"
+    category: "communication"
+    tags: ["chat", "enterprise", "microsoft", "office365"]
+
+    detection:
+      installed_indicator: "/Applications/Microsoft Teams.app"
+      check_command: "[ -d '/Applications/Microsoft Teams.app' ]"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install Microsoft Teams"
+          command: "brew install --cask microsoft-teams"
+          description: "Install via Homebrew cask"
+
+    post_install:
+      message: "Microsoft Teams installed. Sign in with your organization account."
+      notes:
+        - "Deep Office 365 integration"
+        - "Enterprise-grade security"
+        - "Meeting scheduling"
+
+  # =============================================================================
+  # Open-Source Alternatives
+  # =============================================================================
+
+  mattermost:
+    id: "mattermost"
+    name: "Mattermost"
+    description: "Open-source Slack alternative - self-hostable"
+    category: "communication"
+    tags: ["chat", "team", "open-source", "self-hosted"]
+
+    detection:
+      installed_indicator: "/Applications/Mattermost.app"
+      check_command: "[ -d '/Applications/Mattermost.app' ]"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install Mattermost"
+          command: "brew install --cask mattermost"
+          description: "Install via Homebrew cask"
+
+    post_install:
+      message: "Mattermost installed. Open-source team chat."
+      notes:
+        - "Self-hostable"
+        - "Open-source"
+        - "Slack-like interface"
+
+  element:
+    id: "element"
+    name: "Element"
+    description: "Matrix client - decentralized, end-to-end encrypted"
+    category: "communication"
+    tags: ["chat", "matrix", "encrypted", "decentralized"]
+
+    detection:
+      installed_indicator: "/Applications/Element.app"
+      check_command: "[ -d '/Applications/Element.app' ]"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install Element"
+          command: "brew install --cask element"
+          description: "Install via Homebrew cask"
+
+    post_install:
+      message: "Element installed. Decentralized and encrypted communication."
+      notes:
+        - "End-to-end encrypted by default"
+        - "Decentralized (Matrix protocol)"
+        - "Self-hostable"
+
+  # =============================================================================
+  # Video Conferencing
+  # =============================================================================
+
+  zoom:
+    id: "zoom"
+    name: "Zoom"
+    description: "Video conferencing standard - reliable and widely used"
+    category: "communication"
+    tags: ["video", "conferencing", "meetings"]
+
+    detection:
+      installed_indicator: "/Applications/zoom.us.app"
+      check_command: "[ -d '/Applications/zoom.us.app' ]"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install Zoom"
+          command: "brew install --cask zoom"
+          description: "Install via Homebrew cask"
+
+    post_install:
+      message: "Zoom installed. Sign in or join meetings."
+      notes:
+        - "Industry standard for video calls"
+        - "Breakout rooms"
+        - "Free: 40 min limit on group calls"
+
+  google-meet:
+    id: "google-meet"
+    name: "Google Meet (via Chrome)"
+    description: "Google's video conferencing - works best in Chrome"
+    category: "communication"
+    tags: ["video", "conferencing", "google", "web"]
+
+    detection:
+      check_command: "echo 'Google Meet runs in browser'"
+
+    dependencies:
+      required: ["google-chrome"]
+
+    install:
+      steps:
+        - name: "Note about Google Meet"
+          command: "echo 'Google Meet runs in Chrome at meet.google.com'"
+          description: "Web-based video conferencing"
+
+    post_install:
+      message: "Google Meet is web-based. Access at meet.google.com"
+
+  around:
+    id: "around"
+    name: "Around"
+    description: "Floating video bubbles for ambient collaboration"
+    category: "communication"
+    tags: ["video", "conferencing", "ambient", "collaboration"]
+
+    detection:
+      installed_indicator: "/Applications/Around.app"
+      check_command: "[ -d '/Applications/Around.app' ]"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install Around"
+          command: "brew install --cask around"
+          description: "Install via Homebrew cask"
+
+    post_install:
+      message: "Around installed. Ambient video collaboration."
+      notes:
+        - "Floating video bubbles"
+        - "Low-bandwidth friendly"
+        - "AI noise cancellation"
+
+  # =============================================================================
+  # Screen Sharing & Recording
+  # =============================================================================
+
+  loom:
+    id: "loom"
+    name: "Loom"
+    description: "Async video messaging - record and share quickly"
+    category: "communication"
+    tags: ["video", "async", "recording", "sharing"]
+
+    detection:
+      installed_indicator: "/Applications/Loom.app"
+      check_command: "[ -d '/Applications/Loom.app' ]"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install Loom"
+          command: "brew install --cask loom"
+          description: "Install via Homebrew cask"
+
+    post_install:
+      message: "Loom installed. Record and share video messages."
+      notes:
+        - "Screen + camera recording"
+        - "Instant sharing"
+        - "Free tier available"
+
+  # =============================================================================
+  # Email Clients
+  # =============================================================================
+
+  spark:
+    id: "spark"
+    name: "Spark"
+    description: "Smart email client with collaboration features"
+    category: "communication"
+    tags: ["email", "client", "smart", "collaboration"]
+
+    detection:
+      installed_indicator: "/Applications/Spark.app"
+      check_command: "[ -d '/Applications/Spark.app' ]"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install Spark"
+          command: "brew install --cask spark"
+          description: "Install via Homebrew cask"
+
+    post_install:
+      message: "Spark installed. Smart email prioritization."
+      notes:
+        - "Smart inbox prioritization"
+        - "Team collaboration on emails"
+        - "Free for personal use"
+
+  mailspring:
+    id: "mailspring"
+    name: "Mailspring"
+    description: "Beautiful open-source email client"
+    category: "communication"
+    tags: ["email", "client", "open-source"]
+
+    detection:
+      installed_indicator: "/Applications/Mailspring.app"
+      check_command: "[ -d '/Applications/Mailspring.app' ]"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install Mailspring"
+          command: "brew install --cask mailspring"
+          description: "Install via Homebrew cask"
+
+    post_install:
+      message: "Mailspring installed. Beautiful and fast email."
+
+  # =============================================================================
+  # Calendar
+  # =============================================================================
+
+  fantastical:
+    id: "fantastical"
+    name: "Fantastical"
+    description: "Best-in-class calendar app with natural language input"
+    category: "communication"
+    tags: ["calendar", "productivity", "premium"]
+
+    detection:
+      installed_indicator: "/Applications/Fantastical.app"
+      check_command: "[ -d '/Applications/Fantastical.app' ]"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install Fantastical"
+          command: "brew install --cask fantastical"
+          description: "Install via Homebrew cask"
+
+    post_install:
+      message: "Fantastical installed. Premium calendar app."
+      notes:
+        - "Natural language event creation"
+        - "Beautiful interface"
+        - "Subscription required for full features"
+
+  notion-calendar:
+    id: "notion-calendar"
+    name: "Notion Calendar"
+    description: "Calendar integrated with Notion (formerly Cron)"
+    category: "communication"
+    tags: ["calendar", "notion", "productivity"]
+
+    detection:
+      installed_indicator: "/Applications/Notion Calendar.app"
+      check_command: "[ -d '/Applications/Notion Calendar.app' ]"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install Notion Calendar"
+          command: "brew install --cask notion-calendar"
+          description: "Install via Homebrew cask"
+
+    post_install:
+      message: "Notion Calendar installed. Free calendar with Notion integration."

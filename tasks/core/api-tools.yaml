@@ -1,0 +1,309 @@
+metadata:
+  category: "api-tools"
+  description: "API development, testing, and documentation tools"
+  author: "agentic-provision"
+  version: "1.0.0"
+  created: "2026-02-03"
+
+tasks:
+  # =============================================================================
+  # GUI API Clients
+  # =============================================================================
+
+  postman:
+    id: "postman"
+    name: "Postman"
+    description: "Industry-leading API platform with 30M+ users, AI-assisted scripting"
+    category: "api-tools"
+    tags: ["api", "rest", "graphql", "testing", "collaboration"]
+
+    detection:
+      installed_indicator: "/Applications/Postman.app"
+      check_command: "[ -d '/Applications/Postman.app' ]"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install Postman"
+          command: "brew install --cask postman"
+          description: "Install via Homebrew cask"
+
+    post_install:
+      message: "Postman installed. Sign in for cloud sync and collaboration."
+      notes:
+        - "Free tier available"
+        - "REST, GraphQL, SOAP, WebSocket support"
+        - "Team collaboration features"
+        - "AI-assisted test scripting"
+
+  insomnia:
+    id: "insomnia"
+    name: "Insomnia"
+    description: "Lightweight API client with Git sync - simpler than Postman"
+    category: "api-tools"
+    tags: ["api", "rest", "graphql", "grpc", "lightweight"]
+
+    detection:
+      installed_indicator: "/Applications/Insomnia.app"
+      check_command: "[ -d '/Applications/Insomnia.app' ]"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install Insomnia"
+          command: "brew install --cask insomnia"
+          description: "Install via Homebrew cask"
+
+    post_install:
+      message: "Insomnia installed. Simpler alternative to Postman."
+      notes:
+        - "More affordable than Postman"
+        - "REST, GraphQL, gRPC support"
+        - "Git-friendly workflow"
+        - "Clean, intuitive interface"
+
+  bruno:
+    id: "bruno"
+    name: "Bruno"
+    description: "Offline-first, Git-friendly API client - stores as plain text files"
+    category: "api-tools"
+    tags: ["api", "rest", "graphql", "offline", "git-native", "open-source"]
+
+    detection:
+      installed_indicator: "/Applications/Bruno.app"
+      check_command: "[ -d '/Applications/Bruno.app' ]"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install Bruno"
+          command: "brew install --cask bruno"
+          description: "Install via Homebrew cask"
+
+    post_install:
+      message: "Bruno installed. Collections stored as .bru files in your repo."
+      notes:
+        - "Open-source and free"
+        - "Offline-first - no cloud required"
+        - "Git-native workflow"
+        - "Human-readable .bru format"
+        - "No account required"
+
+  hoppscotch:
+    id: "hoppscotch"
+    name: "Hoppscotch"
+    description: "Fast, open-source API client (57K GitHub stars)"
+    category: "api-tools"
+    tags: ["api", "rest", "graphql", "websocket", "open-source", "fast"]
+
+    detection:
+      installed_indicator: "/Applications/Hoppscotch.app"
+      check_command: "[ -d '/Applications/Hoppscotch.app' ]"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install Hoppscotch"
+          command: "brew install --cask hoppscotch"
+          description: "Install via Homebrew cask"
+
+    post_install:
+      message: "Hoppscotch installed. Lightweight and blazing fast."
+      notes:
+        - "Open-source, 57K GitHub stars"
+        - "Very lightweight and fast"
+        - "Self-hostable"
+        - "Web, desktop, and CLI versions"
+
+  rapidapi:
+    id: "rapidapi"
+    name: "RapidAPI (Paw)"
+    description: "Mac-native API client with beautiful UI"
+    category: "api-tools"
+    tags: ["api", "rest", "mac-native", "beautiful"]
+
+    detection:
+      installed_indicator: "/Applications/RapidAPI.app"
+      check_command: "[ -d '/Applications/RapidAPI.app' ] || [ -d '/Applications/Paw.app' ]"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install RapidAPI"
+          command: "brew install --cask rapidapi"
+          description: "Install via Homebrew cask"
+
+    post_install:
+      message: "RapidAPI (formerly Paw) installed. Beautiful Mac-native API client."
+
+  # =============================================================================
+  # CLI API Tools
+  # =============================================================================
+
+  httpie:
+    id: "httpie-cli"
+    name: "HTTPie CLI"
+    description: "User-friendly HTTP client for the command line"
+    category: "api-tools"
+    tags: ["api", "cli", "http", "user-friendly"]
+
+    detection:
+      check_command: "command -v http"
+      version_command: "http --version"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install HTTPie"
+          command: "brew install httpie"
+          description: "Install via Homebrew"
+
+    post_install:
+      message: "HTTPie installed. Usage: http GET api.example.com/users"
+      notes:
+        - "Colorized output"
+        - "JSON support built-in"
+        - "Intuitive syntax"
+
+  curl:
+    id: "curl"
+    name: "cURL (latest)"
+    description: "Latest version of cURL with HTTP/3 support"
+    category: "api-tools"
+    tags: ["api", "cli", "http", "fundamental"]
+
+    detection:
+      check_command: "command -v curl"
+      version_command: "curl --version | head -1"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install latest cURL"
+          command: "brew install curl"
+          description: "Install via Homebrew (newer than system curl)"
+
+    post_install:
+      message: "Latest cURL installed. May need to add to PATH."
+      shell_config:
+        zsh: |
+          # Use Homebrew curl
+          export PATH="$(brew --prefix)/opt/curl/bin:$PATH"
+
+  grpcurl:
+    id: "grpcurl"
+    name: "gRPCurl"
+    description: "cURL for gRPC - command line tool for gRPC services"
+    category: "api-tools"
+    tags: ["api", "cli", "grpc"]
+
+    detection:
+      check_command: "command -v grpcurl"
+      version_command: "grpcurl --version"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install gRPCurl"
+          command: "brew install grpcurl"
+          description: "Install via Homebrew"
+
+    post_install:
+      message: "gRPCurl installed. Test gRPC services from command line."
+
+  # =============================================================================
+  # API Documentation
+  # =============================================================================
+
+  stoplight-studio:
+    id: "stoplight-studio"
+    name: "Stoplight Studio"
+    description: "Visual OpenAPI/Swagger editor and documentation"
+    category: "api-tools"
+    tags: ["api", "openapi", "swagger", "documentation"]
+
+    detection:
+      installed_indicator: "/Applications/Stoplight Studio.app"
+      check_command: "[ -d '/Applications/Stoplight Studio.app' ]"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install Stoplight Studio"
+          command: "brew install --cask stoplight-studio"
+          description: "Install via Homebrew cask"
+
+    post_install:
+      message: "Stoplight Studio installed. Design APIs visually."
+
+  # =============================================================================
+  # Mock Servers & Tools
+  # =============================================================================
+
+  mockoon:
+    id: "mockoon"
+    name: "Mockoon"
+    description: "Easy API mocking - create mock servers in minutes"
+    category: "api-tools"
+    tags: ["api", "mock", "testing", "local"]
+
+    detection:
+      installed_indicator: "/Applications/Mockoon.app"
+      check_command: "[ -d '/Applications/Mockoon.app' ]"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install Mockoon"
+          command: "brew install --cask mockoon"
+          description: "Install via Homebrew cask"
+
+    post_install:
+      message: "Mockoon installed. Create mock APIs for development."
+
+  ngrok:
+    id: "ngrok"
+    name: "ngrok"
+    description: "Expose local servers to the internet with secure tunnels"
+    category: "api-tools"
+    tags: ["tunnel", "webhook", "testing", "localhost"]
+
+    detection:
+      check_command: "command -v ngrok"
+      version_command: "ngrok --version"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install ngrok"
+          command: "brew install ngrok/ngrok/ngrok"
+          description: "Install via Homebrew"
+
+    post_install:
+      message: "ngrok installed. Expose local servers: ngrok http 3000"
+      notes:
+        - "Free tier available"
+        - "Great for webhook testing"
+        - "Requires free account for authtoken"

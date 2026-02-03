@@ -1,0 +1,356 @@
+metadata:
+  category: "cloud-clis"
+  description: "Cloud provider CLIs and Infrastructure as Code tools"
+  author: "agentic-provision"
+  version: "1.0.0"
+  created: "2026-02-03"
+
+tasks:
+  # =============================================================================
+  # AWS Tools
+  # =============================================================================
+
+  awscli:
+    id: "awscli"
+    name: "AWS CLI"
+    description: "Official Amazon Web Services command-line interface"
+    category: "cloud-clis"
+    tags: ["aws", "amazon", "cloud", "cli"]
+
+    detection:
+      check_command: "command -v aws"
+      version_command: "aws --version"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install AWS CLI"
+          command: "brew install awscli"
+          description: "Install via Homebrew"
+
+    post_install:
+      message: "AWS CLI installed. Configure with: aws configure"
+      shell_config:
+        note: "Run 'aws configure' to set up credentials"
+
+  aws-sam-cli:
+    id: "aws-sam-cli"
+    name: "AWS SAM CLI"
+    description: "Serverless Application Model CLI for Lambda development"
+    category: "cloud-clis"
+    tags: ["aws", "serverless", "lambda", "sam"]
+
+    detection:
+      check_command: "command -v sam"
+      version_command: "sam --version"
+
+    dependencies:
+      required: ["homebrew", "awscli"]
+
+    install:
+      steps:
+        - name: "Install AWS SAM CLI"
+          command: "brew install aws-sam-cli"
+          description: "Install via Homebrew"
+
+    post_install:
+      message: "SAM CLI installed. Build serverless apps locally."
+
+  aws-cdk:
+    id: "aws-cdk"
+    name: "AWS CDK"
+    description: "Cloud Development Kit - define infrastructure using code"
+    category: "cloud-clis"
+    tags: ["aws", "infrastructure", "cdk", "typescript"]
+
+    detection:
+      check_command: "command -v cdk"
+      version_command: "cdk --version"
+
+    dependencies:
+      required: ["node-lts"]
+
+    install:
+      steps:
+        - name: "Install AWS CDK"
+          command: "npm install -g aws-cdk"
+          description: "Install globally via npm"
+
+    post_install:
+      message: "AWS CDK installed. Initialize with: cdk init"
+
+  # =============================================================================
+  # Google Cloud Tools
+  # =============================================================================
+
+  google-cloud-sdk:
+    id: "google-cloud-sdk"
+    name: "Google Cloud SDK (gcloud)"
+    description: "Official Google Cloud Platform CLI"
+    category: "cloud-clis"
+    tags: ["gcp", "google", "cloud", "cli"]
+
+    detection:
+      check_command: "command -v gcloud"
+      version_command: "gcloud --version | head -1"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install Google Cloud SDK"
+          command: "brew install --cask google-cloud-sdk"
+          description: "Install via Homebrew cask"
+
+    post_install:
+      message: "Google Cloud SDK installed. Initialize with: gcloud init"
+      shell_config:
+        zsh: |
+          # Google Cloud SDK
+          source "$(brew --prefix)/share/google-cloud-sdk/path.zsh.inc"
+          source "$(brew --prefix)/share/google-cloud-sdk/completion.zsh.inc"
+
+  # =============================================================================
+  # Azure Tools
+  # =============================================================================
+
+  azure-cli:
+    id: "azure-cli"
+    name: "Azure CLI"
+    description: "Official Microsoft Azure command-line interface"
+    category: "cloud-clis"
+    tags: ["azure", "microsoft", "cloud", "cli"]
+
+    detection:
+      check_command: "command -v az"
+      version_command: "az --version | head -1"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install Azure CLI"
+          command: "brew install azure-cli"
+          description: "Install via Homebrew"
+
+    post_install:
+      message: "Azure CLI installed. Login with: az login"
+
+  # =============================================================================
+  # Infrastructure as Code
+  # =============================================================================
+
+  terraform:
+    id: "terraform"
+    name: "Terraform"
+    description: "Infrastructure as Code tool by HashiCorp (32% market share)"
+    category: "cloud-clis"
+    tags: ["iac", "infrastructure", "hashicorp", "multi-cloud"]
+
+    detection:
+      check_command: "command -v terraform"
+      version_command: "terraform --version | head -1"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install Terraform"
+          command: "brew install terraform"
+          description: "Install via Homebrew"
+
+    post_install:
+      message: "Terraform installed. Initialize in project with: terraform init"
+
+  opentofu:
+    id: "opentofu"
+    name: "OpenTofu"
+    description: "Open-source Terraform fork by Linux Foundation"
+    category: "cloud-clis"
+    tags: ["iac", "infrastructure", "open-source", "terraform-compatible"]
+
+    detection:
+      check_command: "command -v tofu"
+      version_command: "tofu --version | head -1"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install OpenTofu"
+          command: "brew install opentofu"
+          description: "Install via Homebrew"
+
+    post_install:
+      message: "OpenTofu installed. Drop-in Terraform replacement."
+
+  pulumi:
+    id: "pulumi"
+    name: "Pulumi"
+    description: "IaC using real programming languages (TypeScript, Python, Go)"
+    category: "cloud-clis"
+    tags: ["iac", "infrastructure", "typescript", "python", "multi-cloud"]
+
+    detection:
+      check_command: "command -v pulumi"
+      version_command: "pulumi version"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install Pulumi"
+          command: "brew install pulumi"
+          description: "Install via Homebrew"
+
+    post_install:
+      message: "Pulumi installed. Create project with: pulumi new"
+
+  terragrunt:
+    id: "terragrunt"
+    name: "Terragrunt"
+    description: "Thin wrapper for Terraform to reduce repetition"
+    category: "cloud-clis"
+    tags: ["iac", "terraform", "dry", "wrapper"]
+
+    detection:
+      check_command: "command -v terragrunt"
+      version_command: "terragrunt --version"
+
+    dependencies:
+      required: ["homebrew", "terraform"]
+
+    install:
+      steps:
+        - name: "Install Terragrunt"
+          command: "brew install terragrunt"
+          description: "Install via Homebrew"
+
+    post_install:
+      message: "Terragrunt installed. Use with Terraform for DRY configurations."
+
+  # =============================================================================
+  # Other Cloud Tools
+  # =============================================================================
+
+  doctl:
+    id: "doctl"
+    name: "DigitalOcean CLI"
+    description: "Official DigitalOcean command-line interface"
+    category: "cloud-clis"
+    tags: ["digitalocean", "cloud", "cli"]
+
+    detection:
+      check_command: "command -v doctl"
+      version_command: "doctl version"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install doctl"
+          command: "brew install doctl"
+          description: "Install via Homebrew"
+
+    post_install:
+      message: "doctl installed. Authenticate with: doctl auth init"
+
+  flyctl:
+    id: "flyctl"
+    name: "Fly.io CLI"
+    description: "Deploy apps globally on Fly.io"
+    category: "cloud-clis"
+    tags: ["fly", "deployment", "edge", "cli"]
+
+    detection:
+      check_command: "command -v fly"
+      version_command: "fly version"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install flyctl"
+          command: "brew install flyctl"
+          description: "Install via Homebrew"
+
+    post_install:
+      message: "flyctl installed. Login with: fly auth login"
+
+  railway:
+    id: "railway"
+    name: "Railway CLI"
+    description: "Deploy infrastructure on Railway"
+    category: "cloud-clis"
+    tags: ["railway", "deployment", "paas", "cli"]
+
+    detection:
+      check_command: "command -v railway"
+      version_command: "railway --version"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install Railway CLI"
+          command: "brew install railway"
+          description: "Install via Homebrew"
+
+    post_install:
+      message: "Railway CLI installed. Login with: railway login"
+
+  vercel:
+    id: "vercel"
+    name: "Vercel CLI"
+    description: "Deploy to Vercel from command line"
+    category: "cloud-clis"
+    tags: ["vercel", "deployment", "frontend", "cli"]
+
+    detection:
+      check_command: "command -v vercel"
+      version_command: "vercel --version"
+
+    dependencies:
+      required: ["node-lts"]
+
+    install:
+      steps:
+        - name: "Install Vercel CLI"
+          command: "npm install -g vercel"
+          description: "Install globally via npm"
+
+    post_install:
+      message: "Vercel CLI installed. Login with: vercel login"
+
+  netlify-cli:
+    id: "netlify-cli"
+    name: "Netlify CLI"
+    description: "Deploy and manage Netlify sites"
+    category: "cloud-clis"
+    tags: ["netlify", "deployment", "jamstack", "cli"]
+
+    detection:
+      check_command: "command -v netlify"
+      version_command: "netlify --version"
+
+    dependencies:
+      required: ["node-lts"]
+
+    install:
+      steps:
+        - name: "Install Netlify CLI"
+          command: "npm install -g netlify-cli"
+          description: "Install globally via npm"
+
+    post_install:
+      message: "Netlify CLI installed. Login with: netlify login"

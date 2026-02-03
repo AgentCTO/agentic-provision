@@ -1,0 +1,220 @@
+metadata:
+  id: "mobile-dev"
+  name: "Mobile Development"
+  description: "React Native, Flutter, or native iOS/Android"
+  version: "1.0.0"
+
+selection_prompt:
+  letter: "C"
+  text: "Mobile Development - React Native, Flutter, or native iOS/Android"
+
+required_tasks:
+  - homebrew
+
+question_flow:
+  - id: "mobile_platform"
+    question: "What type of mobile development will you be doing?"
+    options:
+      - letter: "A"
+        text: "React Native - JavaScript/TypeScript for iOS and Android"
+        tasks: ["nvm", "node-lts"]
+        follow_up: "react_native_setup"
+      - letter: "B"
+        text: "Flutter - Dart-based cross-platform framework"
+        tasks: ["flutter"]
+        follow_up: "flutter_setup"
+      - letter: "C"
+        text: "Native iOS - Swift/SwiftUI for Apple platforms"
+        tasks: ["xcode"]
+        follow_up: "ios_setup"
+      - letter: "D"
+        text: "Not sure - Help me decide"
+        action: "explain"
+        explanation: |
+          **React Native**: Use JavaScript/TypeScript skills for mobile.
+          Great if you know web development. Large ecosystem.
+
+          **Flutter**: Google's UI toolkit using Dart language.
+          Excellent performance, beautiful UI, growing fast.
+
+          **Native iOS**: Swift/SwiftUI for pure Apple development.
+          Best performance, full platform access, Apple-only.
+
+          For web developers: React Native is natural.
+          For best cross-platform UI: Flutter.
+          For iOS-only apps: Native Swift.
+
+  - id: "editor"
+    question: "Which editor do you prefer?"
+    options:
+      - letter: "A"
+        text: "VS Code - Great for React Native and Flutter"
+        tasks: ["vscode"]
+      - letter: "B"
+        text: "Cursor - AI-powered code assistance"
+        tasks: ["cursor"]
+      - letter: "C"
+        text: "Android Studio - Required for Android, good for Flutter"
+        tasks: ["android-studio"]
+      - letter: "D"
+        text: "Xcode only - For native iOS development"
+        tasks: []
+
+  - id: "simulators"
+    question: "Which platform simulators do you need?"
+    options:
+      - letter: "A"
+        text: "iOS Simulator - Included with Xcode"
+        tasks: ["xcode"]
+      - letter: "B"
+        text: "Android Emulator - Via Android Studio"
+        tasks: ["android-studio"]
+      - letter: "C"
+        text: "Both - iOS and Android"
+        tasks: ["xcode", "android-studio"]
+      - letter: "D"
+        text: "Skip simulators for now"
+        tasks: []
+
+  - id: "database"
+    question: "Do you need a local backend database?"
+    options:
+      - letter: "A"
+        text: "PostgreSQL - For REST/GraphQL backends"
+        tasks: ["postgresql"]
+      - letter: "B"
+        text: "MongoDB - Document database"
+        tasks: ["mongodb"]
+      - letter: "C"
+        text: "SQLite only - Embedded in mobile apps"
+        tasks: ["sqlite"]
+      - letter: "D"
+        text: "None - Using Firebase/Supabase/other BaaS"
+        tasks: []
+
+  - id: "shell"
+    question: "Do you want shell customization?"
+    options:
+      - letter: "A"
+        text: "Starship - Fast, minimal prompt"
+        tasks: ["starship"]
+      - letter: "B"
+        text: "Oh My Zsh - Popular framework with plugins"
+        tasks: ["oh-my-zsh"]
+      - letter: "C"
+        text: "None - Keep default shell"
+        tasks: []
+      - letter: "D"
+        text: "Skip for now"
+        tasks: []
+
+  - id: "git"
+    question: "Do you need help setting up Git and GitHub?"
+    options:
+      - letter: "A"
+        text: "Yes - Configure git and generate SSH keys"
+        tasks: ["git", "git-config", "ssh-keygen", "gh-cli", "git-lfs"]
+        user_data_required: ["git_name", "git_email"]
+      - letter: "B"
+        text: "Just git config - I'll handle SSH myself"
+        tasks: ["git", "git-config", "git-lfs"]
+        user_data_required: ["git_name", "git_email"]
+      - letter: "C"
+        text: "No - Already configured"
+        tasks: ["git", "git-lfs"]
+      - letter: "D"
+        text: "Skip for now"
+        tasks: ["git"]
+
+  - id: "ai_tools"
+    question: "Would you like AI coding assistance?"
+    options:
+      - letter: "A"
+        text: "Claude Code - Terminal AI for code assistance"
+        tasks: ["claude-code"]
+      - letter: "B"
+        text: "Cursor - AI-powered editor (if not already selected)"
+        tasks: ["cursor"]
+      - letter: "C"
+        text: "Continue - Open-source AI in VS Code"
+        tasks: ["continue"]
+      - letter: "D"
+        text: "Skip"
+        tasks: []
+
+  - id: "api_tools"
+    question: "Do you need API testing tools for your backend?"
+    options:
+      - letter: "A"
+        text: "Postman - Most popular API platform"
+        tasks: ["postman"]
+      - letter: "B"
+        text: "Bruno - Open-source, Git-friendly"
+        tasks: ["bruno"]
+      - letter: "C"
+        text: "HTTPie - Command-line API testing"
+        tasks: ["httpie"]
+      - letter: "D"
+        text: "Skip - I use browser or curl"
+        tasks: []
+
+  - id: "productivity"
+    question: "Would you like productivity tools?"
+    options:
+      - letter: "A"
+        text: "Raycast - Spotlight replacement with dev features"
+        tasks: ["raycast"]
+      - letter: "B"
+        text: "Rectangle - Window management for simulator + editor"
+        tasks: ["rectangle"]
+      - letter: "C"
+        text: "Both Raycast and Rectangle"
+        tasks: ["raycast", "rectangle"]
+      - letter: "D"
+        text: "Skip"
+        tasks: []
+
+  - id: "fonts"
+    question: "Would you like a coding font?"
+    options:
+      - letter: "A"
+        text: "JetBrains Mono - Great for IDEs, ligatures"
+        tasks: ["jetbrains-mono"]
+      - letter: "B"
+        text: "Fira Code - Popular choice, ligatures"
+        tasks: ["fira-code"]
+      - letter: "C"
+        text: "SF Mono - Apple's monospace (already installed)"
+        tasks: []
+      - letter: "D"
+        text: "Skip"
+        tasks: []
+
+  - id: "communication"
+    question: "Do you need communication tools for team collaboration?"
+    options:
+      - letter: "A"
+        text: "Slack - Most popular team chat"
+        tasks: ["slack"]
+      - letter: "B"
+        text: "Discord - Popular in dev communities"
+        tasks: ["discord"]
+      - letter: "C"
+        text: "Both Slack and Discord"
+        tasks: ["slack", "discord"]
+      - letter: "D"
+        text: "Skip - Already installed or not needed"
+        tasks: []
+
+default_cli_tools:
+  - git
+  - git-lfs
+  - gh-cli
+  - jq
+  - ripgrep
+  - fzf
+
+post_install_suggestions:
+  - iterm2
+  - lazygit
+  - httpie

@@ -1,0 +1,388 @@
+metadata:
+  category: "containers"
+  description: "Container runtimes and orchestration tools"
+  author: "agentic-provision"
+  version: "1.0.0"
+  created: "2026-02-02"
+
+tasks:
+  docker-desktop:
+    id: "docker-desktop"
+    name: "Docker Desktop"
+    description: "Docker container platform with GUI"
+    category: "containers"
+    tags: ["docker", "containers", "gui"]
+
+    detection:
+      check_command: "command -v docker"
+      installed_indicator: "/Applications/Docker.app"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install Docker Desktop"
+          command: "brew install --cask docker"
+          description: "Install Docker Desktop via Homebrew Cask"
+          idempotent: true
+
+        - name: "Note about Docker Desktop"
+          command: 'echo "Open Docker.app to complete setup and start the Docker daemon"'
+          description: "Docker Desktop requires manual first launch"
+
+    verification:
+      command: "docker --version"
+      expected_pattern: "^Docker version \\d+"
+
+    conflicts_with: ["colima", "podman"]
+
+    notes: |
+      Docker Desktop provides Docker Engine, CLI, and Kubernetes.
+
+      IMPORTANT: Docker Desktop requires a paid license for:
+      - Companies with >250 employees OR
+      - Companies with >$10M annual revenue
+
+      For free alternatives, consider Colima or Podman.
+
+    docs_url: "https://www.docker.com/products/docker-desktop"
+
+  colima:
+    id: "colima"
+    name: "Colima"
+    description: "Lightweight Docker runtime (no license required)"
+    category: "containers"
+    tags: ["docker", "containers", "free", "lightweight"]
+
+    detection:
+      check_command: "command -v colima"
+      version_command: "colima version"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install Colima and Docker CLI"
+          command: "brew install colima docker docker-compose"
+          description: "Install Colima with Docker CLI tools"
+          idempotent: true
+
+        - name: "Start Colima"
+          command: "colima start"
+          description: "Start the Colima VM"
+          idempotent: false
+
+    verification:
+      command: "colima status"
+      expected_pattern: "colima is running"
+
+    conflicts_with: ["docker-desktop"]
+
+    notes: |
+      Colima is a free, open-source Docker runtime that doesn't require
+      a Docker Desktop license. It uses Lima to run containers in a VM.
+
+      Start Colima: colima start
+      Stop Colima: colima stop
+      With Kubernetes: colima start --kubernetes
+
+    docs_url: "https://github.com/abiosoft/colima"
+
+  podman:
+    id: "podman"
+    name: "Podman"
+    description: "Daemonless container engine (Docker alternative)"
+    category: "containers"
+    tags: ["containers", "docker-compatible", "free", "daemonless"]
+
+    detection:
+      check_command: "command -v podman"
+      version_command: "podman --version"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install Podman"
+          command: "brew install podman"
+          description: "Install Podman via Homebrew"
+          idempotent: true
+
+        - name: "Initialize Podman machine"
+          command: "podman machine init"
+          description: "Create the Podman VM"
+          idempotent: false
+
+        - name: "Start Podman machine"
+          command: "podman machine start"
+          description: "Start the Podman VM"
+          idempotent: false
+
+    verification:
+      command: "podman --version"
+      expected_pattern: "^podman version \\d+"
+
+    conflicts_with: ["docker-desktop"]
+
+    notes: |
+      Podman is a daemonless container engine that's Docker-compatible.
+      Most Docker commands work with Podman by aliasing:
+        alias docker=podman
+
+      Podman doesn't require a license for commercial use.
+
+    docs_url: "https://podman.io"
+
+  orbstack:
+    id: "orbstack"
+    name: "OrbStack"
+    description: "Fast, lightweight Docker & Linux on macOS"
+    category: "containers"
+    tags: ["docker", "containers", "linux", "fast"]
+
+    detection:
+      installed_indicator: "/Applications/OrbStack.app"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install OrbStack"
+          command: "brew install --cask orbstack"
+          description: "Install OrbStack via Homebrew Cask"
+          idempotent: true
+
+    verification:
+      command: "[ -d '/Applications/OrbStack.app' ] && echo 'installed'"
+      expected_output: "installed"
+
+    conflicts_with: ["docker-desktop"]
+
+    notes: |
+      OrbStack is a fast Docker Desktop alternative with:
+      - Lower resource usage
+      - Faster startup
+      - Built-in Linux VMs
+
+      Free for personal use, paid for commercial use.
+
+    docs_url: "https://orbstack.dev"
+
+  kubernetes-cli:
+    id: "kubernetes-cli"
+    name: "kubectl"
+    description: "Kubernetes command-line tool"
+    category: "containers"
+    tags: ["kubernetes", "k8s", "cli", "orchestration"]
+
+    detection:
+      check_command: "command -v kubectl"
+      version_command: "kubectl version --client"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install kubectl"
+          command: "brew install kubernetes-cli"
+          description: "Install kubectl via Homebrew"
+          idempotent: true
+
+    verification:
+      command: "kubectl version --client"
+      expected_pattern: "Client Version"
+
+    conflicts_with: []
+
+    notes: |
+      kubectl is the CLI for interacting with Kubernetes clusters.
+      Configure with a kubeconfig file at ~/.kube/config.
+
+      For local Kubernetes, use Docker Desktop's built-in K8s,
+      minikube, kind, or colima with --kubernetes flag.
+
+    docs_url: "https://kubernetes.io/docs/reference/kubectl"
+
+  minikube:
+    id: "minikube"
+    name: "Minikube"
+    description: "Local Kubernetes cluster for development"
+    category: "containers"
+    tags: ["kubernetes", "k8s", "local", "development"]
+
+    detection:
+      check_command: "command -v minikube"
+      version_command: "minikube version"
+
+    dependencies:
+      required: ["homebrew"]
+      one_of: ["docker-desktop", "colima", "podman"]
+
+    install:
+      steps:
+        - name: "Install Minikube"
+          command: "brew install minikube"
+          description: "Install Minikube via Homebrew"
+          idempotent: true
+
+    verification:
+      command: "minikube version"
+      expected_pattern: "^minikube version"
+
+    conflicts_with: []
+
+    notes: |
+      Minikube runs a local Kubernetes cluster. Start with:
+        minikube start
+
+      Access dashboard:
+        minikube dashboard
+
+      Requires a container runtime (Docker, Podman, etc.)
+
+    docs_url: "https://minikube.sigs.k8s.io"
+
+  kind:
+    id: "kind"
+    name: "kind"
+    description: "Kubernetes IN Docker - local clusters using containers"
+    category: "containers"
+    tags: ["kubernetes", "k8s", "docker", "local"]
+
+    detection:
+      check_command: "command -v kind"
+      version_command: "kind version"
+
+    dependencies:
+      required: ["homebrew"]
+      one_of: ["docker-desktop", "colima"]
+
+    install:
+      steps:
+        - name: "Install kind"
+          command: "brew install kind"
+          description: "Install kind via Homebrew"
+          idempotent: true
+
+    verification:
+      command: "kind version"
+      expected_pattern: "^kind v\\d+"
+
+    conflicts_with: []
+
+    notes: |
+      kind runs Kubernetes clusters in Docker containers.
+      Great for CI/CD and testing. Create a cluster:
+        kind create cluster
+
+      Faster than minikube for multi-node clusters.
+
+    docs_url: "https://kind.sigs.k8s.io"
+
+  helm:
+    id: "helm"
+    name: "Helm"
+    description: "Kubernetes package manager"
+    category: "containers"
+    tags: ["kubernetes", "k8s", "package-manager"]
+
+    detection:
+      check_command: "command -v helm"
+      version_command: "helm version"
+
+    dependencies:
+      required: ["homebrew", "kubernetes-cli"]
+
+    install:
+      steps:
+        - name: "Install Helm"
+          command: "brew install helm"
+          description: "Install Helm via Homebrew"
+          idempotent: true
+
+    verification:
+      command: "helm version"
+      expected_pattern: "^version.BuildInfo"
+
+    conflicts_with: []
+
+    notes: |
+      Helm manages Kubernetes applications via charts.
+      Add repos and install charts:
+        helm repo add bitnami https://charts.bitnami.com/bitnami
+        helm install my-release bitnami/nginx
+
+    docs_url: "https://helm.sh"
+
+  k9s:
+    id: "k9s"
+    name: "k9s"
+    description: "Terminal UI for Kubernetes"
+    category: "containers"
+    tags: ["kubernetes", "k8s", "tui", "dashboard"]
+
+    detection:
+      check_command: "command -v k9s"
+      version_command: "k9s version"
+
+    dependencies:
+      required: ["homebrew", "kubernetes-cli"]
+
+    install:
+      steps:
+        - name: "Install k9s"
+          command: "brew install k9s"
+          description: "Install k9s via Homebrew"
+          idempotent: true
+
+    verification:
+      command: "k9s version"
+      expected_pattern: "Version:"
+
+    conflicts_with: []
+
+    notes: |
+      k9s provides a terminal UI for managing Kubernetes clusters.
+      Navigate with vim-like keybindings. Launch with:
+        k9s
+
+    docs_url: "https://k9scli.io"
+
+  lazydocker:
+    id: "lazydocker"
+    name: "lazydocker"
+    description: "Terminal UI for Docker"
+    category: "containers"
+    tags: ["docker", "tui", "dashboard"]
+
+    detection:
+      check_command: "command -v lazydocker"
+
+    dependencies:
+      required: ["homebrew"]
+      one_of: ["docker-desktop", "colima", "podman"]
+
+    install:
+      steps:
+        - name: "Install lazydocker"
+          command: "brew install lazydocker"
+          description: "Install lazydocker via Homebrew"
+          idempotent: true
+
+    verification:
+      command: "lazydocker --version"
+      expected_pattern: "Version:"
+
+    conflicts_with: []
+
+    notes: |
+      lazydocker provides a terminal UI for managing Docker containers,
+      images, volumes, and networks. Launch with:
+        lazydocker
+
+    docs_url: "https://github.com/jesseduffield/lazydocker"

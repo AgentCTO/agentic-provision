@@ -1,0 +1,373 @@
+metadata:
+  category: "editors"
+  description: "Code editors and IDEs"
+  author: "agentic-provision"
+  version: "1.0.0"
+  created: "2026-02-02"
+
+tasks:
+  vscode:
+    id: "vscode"
+    name: "Visual Studio Code"
+    description: "Free, extensible code editor from Microsoft"
+    category: "editors"
+    tags: ["editor", "microsoft", "free", "extensions"]
+
+    detection:
+      check_command: "command -v code"
+      installed_indicator: "/Applications/Visual Studio Code.app"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install VS Code"
+          command: "brew install --cask visual-studio-code"
+          description: "Install Visual Studio Code via Homebrew Cask"
+          idempotent: true
+
+    post_install:
+      - task: "vscode-cli"
+        condition: "always"
+
+    verification:
+      command: "code --version"
+      expected_pattern: "^\\d+\\.\\d+\\.\\d+"
+
+    conflicts_with: []
+
+    notes: |
+      VS Code is the most popular code editor. After installation, open VS Code
+      and run "Shell Command: Install 'code' command in PATH" from the
+      Command Palette (Cmd+Shift+P) to enable CLI usage.
+
+    docs_url: "https://code.visualstudio.com"
+
+  vscode-cli:
+    id: "vscode-cli"
+    name: "VS Code CLI"
+    description: "Enable 'code' command in terminal"
+    category: "editors"
+    tags: ["vscode", "cli"]
+
+    detection:
+      check_command: "command -v code"
+
+    dependencies:
+      required: ["vscode"]
+
+    install:
+      steps:
+        - name: "Install code CLI"
+          command: 'cat << ''EOF''
+
+To enable the "code" command:
+1. Open VS Code
+2. Press Cmd+Shift+P
+3. Type "Shell Command: Install"
+4. Select "Shell Command: Install ''code'' command in PATH"
+
+EOF'
+          description: "Instructions to install VS Code CLI"
+
+    conflicts_with: []
+
+  cursor:
+    id: "cursor"
+    name: "Cursor"
+    description: "AI-powered code editor built on VS Code"
+    category: "editors"
+    tags: ["editor", "ai", "vscode-fork"]
+
+    detection:
+      check_command: "command -v cursor"
+      installed_indicator: "/Applications/Cursor.app"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install Cursor"
+          command: "brew install --cask cursor"
+          description: "Install Cursor via Homebrew Cask"
+          idempotent: true
+
+    verification:
+      command: "[ -d '/Applications/Cursor.app' ] && echo 'installed'"
+      expected_output: "installed"
+
+    conflicts_with: []
+
+    notes: |
+      Cursor is an AI-first code editor built on VS Code. It includes
+      built-in AI features for code completion, chat, and editing.
+      VS Code extensions are compatible with Cursor.
+
+    docs_url: "https://cursor.sh"
+
+  neovim:
+    id: "neovim"
+    name: "Neovim"
+    description: "Hyperextensible Vim-based text editor"
+    category: "editors"
+    tags: ["editor", "vim", "terminal", "customizable"]
+
+    detection:
+      check_command: "command -v nvim"
+      version_command: "nvim --version"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install Neovim"
+          command: "brew install neovim"
+          description: "Install Neovim via Homebrew"
+          idempotent: true
+
+    post_install:
+      - task: "neovim-config"
+        condition: "user_choice"
+        prompt: "Set up a Neovim starter config (LazyVim, AstroNvim, or NvChad)?"
+
+    verification:
+      command: "nvim --version"
+      expected_pattern: "^NVIM v\\d+\\.\\d+\\.\\d+"
+
+    conflicts_with: []
+
+    notes: |
+      Neovim is a modern fork of Vim. Popular starter configurations:
+      - LazyVim: https://lazyvim.org
+      - AstroNvim: https://astronvim.com
+      - NvChad: https://nvchad.com
+
+    docs_url: "https://neovim.io"
+
+  sublime-text:
+    id: "sublime-text"
+    name: "Sublime Text"
+    description: "Fast, sophisticated text editor"
+    category: "editors"
+    tags: ["editor", "fast", "lightweight"]
+
+    detection:
+      check_command: "command -v subl"
+      installed_indicator: "/Applications/Sublime Text.app"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install Sublime Text"
+          command: "brew install --cask sublime-text"
+          description: "Install Sublime Text via Homebrew Cask"
+          idempotent: true
+
+    verification:
+      command: "subl --version"
+      expected_pattern: "^Sublime Text"
+
+    conflicts_with: []
+
+    notes: |
+      Sublime Text is known for its speed and responsiveness. It has an
+      unlimited free evaluation period, with a license for continued use.
+
+    docs_url: "https://www.sublimetext.com"
+
+  webstorm:
+    id: "webstorm"
+    name: "JetBrains WebStorm"
+    description: "Professional JavaScript and TypeScript IDE"
+    category: "editors"
+    tags: ["ide", "jetbrains", "javascript", "typescript", "paid"]
+
+    detection:
+      installed_indicator: "/Applications/WebStorm.app"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install WebStorm"
+          command: "brew install --cask webstorm"
+          description: "Install WebStorm via Homebrew Cask"
+          idempotent: true
+
+    verification:
+      command: "[ -d '/Applications/WebStorm.app' ] && echo 'installed'"
+      expected_output: "installed"
+
+    conflicts_with: []
+
+    notes: |
+      WebStorm is a paid IDE with excellent JavaScript/TypeScript support.
+      It includes built-in debugging, testing, and version control.
+      Free for students and open-source projects.
+
+    docs_url: "https://www.jetbrains.com/webstorm"
+
+  pycharm:
+    id: "pycharm"
+    name: "JetBrains PyCharm"
+    description: "Professional Python IDE"
+    category: "editors"
+    tags: ["ide", "jetbrains", "python", "paid"]
+
+    detection:
+      installed_indicator: "/Applications/PyCharm.app"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install PyCharm Professional"
+          command: "brew install --cask pycharm"
+          description: "Install PyCharm Professional via Homebrew Cask"
+          idempotent: true
+
+    verification:
+      command: "[ -d '/Applications/PyCharm.app' ] && echo 'installed'"
+      expected_output: "installed"
+
+    conflicts_with: []
+
+    notes: |
+      PyCharm Professional includes Django, Flask, and data science support.
+      For free alternative, use 'brew install --cask pycharm-ce' for
+      the Community Edition.
+
+    docs_url: "https://www.jetbrains.com/pycharm"
+
+  pycharm-ce:
+    id: "pycharm-ce"
+    name: "JetBrains PyCharm CE"
+    description: "Free Python IDE (Community Edition)"
+    category: "editors"
+    tags: ["ide", "jetbrains", "python", "free"]
+
+    detection:
+      installed_indicator: "/Applications/PyCharm CE.app"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install PyCharm Community"
+          command: "brew install --cask pycharm-ce"
+          description: "Install PyCharm Community Edition via Homebrew Cask"
+          idempotent: true
+
+    verification:
+      command: "[ -d '/Applications/PyCharm CE.app' ] && echo 'installed'"
+      expected_output: "installed"
+
+    conflicts_with: []
+
+    docs_url: "https://www.jetbrains.com/pycharm"
+
+  intellij-idea:
+    id: "intellij-idea"
+    name: "JetBrains IntelliJ IDEA"
+    description: "Professional Java and Kotlin IDE"
+    category: "editors"
+    tags: ["ide", "jetbrains", "java", "kotlin", "paid"]
+
+    detection:
+      installed_indicator: "/Applications/IntelliJ IDEA.app"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install IntelliJ IDEA"
+          command: "brew install --cask intellij-idea"
+          description: "Install IntelliJ IDEA Ultimate via Homebrew Cask"
+          idempotent: true
+
+    verification:
+      command: "[ -d '/Applications/IntelliJ IDEA.app' ] && echo 'installed'"
+      expected_output: "installed"
+
+    conflicts_with: []
+
+    notes: |
+      IntelliJ IDEA Ultimate includes support for web frameworks, databases,
+      and enterprise features. For free alternative, use 'brew install --cask
+      intellij-idea-ce' for the Community Edition.
+
+    docs_url: "https://www.jetbrains.com/idea"
+
+  jetbrains-toolbox:
+    id: "jetbrains-toolbox"
+    name: "JetBrains Toolbox"
+    description: "Manage all JetBrains IDEs from one app"
+    category: "editors"
+    tags: ["jetbrains", "manager"]
+
+    detection:
+      installed_indicator: "/Applications/JetBrains Toolbox.app"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install JetBrains Toolbox"
+          command: "brew install --cask jetbrains-toolbox"
+          description: "Install JetBrains Toolbox via Homebrew Cask"
+          idempotent: true
+
+    verification:
+      command: "[ -d '/Applications/JetBrains Toolbox.app' ] && echo 'installed'"
+      expected_output: "installed"
+
+    conflicts_with: []
+
+    notes: |
+      JetBrains Toolbox makes it easy to install, update, and manage all
+      JetBrains IDEs. Recommended if you use multiple JetBrains products.
+
+    docs_url: "https://www.jetbrains.com/toolbox-app"
+
+  zed:
+    id: "zed"
+    name: "Zed"
+    description: "High-performance, multiplayer code editor"
+    category: "editors"
+    tags: ["editor", "fast", "rust", "collaborative"]
+
+    detection:
+      check_command: "command -v zed"
+      installed_indicator: "/Applications/Zed.app"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install Zed"
+          command: "brew install --cask zed"
+          description: "Install Zed via Homebrew Cask"
+          idempotent: true
+
+    verification:
+      command: "[ -d '/Applications/Zed.app' ] && echo 'installed'"
+      expected_output: "installed"
+
+    conflicts_with: []
+
+    notes: |
+      Zed is a new editor built in Rust for speed. It features real-time
+      collaboration and AI assistance. Created by former Atom developers.
+
+    docs_url: "https://zed.dev"

@@ -1,0 +1,429 @@
+metadata:
+  category: "productivity-apps"
+  description: "Mac productivity apps for developers - launchers, window managers, utilities"
+  author: "agentic-provision"
+  version: "1.0.0"
+  created: "2026-02-03"
+
+tasks:
+  # =============================================================================
+  # App Launchers (Raycast vs Alfred)
+  # =============================================================================
+
+  raycast:
+    id: "raycast"
+    name: "Raycast"
+    description: "Modern launcher with built-in window management, clipboard, and extensions"
+    category: "productivity-apps"
+    tags: ["launcher", "spotlight", "productivity", "modern"]
+
+    detection:
+      installed_indicator: "/Applications/Raycast.app"
+      check_command: "[ -d '/Applications/Raycast.app' ]"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install Raycast"
+          command: "brew install --cask raycast"
+          description: "Install via Homebrew cask"
+
+    post_install:
+      message: "Raycast installed. Launch and set hotkey (recommended: ⌘Space to replace Spotlight)"
+      notes:
+        - "Includes window management (like Rectangle)"
+        - "Includes clipboard history (like Paste)"
+        - "Extensible with community extensions"
+        - "Free for personal use"
+
+  alfred:
+    id: "alfred"
+    name: "Alfred"
+    description: "Powerful launcher with workflows - fastest performance, highly customizable"
+    category: "productivity-apps"
+    tags: ["launcher", "spotlight", "productivity", "workflows"]
+
+    detection:
+      installed_indicator: "/Applications/Alfred 5.app"
+      check_command: "[ -d '/Applications/Alfred 5.app' ] || [ -d '/Applications/Alfred 4.app' ]"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install Alfred"
+          command: "brew install --cask alfred"
+          description: "Install via Homebrew cask"
+
+    post_install:
+      message: "Alfred installed. Launch and set hotkey. Powerpack ($69) unlocks workflows."
+      notes:
+        - "Fastest launcher performance"
+        - "One-time purchase for Powerpack"
+        - "Extensive workflow ecosystem"
+        - "Better clipboard handling for large data"
+
+  # =============================================================================
+  # Window Management
+  # =============================================================================
+
+  rectangle:
+    id: "rectangle"
+    name: "Rectangle"
+    description: "Free, open-source window management with keyboard shortcuts"
+    category: "productivity-apps"
+    tags: ["window-management", "tiling", "free", "open-source"]
+
+    detection:
+      installed_indicator: "/Applications/Rectangle.app"
+      check_command: "[ -d '/Applications/Rectangle.app' ]"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install Rectangle"
+          command: "brew install --cask rectangle"
+          description: "Install via Homebrew cask"
+
+    post_install:
+      message: "Rectangle installed. Grant accessibility permissions when prompted."
+      notes:
+        - "Free and open-source"
+        - "Snap windows to edges like Windows"
+        - "Customizable keyboard shortcuts"
+
+  magnet:
+    id: "magnet"
+    name: "Magnet"
+    description: "Popular window snapping app ($8 one-time)"
+    category: "productivity-apps"
+    tags: ["window-management", "tiling", "paid"]
+
+    detection:
+      installed_indicator: "/Applications/Magnet.app"
+      check_command: "[ -d '/Applications/Magnet.app' ]"
+
+    dependencies:
+      required: []
+
+    install:
+      steps:
+        - name: "Note: Magnet from App Store"
+          command: "echo 'Install Magnet from the Mac App Store (~$8)'"
+          description: "Available on Mac App Store"
+
+    post_install:
+      message: "Install Magnet from the Mac App Store for $7.99"
+      notes:
+        - "One-time purchase"
+        - "Simple and reliable"
+
+  amethyst:
+    id: "amethyst"
+    name: "Amethyst"
+    description: "Automatic tiling window manager (like i3/xmonad)"
+    category: "productivity-apps"
+    tags: ["window-management", "tiling", "automatic", "power-user"]
+
+    detection:
+      installed_indicator: "/Applications/Amethyst.app"
+      check_command: "[ -d '/Applications/Amethyst.app' ]"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install Amethyst"
+          command: "brew install --cask amethyst"
+          description: "Install via Homebrew cask"
+
+    post_install:
+      message: "Amethyst installed. Automatic tiling - takes some getting used to."
+      notes:
+        - "Automatic window tiling"
+        - "Similar to i3/xmonad on Linux"
+        - "Steep learning curve but powerful"
+
+  # =============================================================================
+  # Menu Bar Management
+  # =============================================================================
+
+  bartender:
+    id: "bartender"
+    name: "Bartender"
+    description: "Hide and organize menu bar icons"
+    category: "productivity-apps"
+    tags: ["menu-bar", "organization", "paid"]
+
+    detection:
+      installed_indicator: "/Applications/Bartender 5.app"
+      check_command: "[ -d '/Applications/Bartender 5.app' ] || [ -d '/Applications/Bartender 4.app' ]"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install Bartender"
+          command: "brew install --cask bartender"
+          description: "Install via Homebrew cask"
+
+    post_install:
+      message: "Bartender installed. Organize your menu bar icons."
+      notes:
+        - "Paid app with free trial"
+        - "Hide cluttered menu bar icons"
+        - "Show on hover or click"
+
+  hiddenbar:
+    id: "hiddenbar"
+    name: "Hidden Bar"
+    description: "Free, simple menu bar icon hider"
+    category: "productivity-apps"
+    tags: ["menu-bar", "organization", "free"]
+
+    detection:
+      installed_indicator: "/Applications/Hidden Bar.app"
+      check_command: "[ -d '/Applications/Hidden Bar.app' ]"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install Hidden Bar"
+          command: "brew install --cask hiddenbar"
+          description: "Install via Homebrew cask"
+
+    post_install:
+      message: "Hidden Bar installed. Free alternative to Bartender."
+
+  # =============================================================================
+  # Clipboard Managers
+  # =============================================================================
+
+  maccy:
+    id: "maccy"
+    name: "Maccy"
+    description: "Lightweight, free clipboard manager"
+    category: "productivity-apps"
+    tags: ["clipboard", "history", "free", "lightweight"]
+
+    detection:
+      installed_indicator: "/Applications/Maccy.app"
+      check_command: "[ -d '/Applications/Maccy.app' ]"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install Maccy"
+          command: "brew install --cask maccy"
+          description: "Install via Homebrew cask"
+
+    post_install:
+      message: "Maccy installed. Access clipboard history with ⌘⇧V"
+      notes:
+        - "Free and open-source"
+        - "Lightweight"
+        - "Raycast includes this built-in"
+
+  # =============================================================================
+  # Quick Look Plugins
+  # =============================================================================
+
+  qlmarkdown:
+    id: "qlmarkdown"
+    name: "QLMarkdown"
+    description: "Quick Look preview for Markdown files"
+    category: "productivity-apps"
+    tags: ["quicklook", "markdown", "preview"]
+
+    detection:
+      check_command: "qlmanage -m | grep -q QLMarkdown"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install QLMarkdown"
+          command: "brew install --cask qlmarkdown"
+          description: "Install via Homebrew cask"
+
+    post_install:
+      message: "QLMarkdown installed. Preview .md files with spacebar."
+
+  syntax-highlight:
+    id: "syntax-highlight"
+    name: "Syntax Highlight"
+    description: "Quick Look syntax highlighting for source code"
+    category: "productivity-apps"
+    tags: ["quicklook", "code", "syntax-highlighting"]
+
+    detection:
+      check_command: "qlmanage -m | grep -q SyntaxHighlight"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install Syntax Highlight"
+          command: "brew install --cask syntax-highlight"
+          description: "Install via Homebrew cask"
+
+    post_install:
+      message: "Syntax Highlight installed. Preview code files with spacebar."
+
+  qlstephen:
+    id: "qlstephen"
+    name: "QLStephen"
+    description: "Quick Look for plain text files without extension"
+    category: "productivity-apps"
+    tags: ["quicklook", "text", "extensionless"]
+
+    detection:
+      check_command: "qlmanage -m | grep -q QLStephen"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install QLStephen"
+          command: "brew install --cask qlstephen"
+          description: "Install via Homebrew cask"
+
+    post_install:
+      message: "QLStephen installed. Preview files without extensions."
+
+  # =============================================================================
+  # System Utilities
+  # =============================================================================
+
+  stats:
+    id: "stats"
+    name: "Stats"
+    description: "Beautiful system monitor in menu bar"
+    category: "productivity-apps"
+    tags: ["system-monitor", "menu-bar", "free"]
+
+    detection:
+      installed_indicator: "/Applications/Stats.app"
+      check_command: "[ -d '/Applications/Stats.app' ]"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install Stats"
+          command: "brew install --cask stats"
+          description: "Install via Homebrew cask"
+
+    post_install:
+      message: "Stats installed. Monitor CPU, memory, disk, network in menu bar."
+
+  aldente:
+    id: "aldente"
+    name: "AlDente"
+    description: "Battery charge limiter to extend battery lifespan"
+    category: "productivity-apps"
+    tags: ["battery", "health", "macbook"]
+
+    detection:
+      installed_indicator: "/Applications/AlDente.app"
+      check_command: "[ -d '/Applications/AlDente.app' ]"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install AlDente"
+          command: "brew install --cask aldente"
+          description: "Install via Homebrew cask"
+
+    post_install:
+      message: "AlDente installed. Limit charge to 80% for longer battery life."
+
+  topnotch:
+    id: "topnotch"
+    name: "TopNotch"
+    description: "Hide the notch on MacBook Pro with black menu bar"
+    category: "productivity-apps"
+    tags: ["notch", "menu-bar", "macbook-pro"]
+
+    detection:
+      installed_indicator: "/Applications/TopNotch.app"
+      check_command: "[ -d '/Applications/TopNotch.app' ]"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install TopNotch"
+          command: "brew install --cask topnotch"
+          description: "Install via Homebrew cask"
+
+    post_install:
+      message: "TopNotch installed. Hides the notch with a black menu bar."
+
+  # =============================================================================
+  # Note Taking & Knowledge
+  # =============================================================================
+
+  obsidian:
+    id: "obsidian"
+    name: "Obsidian"
+    description: "Knowledge base with local Markdown files and graph view"
+    category: "productivity-apps"
+    tags: ["notes", "markdown", "knowledge-base", "local-first"]
+
+    detection:
+      installed_indicator: "/Applications/Obsidian.app"
+      check_command: "[ -d '/Applications/Obsidian.app' ]"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install Obsidian"
+          command: "brew install --cask obsidian"
+          description: "Install via Homebrew cask"
+
+    post_install:
+      message: "Obsidian installed. Your notes stay as local Markdown files."
+
+  notion:
+    id: "notion"
+    name: "Notion"
+    description: "All-in-one workspace for notes, docs, and collaboration"
+    category: "productivity-apps"
+    tags: ["notes", "docs", "collaboration", "cloud"]
+
+    detection:
+      installed_indicator: "/Applications/Notion.app"
+      check_command: "[ -d '/Applications/Notion.app' ]"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install Notion"
+          command: "brew install --cask notion"
+          description: "Install via Homebrew cask"
+
+    post_install:
+      message: "Notion installed. Cloud-based collaborative workspace."

@@ -1,0 +1,406 @@
+metadata:
+  category: "shells"
+  description: "Shell customization and prompt themes"
+  author: "agentic-provision"
+  version: "1.0.0"
+  created: "2026-02-02"
+
+tasks:
+  starship:
+    id: "starship"
+    name: "Starship"
+    description: "Fast, minimal, cross-shell prompt"
+    category: "shells"
+    tags: ["prompt", "shell", "rust", "fast", "cross-shell"]
+
+    detection:
+      check_command: "command -v starship"
+      version_command: "starship --version"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install Starship"
+          command: "brew install starship"
+          description: "Install Starship via Homebrew"
+          idempotent: true
+
+    shell_integration:
+      zsh: 'eval "$(starship init zsh)"'
+      bash: 'eval "$(starship init bash)"'
+
+    verification:
+      command: "starship --version"
+      expected_pattern: "^starship \\d+"
+
+    conflicts_with: ["powerlevel10k"]
+
+    notes: |
+      Starship is a fast, customizable prompt written in Rust.
+      Works with any shell (zsh, bash, fish, etc.)
+
+      Configure at ~/.config/starship.toml
+      Preset themes: starship preset nerd-font-symbols -o ~/.config/starship.toml
+
+    docs_url: "https://starship.rs"
+
+  oh-my-zsh:
+    id: "oh-my-zsh"
+    name: "Oh My Zsh"
+    description: "Framework for managing Zsh configuration"
+    category: "shells"
+    tags: ["zsh", "framework", "plugins", "themes"]
+
+    detection:
+      installed_indicator: "~/.oh-my-zsh"
+
+    dependencies:
+      required: []
+
+    install:
+      steps:
+        - name: "Install Oh My Zsh"
+          command: 'sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended'
+          description: "Download and install Oh My Zsh"
+          idempotent: false
+
+    verification:
+      command: "[ -d ~/.oh-my-zsh ] && echo 'installed'"
+      expected_output: "installed"
+
+    conflicts_with: []
+
+    notes: |
+      Oh My Zsh provides plugins, themes, and helpers for Zsh.
+      Edit ~/.zshrc to change themes and enable plugins:
+
+      Recommended plugins:
+        plugins=(git docker kubectl zsh-autosuggestions zsh-syntax-highlighting)
+
+      Popular themes: robbyrussell (default), agnoster, powerlevel10k
+
+    docs_url: "https://ohmyz.sh"
+
+  powerlevel10k:
+    id: "powerlevel10k"
+    name: "Powerlevel10k"
+    description: "Feature-rich Zsh theme with instant prompt"
+    category: "shells"
+    tags: ["zsh", "theme", "prompt", "fast"]
+
+    detection:
+      installed_indicator: "~/.oh-my-zsh/custom/themes/powerlevel10k"
+
+    dependencies:
+      required: ["oh-my-zsh"]
+
+    install:
+      steps:
+        - name: "Clone Powerlevel10k"
+          command: "git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k"
+          description: "Clone Powerlevel10k into Oh My Zsh themes"
+          idempotent: false
+
+        - name: "Set theme in .zshrc"
+          command: 'sed -i "" ''s/ZSH_THEME="[^"]*"/ZSH_THEME="powerlevel10k\/powerlevel10k"/'' ~/.zshrc'
+          description: "Update .zshrc to use Powerlevel10k"
+          shell_config: true
+
+    verification:
+      command: "[ -d ~/.oh-my-zsh/custom/themes/powerlevel10k ] && echo 'installed'"
+      expected_output: "installed"
+
+    conflicts_with: ["starship"]
+
+    notes: |
+      Powerlevel10k is a fast, feature-rich Zsh theme.
+      After installation, restart your terminal and run:
+        p10k configure
+
+      Requires a Nerd Font for icons. Install with:
+        brew install --cask font-meslo-lg-nerd-font
+
+    docs_url: "https://github.com/romkatv/powerlevel10k"
+
+  zsh-autosuggestions:
+    id: "zsh-autosuggestions"
+    name: "zsh-autosuggestions"
+    description: "Fish-like autosuggestions for Zsh"
+    category: "shells"
+    tags: ["zsh", "plugin", "autosuggestions"]
+
+    detection:
+      installed_indicator: "~/.oh-my-zsh/custom/plugins/zsh-autosuggestions"
+
+    dependencies:
+      required: ["oh-my-zsh"]
+
+    install:
+      steps:
+        - name: "Clone zsh-autosuggestions"
+          command: "git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions"
+          description: "Clone into Oh My Zsh plugins"
+          idempotent: false
+
+    verification:
+      command: "[ -d ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions ] && echo 'installed'"
+      expected_output: "installed"
+
+    conflicts_with: []
+
+    notes: |
+      After installation, add to plugins in ~/.zshrc:
+        plugins=(... zsh-autosuggestions)
+
+      Suggestions appear in gray. Press → to accept.
+
+    docs_url: "https://github.com/zsh-users/zsh-autosuggestions"
+
+  zsh-syntax-highlighting:
+    id: "zsh-syntax-highlighting"
+    name: "zsh-syntax-highlighting"
+    description: "Syntax highlighting for Zsh commands"
+    category: "shells"
+    tags: ["zsh", "plugin", "syntax-highlighting"]
+
+    detection:
+      installed_indicator: "~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting"
+
+    dependencies:
+      required: ["oh-my-zsh"]
+
+    install:
+      steps:
+        - name: "Clone zsh-syntax-highlighting"
+          command: "git clone https://github.com/zsh-users/zsh-syntax-highlighting ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting"
+          description: "Clone into Oh My Zsh plugins"
+          idempotent: false
+
+    verification:
+      command: "[ -d ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting ] && echo 'installed'"
+      expected_output: "installed"
+
+    conflicts_with: []
+
+    notes: |
+      After installation, add to plugins in ~/.zshrc:
+        plugins=(... zsh-syntax-highlighting)
+
+      IMPORTANT: Must be the LAST plugin in the list.
+
+    docs_url: "https://github.com/zsh-users/zsh-syntax-highlighting"
+
+  fish:
+    id: "fish"
+    name: "Fish Shell"
+    description: "Friendly Interactive Shell"
+    category: "shells"
+    tags: ["shell", "fish", "user-friendly"]
+
+    detection:
+      check_command: "command -v fish"
+      version_command: "fish --version"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install Fish"
+          command: "brew install fish"
+          description: "Install Fish shell via Homebrew"
+          idempotent: true
+
+        - name: "Add Fish to allowed shells"
+          command: "echo $(brew --prefix)/bin/fish | sudo tee -a /etc/shells"
+          description: "Register Fish as a valid login shell"
+          requires_sudo: true
+
+    verification:
+      command: "fish --version"
+      expected_pattern: "^fish, version \\d+"
+
+    conflicts_with: []
+
+    notes: |
+      Fish provides autosuggestions and syntax highlighting out of the box.
+      To set as default shell:
+        chsh -s $(brew --prefix)/bin/fish
+
+      Configure at ~/.config/fish/config.fish
+
+    docs_url: "https://fishshell.com"
+
+  tmux:
+    id: "tmux"
+    name: "tmux"
+    description: "Terminal multiplexer"
+    category: "shells"
+    tags: ["terminal", "multiplexer", "sessions"]
+
+    detection:
+      check_command: "command -v tmux"
+      version_command: "tmux -V"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install tmux"
+          command: "brew install tmux"
+          description: "Install tmux via Homebrew"
+          idempotent: true
+
+    verification:
+      command: "tmux -V"
+      expected_pattern: "^tmux \\d+"
+
+    conflicts_with: []
+
+    notes: |
+      tmux lets you run multiple terminal sessions in one window.
+      Common commands:
+        tmux new -s session-name    # New session
+        tmux attach -t session-name # Attach to session
+        Ctrl+b d                    # Detach
+        Ctrl+b c                    # New window
+        Ctrl+b %                    # Split vertical
+        Ctrl+b "                    # Split horizontal
+
+    docs_url: "https://github.com/tmux/tmux/wiki"
+
+  iterm2:
+    id: "iterm2"
+    name: "iTerm2"
+    description: "Feature-rich terminal emulator for macOS"
+    category: "shells"
+    tags: ["terminal", "emulator", "macos"]
+
+    detection:
+      installed_indicator: "/Applications/iTerm.app"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install iTerm2"
+          command: "brew install --cask iterm2"
+          description: "Install iTerm2 via Homebrew Cask"
+          idempotent: true
+
+    verification:
+      command: "[ -d '/Applications/iTerm.app' ] && echo 'installed'"
+      expected_output: "installed"
+
+    conflicts_with: []
+
+    notes: |
+      iTerm2 is the most popular terminal replacement for macOS.
+      Features include split panes, search, autocomplete, and more.
+
+      Recommended: Enable shell integration for extra features.
+
+    docs_url: "https://iterm2.com"
+
+  warp:
+    id: "warp"
+    name: "Warp"
+    description: "Modern, GPU-accelerated terminal"
+    category: "shells"
+    tags: ["terminal", "emulator", "modern", "ai"]
+
+    detection:
+      installed_indicator: "/Applications/Warp.app"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install Warp"
+          command: "brew install --cask warp"
+          description: "Install Warp via Homebrew Cask"
+          idempotent: true
+
+    verification:
+      command: "[ -d '/Applications/Warp.app' ] && echo 'installed'"
+      expected_output: "installed"
+
+    conflicts_with: []
+
+    notes: |
+      Warp is a modern terminal with AI features, blocks for output,
+      and collaborative workflows. Requires account creation.
+
+    docs_url: "https://www.warp.dev"
+
+  alacritty:
+    id: "alacritty"
+    name: "Alacritty"
+    description: "Fast, GPU-accelerated terminal emulator"
+    category: "shells"
+    tags: ["terminal", "emulator", "fast", "gpu"]
+
+    detection:
+      check_command: "command -v alacritty"
+      installed_indicator: "/Applications/Alacritty.app"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install Alacritty"
+          command: "brew install --cask alacritty"
+          description: "Install Alacritty via Homebrew Cask"
+          idempotent: true
+
+    verification:
+      command: "[ -d '/Applications/Alacritty.app' ] && echo 'installed'"
+      expected_output: "installed"
+
+    conflicts_with: []
+
+    notes: |
+      Alacritty is a minimal, fast terminal focused on performance.
+      Configure at ~/.config/alacritty/alacritty.toml
+
+      No tabs/splits built-in - use with tmux for those features.
+
+    docs_url: "https://alacritty.org"
+
+  ghostty:
+    id: "ghostty"
+    name: "Ghostty"
+    description: "Fast terminal with native macOS features"
+    category: "shells"
+    tags: ["terminal", "emulator", "fast", "native"]
+
+    detection:
+      installed_indicator: "/Applications/Ghostty.app"
+
+    dependencies:
+      required: ["homebrew"]
+
+    install:
+      steps:
+        - name: "Install Ghostty"
+          command: "brew install --cask ghostty"
+          description: "Install Ghostty via Homebrew Cask"
+          idempotent: true
+
+    verification:
+      command: "[ -d '/Applications/Ghostty.app' ] && echo 'installed'"
+      expected_output: "installed"
+
+    conflicts_with: []
+
+    notes: |
+      Ghostty is a new, fast terminal that feels native on macOS.
+      Supports tabs, splits, and native macOS features.
+
+    docs_url: "https://ghostty.org"
