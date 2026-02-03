@@ -1,0 +1,153 @@
+name: Validate Task Manifests
+
+on:
+  push:
+    paths:
+      - 'tasks/**/*.yaml'
+      - 'scripts/*.py'
+      - '.github/workflows/validate-manifests.yml'
+  pull_request:
+    paths:
+      - 'tasks/**/*.yaml'
+      - 'scripts/*.py'
+
+jobs:
+  validate-yaml-syntax:
+    name: YAML Syntax Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install yamllint
+        run: pip install yamllint
+
+      - name: Lint YAML files
+        run: |
+          yamllint -d "{extends: relaxed, rules: {line-length: disable, truthy: disable}}" tasks/
+
+  validate-schema:
+    name: Schema Validation
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install pyyaml
+
+      - name: Validate manifest schema
+        run: python scripts/validate-manifests.py
+
+  validate-references:
+    name: Profile Reference Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install pyyaml
+
+      - name: Validate profile references
+        run: python scripts/validate-profile-refs.py
+
+  check-duplicate-ids:
+    name: Duplicate ID Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install yq
+        run: |
+          sudo wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64
+          sudo chmod +x /usr/local/bin/yq
+
+      - name: Check for duplicate task IDs
+        run: |
+          # Extract all task IDs and check for duplicates
+          ALL_IDS=$(find tasks/core -name "*.yaml" -exec yq '.tasks | keys | .[]' {} \;)
+          DUPLICATES=$(echo "$ALL_IDS" | sort | uniq -d)
+
+          if [ -n "$DUPLICATES" ]; then
+            echo "Duplicate task IDs found:"
+            echo "$DUPLICATES"
+            exit 1
+          fi
+          echo "No duplicate task IDs found"
+
+  test-detection-syntax:
+    name: Detection Command Syntax
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install pyyaml
+
+      - name: Test detection commands (syntax only)
+        run: |
+          python3 << 'EOF'
+          import yaml
+          import subprocess
+          from pathlib import Path
+
+          errors = []
+
+          for manifest in Path('tasks/core').glob('*.yaml'):
+              with open(manifest) as f:
+                  data = yaml.safe_load(f)
+
+              for task_id, task in data.get('tasks', {}).items():
+                  cmd = task.get('detection', {}).get('check_command')
+                  if cmd:
+                      # Syntax check only using bash -n
+                      result = subprocess.run(
+                          ['bash', '-n', '-c', cmd],
+                          capture_output=True
+                      )
+                      if result.returncode != 0:
+                          errors.append(f"{manifest.name}: {task_id}")
+
+          if errors:
+              print("Detection commands with syntax errors:")
+              for e in errors:
+                  print(f"  - {e}")
+              exit(1)
+
+          print("All detection commands have valid syntax")
+          EOF
+
+  test-detection-macos:
+    name: Detection Tests (macOS)
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install pyyaml
+
+      - name: Run detection tests
+        run: python scripts/test-detection.py
+
+      - name: Summary
+        run: |
+          echo "Detection test completed on macOS runner."
+          echo "Note: Most tools are not pre-installed, so detection should return 'not installed'."
