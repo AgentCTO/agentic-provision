@@ -39,13 +39,6 @@ fi
 
 print_success "Running on macOS $(sw_vers -productVersion)"
 
-# Administrator check — Homebrew and cask installs require sudo
-if ! groups "$(whoami)" | grep -qw admin; then
-    print_error "This script requires an administrator account."
-    print_error "Log in as an admin user and try again."
-    exit 1
-fi
-print_success "Administrator account confirmed"
 
 # ------------------------------------------------------------------------------
 # Xcode Command Line Tools
