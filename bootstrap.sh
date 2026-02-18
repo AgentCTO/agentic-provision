@@ -3,7 +3,7 @@
 # agentic-provision bootstrap script
 # One command to get an AI agent ready to provision your Mac
 #
-# Usage: curl -fsSL https://raw.githubusercontent.com/AgentCTO/agentic-provision/main/bootstrap.sh | bash
+# Usage: curl -fsSL https://raw.githubusercontent.com/AgentCTO/agentic-provision/refs/heads/main/bootstrap.sh | bash
 #
 
 set -e

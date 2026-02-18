@@ -121,7 +121,7 @@ Agent: Here's what I'll set up:
 ## Quick Start
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/AgentCTO/agentic-provision/main/bootstrap.sh | bash
+curl -fsSL https://raw.githubusercontent.com/AgentCTO/agentic-provision/refs/heads/main/bootstrap.sh | bash
 ```
 
 The bootstrap script handles everything: Homebrew, Claude Code, Python environment, API key setup, and offers to launch the provisioner immediately.
