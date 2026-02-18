@@ -77,14 +77,24 @@ print_success "Xcode Command Line Tools installed"
 if ! command -v brew &>/dev/null; then
     print_step "Installing Homebrew..."
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-
-    # Add brew to PATH for this session (Apple Silicon vs Intel)
-    if [[ -f "/opt/homebrew/bin/brew" ]]; then
-        eval "$(/opt/homebrew/bin/brew shellenv)"
-    elif [[ -f "/usr/local/bin/brew" ]]; then
-        eval "$(/usr/local/bin/brew shellenv)"
-    fi
 fi
+
+# Add Homebrew to PATH for this session and persist to shell profile
+if [[ -f "/opt/homebrew/bin/brew" ]]; then
+    eval "$(/opt/homebrew/bin/brew shellenv)"
+    BREW_SHELLENV='eval "$(/opt/homebrew/bin/brew shellenv)"'
+elif [[ -f "/usr/local/bin/brew" ]]; then
+    eval "$(/usr/local/bin/brew shellenv)"
+    BREW_SHELLENV='eval "$(/usr/local/bin/brew shellenv)"'
+fi
+
+if [[ -n "$BREW_SHELLENV" ]] && ! grep -qF "brew shellenv" "${HOME}/.zprofile" 2>/dev/null; then
+    echo "" >> "${HOME}/.zprofile"
+    echo "# Homebrew" >> "${HOME}/.zprofile"
+    echo "$BREW_SHELLENV" >> "${HOME}/.zprofile"
+    print_success "Homebrew added to PATH in ~/.zprofile"
+fi
+
 print_success "Homebrew installed ($(brew --version | head -1))"
 
 # ------------------------------------------------------------------------------
