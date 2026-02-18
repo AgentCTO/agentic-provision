@@ -217,6 +217,11 @@ fi
 
 print_success "Knowledge base and task manifests ready"
 
+# Copy system prompt as CLAUDE.md so Claude Code loads it automatically
+# --system-prompt flag only works in print mode; CLAUDE.md is loaded in interactive mode
+cp "${KNOWLEDGE_DIR}/system-prompt.md" "${PROVISION_DIR}/CLAUDE.md"
+print_success "System prompt configured"
+
 # ------------------------------------------------------------------------------
 # Create launcher script
 # ------------------------------------------------------------------------------
@@ -240,12 +245,16 @@ if ! command -v claude &>/dev/null; then
     exit 1
 fi
 
+# cd into provision dir so Claude loads CLAUDE.md as context automatically
+# (--system-prompt flag is print-mode only and doesn't work in interactive mode)
+cd "${PROVISION_DIR}"
+
 echo ""
 echo "Starting Agentic Provision..."
 echo "Type 'begin' and press Enter to start."
 echo ""
 
-exec claude --system-prompt "${PROVISION_DIR}/knowledge/system-prompt.md"
+exec claude
 LAUNCHER_SCRIPT
 
 chmod +x "$LAUNCHER"
