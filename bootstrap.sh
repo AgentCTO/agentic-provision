@@ -104,17 +104,8 @@ print_success "Homebrew installed ($(brew --version | head -1))"
 if ! command -v claude &>/dev/null; then
     print_step "Installing Claude Code..."
     brew install --cask claude-code
-    hash -r 2>/dev/null || true  # clear bash's command cache so claude is found immediately
 fi
-
-CLAUDE_BIN="$(command -v claude 2>/dev/null)"
-if [[ -z "$CLAUDE_BIN" ]]; then
-    print_error "Claude Code was installed but 'claude' was not found in PATH."
-    print_error "Open a new terminal, run 'source ~/.zprofile', then re-run this script."
-    exit 1
-fi
-
-print_success "Claude Code installed ($("$CLAUDE_BIN" --version 2>/dev/null | head -1))"
+print_success "Claude Code installed"
 
 # ------------------------------------------------------------------------------
 # Python (via Homebrew for consistency)
@@ -321,24 +312,14 @@ print_success "Launcher script created"
 
 echo ""
 echo -e "${GREEN}════════════════════════════════════════════${NC}"
-echo -e "${GREEN}  Installation complete!${NC}"
+echo -e "${GREEN}  Bootstrap complete! Next steps:${NC}"
 echo -e "${GREEN}════════════════════════════════════════════${NC}"
 echo ""
-echo "  Run later:  ${BLUE}provision${NC}"
-echo "  Options:    provision -y   (skip confirmations)"
+echo "  1. Open a new terminal"
 echo ""
-
-# Authenticate Claude Code if needed
-if ! "$CLAUDE_BIN" auth status &>/dev/null 2>&1; then
-    print_step "Launching Claude Code for authentication..."
-    echo "  Sign in, then return here — the provisioner will start automatically."
-    echo ""
-    "$CLAUDE_BIN" </dev/tty
-fi
-
-print_success "Claude Code authenticated"
+echo "  2. Authenticate Claude Code:"
+echo "     ${BLUE}claude${NC}"
 echo ""
-
-# Launch the provisioner
-export PATH="${HOME}/.agentic-provision:${PATH}"
-exec "$LAUNCHER"
+echo "  3. Once signed in, start the provisioner:"
+echo "     ${BLUE}provision${NC}"
+echo ""
