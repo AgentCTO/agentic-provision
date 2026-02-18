@@ -240,7 +240,12 @@ if ! command -v claude &>/dev/null; then
     exit 1
 fi
 
-exec claude --system-prompt "${PROVISION_DIR}/knowledge/system-prompt.md" "Begin"
+echo ""
+echo "Starting Agentic Provision..."
+echo "Type 'begin' and press Enter to start."
+echo ""
+
+exec claude --system-prompt "${PROVISION_DIR}/knowledge/system-prompt.md"
 LAUNCHER_SCRIPT
 
 chmod +x "$LAUNCHER"
