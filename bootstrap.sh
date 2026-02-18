@@ -104,8 +104,17 @@ print_success "Homebrew installed ($(brew --version | head -1))"
 if ! command -v claude &>/dev/null; then
     print_step "Installing Claude Code..."
     brew install --cask claude-code
+    hash -r 2>/dev/null || true  # clear bash's command cache so claude is found immediately
 fi
-print_success "Claude Code installed ($(claude --version 2>/dev/null | head -1))"
+
+CLAUDE_BIN="$(command -v claude 2>/dev/null)"
+if [[ -z "$CLAUDE_BIN" ]]; then
+    print_error "Claude Code was installed but 'claude' was not found in PATH."
+    print_error "Open a new terminal, run 'source ~/.zprofile', then re-run this script."
+    exit 1
+fi
+
+print_success "Claude Code installed ($("$CLAUDE_BIN" --version 2>/dev/null | head -1))"
 
 # ------------------------------------------------------------------------------
 # Python (via Homebrew for consistency)
@@ -320,11 +329,11 @@ echo "  Options:    provision -y   (skip confirmations)"
 echo ""
 
 # Authenticate Claude Code if needed
-if ! claude auth status &>/dev/null 2>&1; then
+if ! "$CLAUDE_BIN" auth status &>/dev/null 2>&1; then
     print_step "Launching Claude Code for authentication..."
     echo "  Sign in, then return here — the provisioner will start automatically."
     echo ""
-    claude </dev/tty
+    "$CLAUDE_BIN" </dev/tty
 fi
 
 print_success "Claude Code authenticated"
