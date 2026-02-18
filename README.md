@@ -1,5 +1,7 @@
 # Agentic Provision
 
+![Agentic Provision](agentic-provision.png)
+
 **AI-assisted macOS development environment setup using Claude.**
 
 An AI agent guides you through setting up your Mac for development. No predefined scripts—just describe what you need, and the agent configures your system accordingly.
