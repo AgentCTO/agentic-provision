@@ -45,17 +45,19 @@ print_success "Running on macOS $(sw_vers -productVersion)"
 
 if ! xcode-select -p &>/dev/null; then
     print_step "Installing Xcode Command Line Tools..."
-    print_warning "A dialog will appear. Click 'Install' and wait for completion."
-    xcode-select --install
+    print_warning "A dialog will appear — click 'Install' to continue."
+    xcode-select --install 2>/dev/null || true
 
-    # Wait for installation
-    echo ""
-    read -p "Press Enter once the installation completes..."
-
-    if ! xcode-select -p &>/dev/null; then
-        print_error "Xcode Command Line Tools installation failed."
-        exit 1
-    fi
+    print_step "Waiting for installation to complete (this may take several minutes)..."
+    ATTEMPTS=0
+    until xcode-select -p &>/dev/null; do
+        sleep 5
+        ATTEMPTS=$((ATTEMPTS + 1))
+        if [[ $ATTEMPTS -ge 360 ]]; then
+            print_error "Timed out waiting for Xcode Command Line Tools (30 min). Re-run the script to retry."
+            exit 1
+        fi
+    done
 fi
 print_success "Xcode Command Line Tools installed"
 
