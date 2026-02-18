@@ -132,33 +132,8 @@ pip install --quiet anthropic pyyaml
 
 print_success "Python environment configured"
 
-# ------------------------------------------------------------------------------
-# Anthropic API Key
-# ------------------------------------------------------------------------------
-
 SHELL_RC="${HOME}/.zshrc"
 [[ -f "${HOME}/.bashrc" ]] && [[ ! -f "${HOME}/.zshrc" ]] && SHELL_RC="${HOME}/.bashrc"
-
-if [[ -n "$ANTHROPIC_API_KEY" ]]; then
-    print_success "ANTHROPIC_API_KEY is set"
-elif grep -q "ANTHROPIC_API_KEY" "$SHELL_RC" 2>/dev/null; then
-    print_success "ANTHROPIC_API_KEY found in $SHELL_RC"
-else
-    print_warning "ANTHROPIC_API_KEY is not set"
-    echo ""
-    echo "  Get your key at: https://console.anthropic.com/settings/keys"
-    echo ""
-    read -p "  Enter your Anthropic API key (or press Enter to skip): " api_key </dev/tty
-    if [[ -n "$api_key" ]]; then
-        echo "" >> "$SHELL_RC"
-        echo "# Anthropic API Key" >> "$SHELL_RC"
-        echo "export ANTHROPIC_API_KEY='$api_key'" >> "$SHELL_RC"
-        export ANTHROPIC_API_KEY="$api_key"
-        print_success "API key saved to $SHELL_RC"
-    else
-        print_warning "Skipped — set it later: export ANTHROPIC_API_KEY='sk-ant-...'"
-    fi
-fi
 
 # ------------------------------------------------------------------------------
 # Create directory structure
