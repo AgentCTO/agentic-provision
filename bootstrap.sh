@@ -321,17 +321,15 @@ echo ""
 
 # Authenticate Claude Code if needed
 if ! claude auth status &>/dev/null 2>&1; then
-    print_warning "Claude Code needs authentication. Run 'claude' once to sign in."
+    print_step "Launching Claude Code for authentication..."
+    echo "  Sign in, then return here — the provisioner will start automatically."
     echo ""
+    claude </dev/tty
 fi
 
-read -p "Start the provisioner now? [Y/n] " launch_now </dev/tty
+print_success "Claude Code authenticated"
 echo ""
-if [[ "$launch_now" =~ ^[Nn] ]]; then
-    echo "  When ready, open a new terminal and run: ${BLUE}provision${NC}"
-    echo ""
-else
-    # Reload shell config so PATH includes the launcher
-    export PATH="${HOME}/.agentic-provision:${PATH}"
-    exec "$LAUNCHER"
-fi
+
+# Launch the provisioner
+export PATH="${HOME}/.agentic-provision:${PATH}"
+exec "$LAUNCHER"
