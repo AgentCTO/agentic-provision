@@ -3,7 +3,7 @@
 # agentic-provision bootstrap script
 # One command to get an AI agent ready to provision your Mac
 #
-# Usage: curl -fsSL https://raw.githubusercontent.com/YOURUSER/agentic-provision/main/bootstrap.sh | bash
+# Usage: curl -fsSL https://raw.githubusercontent.com/AgentCTO/agentic-provision/main/bootstrap.sh | bash
 #
 
 set -e
@@ -77,6 +77,16 @@ fi
 print_success "Homebrew installed ($(brew --version | head -1))"
 
 # ------------------------------------------------------------------------------
+# Claude Code
+# ------------------------------------------------------------------------------
+
+if ! command -v claude &>/dev/null; then
+    print_step "Installing Claude Code..."
+    brew install --cask claude-code
+fi
+print_success "Claude Code installed ($(claude --version 2>/dev/null | head -1))"
+
+# ------------------------------------------------------------------------------
 # Python (via Homebrew for consistency)
 # ------------------------------------------------------------------------------
 
@@ -107,9 +117,37 @@ fi
 # Activate and install dependencies
 source "${VENV_DIR}/bin/activate"
 pip install --quiet --upgrade pip
-pip install --quiet anthropic pyyaml claude-agent-sdk
+pip install --quiet anthropic pyyaml
 
 print_success "Python environment configured"
+
+# ------------------------------------------------------------------------------
+# Anthropic API Key
+# ------------------------------------------------------------------------------
+
+SHELL_RC="${HOME}/.zshrc"
+[[ -f "${HOME}/.bashrc" ]] && [[ ! -f "${HOME}/.zshrc" ]] && SHELL_RC="${HOME}/.bashrc"
+
+if [[ -n "$ANTHROPIC_API_KEY" ]]; then
+    print_success "ANTHROPIC_API_KEY is set"
+elif grep -q "ANTHROPIC_API_KEY" "$SHELL_RC" 2>/dev/null; then
+    print_success "ANTHROPIC_API_KEY found in $SHELL_RC"
+else
+    print_warning "ANTHROPIC_API_KEY is not set"
+    echo ""
+    echo "  Get your key at: https://console.anthropic.com/settings/keys"
+    echo ""
+    read -p "  Enter your Anthropic API key (or press Enter to skip): " api_key
+    if [[ -n "$api_key" ]]; then
+        echo "" >> "$SHELL_RC"
+        echo "# Anthropic API Key" >> "$SHELL_RC"
+        echo "export ANTHROPIC_API_KEY='$api_key'" >> "$SHELL_RC"
+        export ANTHROPIC_API_KEY="$api_key"
+        print_success "API key saved to $SHELL_RC"
+    else
+        print_warning "Skipped — set it later: export ANTHROPIC_API_KEY='sk-ant-...'"
+    fi
+fi
 
 # ------------------------------------------------------------------------------
 # Create directory structure
@@ -142,7 +180,7 @@ print_step "Downloading knowledge base..."
 
 # If running from curl|bash, download knowledge files
 # If running locally, copy from repo
-REPO_URL="https://raw.githubusercontent.com/YOURUSER/agentic-provision/main"
+REPO_URL="https://raw.githubusercontent.com/AgentCTO/agentic-provision/main"
 
 LIB_DIR="${PROVISION_DIR}/lib"
 mkdir -p "$LIB_DIR"
@@ -264,9 +302,6 @@ LAUNCHER_SCRIPT
 chmod +x "$LAUNCHER"
 
 # Add to PATH if not already there
-SHELL_RC="${HOME}/.zshrc"
-[[ -f "${HOME}/.bashrc" ]] && [[ ! -f "${HOME}/.zshrc" ]] && SHELL_RC="${HOME}/.bashrc"
-
 if ! grep -q "agentic-provision" "$SHELL_RC" 2>/dev/null; then
     echo "" >> "$SHELL_RC"
     echo "# Agentic Provision" >> "$SHELL_RC"
@@ -284,24 +319,23 @@ echo -e "${GREEN}═════════════════════
 echo -e "${GREEN}  Installation complete!${NC}"
 echo -e "${GREEN}════════════════════════════════════════════${NC}"
 echo ""
-echo "Next steps:"
+echo "  Run later:  ${BLUE}provision${NC}"
+echo "  Options:    provision -y   (skip confirmations)"
 echo ""
-echo "  1. Install Claude Code (if not already installed):"
+
+# Authenticate Claude Code if needed
+if ! claude auth status &>/dev/null 2>&1; then
+    print_warning "Claude Code needs authentication. Run 'claude' once to sign in."
+    echo ""
+fi
+
+read -p "Start the provisioner now? [Y/n] " launch_now
 echo ""
-echo "     ${BLUE}brew install --cask claude-code${NC}"
-echo ""
-echo "     Then run 'claude' once to authenticate."
-echo ""
-echo "  2. Start a new terminal or run:"
-echo "     source ${SHELL_RC}"
-echo ""
-echo "  3. Run the provisioner:"
-echo "     ${BLUE}provision${NC}"
-echo ""
-echo "Options:"
-echo "  provision -y              Skip command confirmations (faster)"
-echo "  provision --help          Show all options"
-echo ""
-echo "The AI agent will ask about your development needs and"
-echo "configure this Mac accordingly."
-echo ""
+if [[ "$launch_now" =~ ^[Nn] ]]; then
+    echo "  When ready, open a new terminal and run: ${BLUE}provision${NC}"
+    echo ""
+else
+    # Reload shell config so PATH includes the launcher
+    export PATH="${HOME}/.agentic-provision:${PATH}"
+    exec "$LAUNCHER"
+fi

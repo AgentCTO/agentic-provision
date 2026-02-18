@@ -118,27 +118,11 @@ Agent: Here's what I'll set up:
 
 ## Quick Start
 
-### Prerequisites
-
-**Claude Code CLI** is required. Install it first:
-
 ```bash
-npm install -g @anthropic-ai/claude-code
+curl -fsSL https://raw.githubusercontent.com/AgentCTO/agentic-provision/main/bootstrap.sh | bash
 ```
 
-Set your Anthropic API key:
-```bash
-export ANTHROPIC_API_KEY='your-key-here'
-```
-
-### Run
-
-```bash
-cd agentic-provision
-claude --system-prompt knowledge/system-prompt.md
-```
-
-The agent will greet you and start the guided setup.
+The bootstrap script handles everything: Homebrew, Claude Code, Python environment, API key setup, and offers to launch the provisioner immediately.
 
 ## Features
 
