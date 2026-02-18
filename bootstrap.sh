@@ -107,40 +107,7 @@ if ! command -v claude &>/dev/null; then
 fi
 print_success "Claude Code installed"
 
-# ------------------------------------------------------------------------------
-# Python (via Homebrew for consistency)
-# ------------------------------------------------------------------------------
-
-if ! brew list python@3.11 &>/dev/null; then
-    print_step "Installing Python 3.11..."
-    brew install python@3.11
-fi
-print_success "Python 3.11 installed"
-
-# Get the Homebrew Python path
-PYTHON_PATH="$(brew --prefix python@3.11)/bin/python3.11"
-
-# ------------------------------------------------------------------------------
-# Python Environment
-# ------------------------------------------------------------------------------
-
-print_step "Setting up Python environment..."
-
-# Create a virtual environment for the provisioner
 PROVISION_DIR="${HOME}/.agentic-provision"
-VENV_DIR="${PROVISION_DIR}/venv"
-
-if [[ ! -d "$VENV_DIR" ]]; then
-    mkdir -p "$PROVISION_DIR"
-    "$PYTHON_PATH" -m venv "$VENV_DIR"
-fi
-
-# Activate and install dependencies
-source "${VENV_DIR}/bin/activate"
-pip install --quiet --upgrade pip
-pip install --quiet anthropic pyyaml
-
-print_success "Python environment configured"
 
 SHELL_RC="${HOME}/.zshrc"
 [[ -f "${HOME}/.bashrc" ]] && [[ ! -f "${HOME}/.zshrc" ]] && SHELL_RC="${HOME}/.bashrc"
@@ -262,37 +229,18 @@ cat > "$LAUNCHER" << 'LAUNCHER_SCRIPT'
 # Agentic Provision launcher
 #
 # Usage:
-#   provision                    # Default: confirm each command
-#   provision --auto-approve     # Skip command confirmations
-#   provision -y                 # Same as --auto-approve
-#
-# Requires: Claude Code CLI (brew install --cask claude-code)
+#   provision        # Start or resume a provisioning session
 #
 
 PROVISION_DIR="${HOME}/.agentic-provision"
-VENV_DIR="${PROVISION_DIR}/venv"
-LIB_DIR="${PROVISION_DIR}/lib"
 
-# Check for Claude Code CLI
 if ! command -v claude &>/dev/null; then
-    echo "Error: Claude Code CLI not found."
-    echo ""
-    echo "Install it with:"
-    echo "  brew install --cask claude-code"
-    echo ""
-    echo "Or visit: https://claude.ai/download"
+    echo "Error: Claude Code not found."
+    echo "Install: brew install --cask claude-code"
     exit 1
 fi
 
-# Activate virtual environment
-source "${VENV_DIR}/bin/activate"
-
-# Set environment variables
-export AGENTIC_PROVISION_DIR="${PROVISION_DIR}"
-export PYTHONPATH="${LIB_DIR}:${PYTHONPATH}"
-
-# Run the provisioner
-python "${LIB_DIR}/provision.py" "$@"
+exec claude --system-prompt "${PROVISION_DIR}/knowledge/system-prompt.md"
 LAUNCHER_SCRIPT
 
 chmod +x "$LAUNCHER"
