@@ -240,7 +240,7 @@ if ! command -v claude &>/dev/null; then
     exit 1
 fi
 
-exec claude --system-prompt "${PROVISION_DIR}/knowledge/system-prompt.md"
+exec claude --system-prompt "${PROVISION_DIR}/knowledge/system-prompt.md" "Begin"
 LAUNCHER_SCRIPT
 
 chmod +x "$LAUNCHER"
