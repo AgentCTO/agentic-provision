@@ -9,22 +9,22 @@
 set -e
 
 # Colors for output
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[0;33m'
-BLUE='\033[0;34m'
-NC='\033[0m' # No Color
+RED=$'\033[0;31m'
+GREEN=$'\033[0;32m'
+YELLOW=$'\033[0;33m'
+BLUE=$'\033[0;34m'
+NC=$'\033[0m'
 
-print_step() { echo -e "${BLUE}▶${NC} $1"; }
-print_success() { echo -e "${GREEN}✓${NC} $1"; }
-print_warning() { echo -e "${YELLOW}⚠${NC} $1"; }
-print_error() { echo -e "${RED}✗${NC} $1"; }
+print_step() { echo "${BLUE}▶${NC} $1"; }
+print_success() { echo "${GREEN}✓${NC} $1"; }
+print_warning() { echo "${YELLOW}⚠${NC} $1"; }
+print_error() { echo "${RED}✗${NC} $1"; }
 
 echo ""
-echo -e "${BLUE}╔════════════════════════════════════════════╗${NC}"
-echo -e "${BLUE}║${NC}        🤖 Agentic Provision                ${BLUE}║${NC}"
-echo -e "${BLUE}║${NC}   AI-assisted Mac development setup        ${BLUE}║${NC}"
-echo -e "${BLUE}╚════════════════════════════════════════════╝${NC}"
+echo "${BLUE}╔════════════════════════════════════════════╗${NC}"
+echo "${BLUE}║${NC}        🤖 Agentic Provision                ${BLUE}║${NC}"
+echo "${BLUE}║${NC}   AI-assisted Mac development setup        ${BLUE}║${NC}"
+echo "${BLUE}╚════════════════════════════════════════════╝${NC}"
 echo ""
 
 # ------------------------------------------------------------------------------
@@ -259,17 +259,17 @@ print_success "Launcher script created"
 # ------------------------------------------------------------------------------
 
 echo ""
-echo -e "${GREEN}════════════════════════════════════════════${NC}"
-echo -e "${GREEN}  Bootstrap complete!${NC}"
-echo -e "${GREEN}════════════════════════════════════════════${NC}"
+echo "${GREEN}════════════════════════════════════════════${NC}"
+echo "${GREEN}  Bootstrap complete!${NC}"
+echo "${GREEN}════════════════════════════════════════════${NC}"
 echo ""
 echo "  Next steps:"
 echo ""
 echo "  1. Open a new terminal"
 echo ""
 echo "  2. Authenticate Claude Code:"
-echo -e "     ${BLUE}claude${NC}"
+echo "     ${BLUE}claude${NC}"
 echo ""
 echo "  3. Start the provisioner:"
-echo -e "     ${BLUE}provision${NC}"
+echo "     ${BLUE}provision${NC}"
 echo ""
