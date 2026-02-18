@@ -39,6 +39,14 @@ fi
 
 print_success "Running on macOS $(sw_vers -productVersion)"
 
+# Administrator check — Homebrew and cask installs require sudo
+if ! groups "$(whoami)" | grep -qw admin; then
+    print_error "This script requires an administrator account."
+    print_error "Log in as an admin user and try again."
+    exit 1
+fi
+print_success "Administrator account confirmed"
+
 # ------------------------------------------------------------------------------
 # Xcode Command Line Tools
 # ------------------------------------------------------------------------------
@@ -139,7 +147,7 @@ else
     echo ""
     echo "  Get your key at: https://console.anthropic.com/settings/keys"
     echo ""
-    read -p "  Enter your Anthropic API key (or press Enter to skip): " api_key
+    read -p "  Enter your Anthropic API key (or press Enter to skip): " api_key </dev/tty
     if [[ -n "$api_key" ]]; then
         echo "" >> "$SHELL_RC"
         echo "# Anthropic API Key" >> "$SHELL_RC"
@@ -331,7 +339,7 @@ if ! claude auth status &>/dev/null 2>&1; then
     echo ""
 fi
 
-read -p "Start the provisioner now? [Y/n] " launch_now
+read -p "Start the provisioner now? [Y/n] " launch_now </dev/tty
 echo ""
 if [[ "$launch_now" =~ ^[Nn] ]]; then
     echo "  When ready, open a new terminal and run: ${BLUE}provision${NC}"
