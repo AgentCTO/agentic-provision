@@ -39,6 +39,14 @@ fi
 
 print_success "Running on macOS $(sw_vers -productVersion)"
 
+# Verify and cache administrator credentials upfront
+print_step "Verifying administrator access..."
+if ! sudo -v </dev/tty; then
+    print_error "Administrator privileges are required."
+    print_error "Check System Settings > Users & Groups and ensure your account type is Administrator."
+    exit 1
+fi
+print_success "Administrator access confirmed"
 
 # ------------------------------------------------------------------------------
 # Xcode Command Line Tools
