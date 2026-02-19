@@ -254,7 +254,8 @@ echo "Starting Agentic Provision..."
 echo "Type 'begin' and press Enter to start."
 echo ""
 
-exec claude
+# --continue resumes the most recent session so provisioning picks up where it left off
+exec claude --continue
 LAUNCHER_SCRIPT
 
 chmod +x "$LAUNCHER"
